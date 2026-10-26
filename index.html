@@ -764,54 +764,169 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-
 <style>
+#aykent-pwa-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(12, 25, 45, 0.28);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+#aykent-pwa-backdrop[hidden],
+#aykent-pwa-install[hidden] {
+    display: none !important;
+}
 #aykent-pwa-install {
     position: fixed;
     z-index: 10000;
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
-    max-width: 500px;
-    margin: auto;
-    padding: 14px;
-    background: white;
-    color: #101827;
-    border: 1px solid #d7deea;
-    border-radius: 14px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.18);
-    font: 600 14px/1.5 Arial, sans-serif;
+    top: max(14px, env(safe-area-inset-top));
+    left: 14px;
+    right: 14px;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 22px;
+    box-sizing: border-box;
+    color: #172943;
+    background: #fff;
+    border: 1px solid #e0e6ef;
+    border-radius: 22px;
+    box-shadow: 0 18px 55px rgba(13,29,54,.28);
+    font: 500 15px/1.5 Arial, sans-serif;
+    animation: aykentPopIn .42s cubic-bezier(.2,.8,.2,1) both;
 }
-#aykent-pwa-install button {
-    padding: 10px 12px;
+#aykent-pwa-install .pwa-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 24px;
+}
+#aykent-pwa-install .pwa-icon {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    display: grid;
+    place-items: center;
+    color: white;
+    background: #1A2B48;
+    border-radius: 15px;
+    font-size: 27px;
+}
+#aykent-pwa-install .pwa-brand {
+    color: #65748b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+}
+#aykent-pwa-install .pwa-title {
+    margin-top: 3px;
+    font-size: 21px;
+    line-height: 1.25;
+    font-weight: 800;
+}
+#aykent-pwa-install .pwa-copy {
+    margin: 17px 0;
+    color: #526176;
+    font-size: 14px;
+    line-height: 1.6;
+}
+#aykent-pwa-install .pwa-primary {
+    width: 100%;
+    padding: 14px 16px;
     border: 0;
-    border-radius: 8px;
-    cursor: pointer;
-}
-#aykent-pwa-install .primary {
+    border-radius: 12px;
     background: #1A2B48;
     color: white;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+#aykent-pwa-install .pwa-secondary {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    border: 0;
+    background: transparent;
+    color: #65748b;
+    font-size: 14px;
+    cursor: pointer;
+}
+#aykent-pwa-install .pwa-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: #f0f3f7;
+    color: #43516a;
+    font-size: 22px;
+    cursor: pointer;
+}
+#aykent-pwa-install .pwa-note {
+    margin-top: 10px;
+    color: #7a8799;
+    font-size: 11px;
+    text-align: center;
+}
+@keyframes aykentPopIn {
+    from { opacity: 0; transform: translateY(-28px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+    #aykent-pwa-install { animation: none; }
 }
 </style>
 
-<div id="aykent-pwa-install" hidden>
-    <strong>Aykent Aidat'ı ana ekrana ekle</strong>
-    <p id="aykent-pwa-message">
-        Aidat panelini ana ekrandan açabilirsin.
+<div id="aykent-pwa-backdrop" hidden></div>
+
+<section id="aykent-pwa-install"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="aykent-pwa-title"
+         hidden>
+    <button type="button" class="pwa-close"
+            id="aykent-pwa-close" aria-label="Kapat">×</button>
+
+    <div class="pwa-head">
+        <div class="pwa-icon" aria-hidden="true">＋</div>
+        <div>
+            <div class="pwa-brand">AYKENT SİTESİ</div>
+            <div class="pwa-title" id="aykent-pwa-title">
+                Aidat panelin yanında olsun
+            </div>
+        </div>
+    </div>
+
+    <p class="pwa-copy" id="aykent-pwa-message">
+        Kendi daire bilgilerine ana ekranından tek dokunuşla ulaş.
+        Aykent Aidat'ı ana ekranına ekle.
     </p>
-    <button type="button" id="aykent-pwa-button" class="primary">
-        Ana ekrana ekle
+
+    <button type="button" id="aykent-pwa-button" class="pwa-primary">
+        ＋ &nbsp; Ana ekrana ekle
     </button>
-    <button type="button" id="aykent-pwa-close">Kapat</button>
-</div>
+
+    <button type="button" id="aykent-pwa-later" class="pwa-secondary">
+        Şimdi değil
+    </button>
+
+    <div class="pwa-note">Bir kez ekle, kolayca kullan.</div>
+</section>
 
 <script>
 (function () {
     var box = document.getElementById('aykent-pwa-install');
+    var backdrop = document.getElementById('aykent-pwa-backdrop');
     var button = document.getElementById('aykent-pwa-button');
     var message = document.getElementById('aykent-pwa-message');
     var close = document.getElementById('aykent-pwa-close');
+    var later = document.getElementById('aykent-pwa-later');
     var promptEvent = null;
+
+    var dismissedKey = 'aykent_pwa_test_install_dismissed_v1';
+    var installedKey = 'aykent_pwa_test_install_done_v1';
 
     var standalone =
         window.matchMedia('(display-mode: standalone)').matches ||
@@ -819,53 +934,134 @@ if ('serviceWorker' in navigator) {
 
     if (standalone) return;
 
-    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var ua = navigator.userAgent;
+    var ios = /iphone|ipad|ipod/i.test(ua) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    var safari = ios && /safari/i.test(ua) &&
+        !/crios|fxios|edgios|OPiOS/i.test(ua);
+
+    var dismissed = false;
+
+    try {
+        dismissed =
+            localStorage.getItem(dismissedKey) === '1' ||
+            localStorage.getItem(installedKey) === '1';
+    } catch (e) {}
 
     function show(text) {
-        message.textContent = text;
+        if (dismissed || standalone) return;
+        if (text) message.textContent = text;
         box.hidden = false;
+        backdrop.hidden = false;
+    }
+
+    function hide(remember) {
+        box.hidden = true;
+        backdrop.hidden = true;
+
+        if (remember) {
+            dismissed = true;
+            try {
+                localStorage.setItem(dismissedKey, '1');
+            } catch (e) {}
+        }
     }
 
     if (ios) {
-        show('Safari’de Paylaş düğmesine, ardından Ana Ekrana Ekle seçeneğine dokun.');
-        button.textContent = 'Kurulum talimatı';
+        button.textContent = 'Kurulum adımlarını göster';
+
+        if (!safari) {
+            message.textContent =
+                'Ana ekrana eklemek için bu sayfayı Safari’de aç. ' +
+                'Ardından Paylaş menüsünden “Ana Ekrana Ekle” seçeneğini kullan.';
+        } else {
+            message.textContent =
+                'Safari’de Paylaş düğmesine, ardından “Ana Ekrana Ekle” seçeneğine dokun.';
+        }
     }
 
     window.addEventListener('beforeinstallprompt', function (event) {
         event.preventDefault();
         promptEvent = event;
-        show('Uygulamayı ana ekrana ekleyerek daha kolay açabilirsin.');
+
+        show('Aykent Aidat’ı ana ekranına ekle. Kendi daire panelini tek dokunuşla aç.');
+    });
+
+    window.addEventListener('appinstalled', function () {
+        try {
+            localStorage.setItem(installedKey, '1');
+        } catch (e) {}
+        hide(true);
     });
 
     button.addEventListener('click', async function () {
         if (ios) {
-            show('Safari’de Paylaş → Ana Ekrana Ekle adımlarını uygula.');
+            if (!safari) {
+                message.textContent =
+                    'Bu bağlantıyı Safari’de aç. Safari’de Paylaş simgesine dokun, ' +
+                    '“Ana Ekrana Ekle” seçeneğini bul ve Ekle’ye bas.';
+            } else {
+                message.textContent =
+                    'Safari’de Paylaş simgesine dokun. Menüde “Ana Ekrana Ekle” ' +
+                    'seçeneğini seç, ardından Ekle’ye bas.';
+            }
+
+            button.textContent = 'Anladım';
+            button.onclick = function () {
+                hide(true);
+            };
             return;
         }
 
         if (promptEvent) {
-            promptEvent.prompt();
-            await promptEvent.userChoice;
+            var eventToPrompt = promptEvent;
             promptEvent = null;
-            box.hidden = true;
+
+            try {
+                eventToPrompt.prompt();
+                var choice = await eventToPrompt.userChoice;
+
+                if (choice && choice.outcome === 'accepted') {
+                    try {
+                        localStorage.setItem(installedKey, '1');
+                    } catch (e) {}
+                }
+            } catch (e) {}
+
+            hide(false);
         } else {
-            show('Chrome menüsünden (⋮) Uygulamayı yükle veya Ana ekrana ekle seçeneğini kullan.');
+            message.textContent =
+                'Chrome’da sağ üstteki ⋮ menüsünü aç. ' +
+                '“Uygulamayı yükle” veya “Ana ekrana ekle” seçeneğini kullan.';
+
+            button.textContent = 'Anladım';
+            button.onclick = function () {
+                hide(true);
+            };
         }
     });
 
     close.addEventListener('click', function () {
-        box.hidden = true;
+        hide(true);
     });
 
-    if (!ios) {
+    later.addEventListener('click', function () {
+        hide(true);
+    });
+
+    backdrop.addEventListener('click', function () {
+        hide(true);
+    });
+
+    if (!dismissed) {
         window.setTimeout(function () {
             if (!promptEvent && !standalone) {
-                show('Tarayıcı menüsünden Uygulamayı yükle veya Ana ekrana ekle seçeneğini kontrol et.');
+                show();
             }
-        }, 2000);
+        }, 1200);
     }
 })();
 </script>
-
 </body>
 </html>
