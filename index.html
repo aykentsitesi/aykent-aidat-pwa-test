@@ -764,5 +764,108 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+
+<style>
+#aykent-pwa-install {
+    position: fixed;
+    z-index: 10000;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    max-width: 500px;
+    margin: auto;
+    padding: 14px;
+    background: white;
+    color: #101827;
+    border: 1px solid #d7deea;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.18);
+    font: 600 14px/1.5 Arial, sans-serif;
+}
+#aykent-pwa-install button {
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#aykent-pwa-install .primary {
+    background: #1A2B48;
+    color: white;
+}
+</style>
+
+<div id="aykent-pwa-install" hidden>
+    <strong>Aykent Aidat'ı ana ekrana ekle</strong>
+    <p id="aykent-pwa-message">
+        Aidat panelini ana ekrandan açabilirsin.
+    </p>
+    <button type="button" id="aykent-pwa-button" class="primary">
+        Ana ekrana ekle
+    </button>
+    <button type="button" id="aykent-pwa-close">Kapat</button>
+</div>
+
+<script>
+(function () {
+    var box = document.getElementById('aykent-pwa-install');
+    var button = document.getElementById('aykent-pwa-button');
+    var message = document.getElementById('aykent-pwa-message');
+    var close = document.getElementById('aykent-pwa-close');
+    var promptEvent = null;
+
+    var standalone =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true;
+
+    if (standalone) return;
+
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+    function show(text) {
+        message.textContent = text;
+        box.hidden = false;
+    }
+
+    if (ios) {
+        show('Safari’de Paylaş düğmesine, ardından Ana Ekrana Ekle seçeneğine dokun.');
+        button.textContent = 'Kurulum talimatı';
+    }
+
+    window.addEventListener('beforeinstallprompt', function (event) {
+        event.preventDefault();
+        promptEvent = event;
+        show('Uygulamayı ana ekrana ekleyerek daha kolay açabilirsin.');
+    });
+
+    button.addEventListener('click', async function () {
+        if (ios) {
+            show('Safari’de Paylaş → Ana Ekrana Ekle adımlarını uygula.');
+            return;
+        }
+
+        if (promptEvent) {
+            promptEvent.prompt();
+            await promptEvent.userChoice;
+            promptEvent = null;
+            box.hidden = true;
+        } else {
+            show('Chrome menüsünden (⋮) Uygulamayı yükle veya Ana ekrana ekle seçeneğini kullan.');
+        }
+    });
+
+    close.addEventListener('click', function () {
+        box.hidden = true;
+    });
+
+    if (!ios) {
+        window.setTimeout(function () {
+            if (!promptEvent && !standalone) {
+                show('Tarayıcı menüsünden Uygulamayı yükle veya Ana ekrana ekle seçeneğini kontrol et.');
+            }
+        }, 2000);
+    }
+})();
+</script>
+
 </body>
 </html>
