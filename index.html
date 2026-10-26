@@ -401,7 +401,13 @@
         }
 
         function paneliBaslat() {
-            var kod = getParam('k') || getParam('id');
+var kod = getParam('k') || getParam('id');
+
+if (!kod) {
+    try {
+        kod = localStorage.getItem('aykent_pwa_test_resident_code') || '';
+    } catch (e) {}
+}
             panelKod = kod || '';
             if(!kod) {
                 showError("Geçersiz Bağlantı", "Kullanılan link hatalı veya eksik kod içeriyor. Lütfen site yönetimi ile görüşünüz.");
