@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.0 Sekmeli Görünüm | Mevcut API ve veri yapısı korunmuştur -->
+<!-- AYKENT AIDAT PANELİ — v3.9.3 Sekmeli Görünüm + UX/Gizlilik İyileştirmeleri | API/veri modeli korunmuştur -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -17,8 +17,8 @@
     <style>
         :root{--navy:#1A2B48;--gold:#d6b25e;--ink:#101827;--line:#e6e9ef;--green:#047857;--red:#be123c;--amber:#92400e;--mint:#E8F5E9;--active-green:#27AE60;--cool-gray:#F8F9FA;}
         *{box-sizing:border-box;margin:0;padding:0;}
-        html{height:100%;overflow-y:scroll;overflow-x:hidden;-webkit-text-size-adjust:100%;}
-        body{min-height:100%;overflow-x:hidden;background:#f3f6fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);font-weight:700;}
+        html{height:100%;overflow-y:scroll;overflow-x:clip;-webkit-text-size-adjust:100%;}
+        body{min-height:100%;overflow-x:clip;background:#f3f6fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);font-weight:700;}
         
         /* ── PREMIUM GLASSMORPHISM LOADER DESIGN ── */
         #loader-container {
@@ -27,7 +27,7 @@
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
             overflow: hidden;
         }
         .bg-orb1 {
@@ -128,8 +128,12 @@
         .tab-panel.active{display:block;}
         .announcement-card{margin:16px 14px 8px;border:1px solid rgba(214,178,94,.5);border-radius:18px;overflow:hidden;background:#fffdf7;box-shadow:0 5px 16px rgba(15,23,42,.08);}
         .announcement-head{background:linear-gradient(90deg,#07111f,var(--navy));color:#f4d47c;padding:15px 16px;text-align:center;font-size:18px;font-weight:950;letter-spacing:.3px;}
-        .announcement-body{padding:18px 16px;color:#273449;font-size:16px;line-height:1.55;font-weight:750;white-space:pre-line;overflow-wrap:anywhere;}
-        .announcement-empty{color:#667085;text-align:center;font-weight:700;}
+        .announcement-body{padding:18px 16px;color:#273449;font-size:16px;line-height:1.55;font-weight:750;overflow-wrap:anywhere;}
+        .announcement-list{list-style:none;margin:0;padding:0;}
+        .announcement-item{position:relative;padding:9px 4px 9px 27px;border-bottom:1px solid rgba(214,178,94,.22);white-space:pre-wrap;overflow-wrap:anywhere;}
+        .announcement-item:last-child{border-bottom:0;}
+        .announcement-item::before{content:"✦";position:absolute;left:3px;top:9px;color:#b38a32;font-size:17px;font-weight:950;}
+        .announcement-empty{color:#667085;text-align:center;font-weight:700;padding:20px 16px;}
         
         .hero{background:radial-gradient(circle at top left,#355d93 0,#0f2747 42%,#07111f 100%);color:white;text-align:center;padding:26px 20px 22px;border-bottom:4px solid var(--gold);}
         .blok{font-size:31px;line-height:1.1;font-weight:950;letter-spacing:.2px;}
@@ -141,6 +145,16 @@
         .box:hover{transform:translateY(-2px);}
         .box .small{font-size:13px;display:block;margin-bottom:5px;font-weight:950;letter-spacing:.2px;}
         .box .big{font-size:21px;display:block;font-weight:950;}
+        .box{position:relative;}
+        .summary-label-row{display:flex;align-items:center;justify-content:center;gap:5px;min-height:22px;margin-bottom:5px;}
+        .box .small{display:inline;margin:0;}
+        .info-btn{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;flex:0 0 19px;border:1px solid currentColor;border-radius:50%;background:rgba(255,255,255,.72);color:inherit;font-size:12px;line-height:1;font-weight:950;cursor:pointer;padding:0;}
+        .info-btn:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
+        .info-popover{display:none;position:absolute;z-index:120;top:calc(100% - 2px);left:50%;transform:translateX(-50%);width:min(230px,calc(100vw - 32px));padding:12px 13px;border:1px solid rgba(214,178,94,.75);border-radius:12px;background:#fff;color:#273449;text-align:left;font-size:13px;line-height:1.45;font-weight:700;white-space:normal;box-shadow:0 8px 24px rgba(15,23,42,.22);}
+        .info-popover.show{display:block;}
+        .info-popover::before{content:"";position:absolute;top:-6px;left:calc(50% - 6px);width:10px;height:10px;background:#fff;border-left:1px solid rgba(214,178,94,.75);border-top:1px solid rgba(214,178,94,.75);transform:rotate(45deg);}
+        .box.info-open{z-index:130;}
+
         
         .green{background:linear-gradient(180deg,#ecfdf5,var(--mint));color:var(--green);}
         .red{background:linear-gradient(180deg,#fff1f2,#ffe4e6);color:var(--red);}
@@ -198,14 +212,23 @@
             .summary{gap:5px;}
             .summary-sticky{padding:8px 8px 4px;}
             .tab-nav{padding:9px 7px;gap:4px;}
-            .tab-btn{font-size:11px;min-height:46px;border-radius:10px;}
+            .tab-btn{font-size:12px;min-height:46px;border-radius:10px;}
             .tab-btn .tab-icon{font-size:14px;}
             .announcement-card{margin:12px 8px 8px;}
             .table-wrap{padding:10px 8px 0;}
             .payment{margin:12px 8px 8px;}
             .note{margin:10px 8px 0;}
         }
-    </style>
+    
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+</style>
     
 <script>
 (function () {
@@ -312,7 +335,7 @@
 
             <section class="tab-panel" id="panel-iletisim" role="tabpanel" aria-labelledby="tab-iletisim" data-panel="iletisim" hidden>
                 <div class="payment">
-                    <div class="payment-head">BANKA / ÖDEME BİLGİLERİ</div>
+                    <div class="payment-head">BANKA BİLGİLERİ VE İLETİŞİM</div>
                     <div id="odeme-govde"></div>
                 </div>
                 <div id="whatsapp-alan" class="whatsapp-container">
@@ -383,11 +406,17 @@
         function lokalPanelCacheOku_(kod) {
             try {
                 if(!window.localStorage || !kod) return null;
-                var raw = localStorage.getItem(lokalCacheKey_(kod));
+                var cacheKey = lokalCacheKey_(kod);
+                var raw = localStorage.getItem(cacheKey);
                 if(!raw) return null;
                 var paket = JSON.parse(raw);
-                if(!paket || !paket.zaman || !paket.data) return null;
-                if(Date.now() - Number(paket.zaman) > LOCAL_PANEL_CACHE_MS) return null;
+                if(!paket || !paket.zaman || !paket.data ||
+                   !Number.isFinite(Number(paket.zaman)) ||
+                   Date.now() - Number(paket.zaman) > LOCAL_PANEL_CACHE_MS ||
+                   Date.now() < Number(paket.zaman)) {
+                    localStorage.removeItem(cacheKey);
+                    return null;
+                }
                 return paket.data;
             } catch(e) {
                 return null;
@@ -438,6 +467,7 @@
         }
 
         // Sekmeler yalnızca görünümü değiştirir; API ve veri akışı aynen korunur.
+        var ilkSekmeGosterildi = false;
         function sekmeAc(sekmeAdi) {
             var gecerliSekmeler = ['ozet', 'odemeler', 'duyurular', 'iletisim'];
             if(gecerliSekmeler.indexOf(sekmeAdi) === -1) sekmeAdi = 'ozet';
@@ -469,6 +499,22 @@
                 sekmeAc(sonraki.getAttribute('data-tab'));
                 sonraki.focus();
             });
+        });
+
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.info-popover.show').forEach(function(info) {
+                info.classList.remove('show');
+                var box = info.closest('.box');
+                if(box) {
+                    box.classList.remove('info-open');
+                    var button = box.querySelector('.info-btn');
+                    if(button) button.setAttribute('aria-expanded', 'false');
+                }
+            });
+            if(summaryInfoTimer) {
+                clearTimeout(summaryInfoTimer);
+                summaryInfoTimer = null;
+            }
         });
 
         function paneliBaslat() {
@@ -559,8 +605,28 @@
 
             var duyuruMetni = document.getElementById('duyuru-metni');
             if(duyuruMetni) {
-                duyuruMetni.textContent = data.duyuru || 'Şu anda yayınlanmış bir duyuru bulunmuyor.';
-                duyuruMetni.classList.toggle('announcement-empty', !data.duyuru);
+                duyuruMetni.textContent = '';
+                duyuruMetni.classList.remove('announcement-empty');
+                var duyuruSatirlari = String(data.duyuru || '').split(/\r?\n/).map(function(satir) {
+                    return satir.trim();
+                }).filter(function(satir) {
+                    return satir.length > 0;
+                });
+
+                if(duyuruSatirlari.length) {
+                    var duyuruListe = document.createElement('ul');
+                    duyuruListe.className = 'announcement-list';
+                    duyuruSatirlari.forEach(function(satir) {
+                        var li = document.createElement('li');
+                        li.className = 'announcement-item';
+                        li.textContent = satir;
+                        duyuruListe.appendChild(li);
+                    });
+                    duyuruMetni.appendChild(duyuruListe);
+                } else {
+                    duyuruMetni.textContent = 'Şu anda yayınlanmış bir duyuru bulunmuyor.';
+                    duyuruMetni.classList.add('announcement-empty');
+                }
             }
             var n = document.getElementById('panel-not');
             if(n) { n.textContent = ''; n.style.display = 'none'; }
@@ -579,11 +645,14 @@
             var row1 = document.getElementById('summary-row-1');
             row1.innerHTML = '';
             
-            row1.appendChild(createSummaryBox(data.etiketOdenen, odenenTemiz, 'green'));
+            row1.appendChild(createSummaryBox(data.etiketOdenen, odenenTemiz, 'green',
+                '2026 yılı içinde ödenmiş aidat ödemelerinin toplamını gösterir.'));
             if(data.borcYilRaw > 0) {
-                row1.appendChild(createSummaryBox(data.etiketBorc, borcTemiz, 'red'));
+                row1.appendChild(createSummaryBox(data.etiketBorc, borcTemiz, 'red',
+                    '2026 yılında aidatı tahakkuk etmiş ancak henüz ödenmemiş borcu gösterir. Henüz tahakkuk etmemiş gelecek ayların aidatları bu tutara dahil değildir.'));
             } else {
-                row1.appendChild(createSummaryBox(data.etiketBorc, '0 TL', 'green'));
+                row1.appendChild(createSummaryBox(data.etiketBorc, '0 TL', 'green',
+                    '2026 yılında aidatı tahakkuk etmiş ancak henüz ödenmemiş borcu gösterir. Henüz tahakkuk etmemiş gelecek ayların aidatları bu tutara dahil değildir.'));
             }
 
             // 🔒 XSS Korumalı 2. Özet Satırı Yapılandırması
@@ -591,15 +660,19 @@
             row2.innerHTML = '';
 
             if(data.devirRaw > 0) {
-                row2.appendChild(createSummaryBox(data.etiketDevir, devirTemiz, 'yellow'));
+                row2.appendChild(createSummaryBox(data.etiketDevir, devirTemiz, 'yellow',
+                    '2025 yılı için 12 aylık aidat (12 × 500 TL = 6.000 TL) ve 500 TL asansör revizyonu olmak üzere toplam 6.500 TL üzerinden ödenmemiş kalan tutarı gösterir.'));
             } else {
-                row2.appendChild(createSummaryBox(data.etiketDevir, 'Borç yok', 'gray'));
+                row2.appendChild(createSummaryBox(data.etiketDevir, 'Borç yok', 'gray',
+                    '2025 yılı için 12 aylık aidat (12 × 500 TL = 6.000 TL) ve 500 TL asansör revizyonu olmak üzere toplam 6.500 TL üzerinden ödenmemiş kalan tutarı gösterir.'));
             }
 
             if(data.toplamBorcRaw <= 0) {
-                row2.appendChild(createSummaryBox('TOPLAM DURUM', 'BORÇ YOK 👍', 'green'));
+                row2.appendChild(createSummaryBox('TOPLAM DURUM', 'BORÇ YOK 👍', 'green',
+                    '2026 yılında tahakkuk etmiş aidatların ödenmemiş kısmı ile 2025 yılından devreden borcun toplamını gösterir. Henüz tahakkuk etmemiş gelecek ayların aidatları toplam borca dahil değildir.'));
             } else {
-                row2.appendChild(createSummaryBox('TOPLAM BORÇ', toplamTemiz, 'pink'));
+                row2.appendChild(createSummaryBox('TOPLAM BORÇ', toplamTemiz, 'pink',
+                    '2026 yılında tahakkuk etmiş aidatların ödenmemiş kısmı ile 2025 yılından devreden borcun toplamını gösterir. Henüz tahakkuk etmemiş gelecek ayların aidatları toplam borca dahil değildir.'));
             }
 
             if(data.notlar && data.notlar !== '0') {
@@ -659,7 +732,10 @@
             }
 
             document.getElementById('panel-guncelleme').textContent = "Son güncelleme: " + data.guncellemeTarihi + (cacheRender ? " · güncel kontrol ediliyor" : "");
-            sekmeAc('ozet');
+            if(!ilkSekmeGosterildi) {
+                sekmeAc('ozet');
+                ilkSekmeGosterildi = true;
+            }
             document.getElementById('card').style.display = 'block';
 
             // Panel kullanıcıya gösterildikten sonra ziyaret logunu yalnızca güncel sunucu cevabında arka planda yaz.
@@ -741,21 +817,73 @@
             return data;
         }
 
-        // 🔒 XSS Güvenli Özet Kutusu Üretici
-        function createSummaryBox(label, val, className) {
+        // Özet kutularındaki bilgi açıklamaları: dokununca açılır, 5 saniye sonra kapanır.
+        var summaryInfoTimer = null;
+        function createSummaryBox(label, val, className, infoText) {
             var box = document.createElement('div');
             box.className = 'box ' + className;
-            
+
+            var labelRow = document.createElement('div');
+            labelRow.className = 'summary-label-row';
+
             var sm = document.createElement('span');
             sm.className = 'small';
             sm.textContent = label;
-            
+
+            var infoButton = document.createElement('button');
+            infoButton.type = 'button';
+            infoButton.className = 'info-btn';
+            infoButton.textContent = 'i';
+            infoButton.setAttribute('aria-label', label + ' hakkında bilgi');
+            infoButton.setAttribute('aria-expanded', 'false');
+
+            var info = document.createElement('div');
+            info.className = 'info-popover';
+            info.setAttribute('role', 'tooltip');
+            info.textContent = infoText || '';
+
+            infoButton.addEventListener('click', function(event) {
+                event.stopPropagation();
+                var wasOpen = info.classList.contains('show');
+
+                document.querySelectorAll('.info-popover.show').forEach(function(openInfo) {
+                    openInfo.classList.remove('show');
+                    var parentBox = openInfo.closest('.box');
+                    if(parentBox) {
+                        parentBox.classList.remove('info-open');
+                        var relatedButton = parentBox.querySelector('.info-btn');
+                        if(relatedButton) relatedButton.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                if(summaryInfoTimer) {
+                    clearTimeout(summaryInfoTimer);
+                    summaryInfoTimer = null;
+                }
+
+                if(!wasOpen) {
+                    info.classList.add('show');
+                    box.classList.add('info-open');
+                    infoButton.setAttribute('aria-expanded', 'true');
+                    summaryInfoTimer = setTimeout(function() {
+                        info.classList.remove('show');
+                        box.classList.remove('info-open');
+                        infoButton.setAttribute('aria-expanded', 'false');
+                        summaryInfoTimer = null;
+                    }, 5000);
+                }
+            });
+
+            labelRow.appendChild(sm);
+            labelRow.appendChild(infoButton);
+            box.appendChild(labelRow);
+
             var bg = document.createElement('span');
             bg.className = 'big';
             bg.textContent = val;
-            
-            box.appendChild(sm);
+
             box.appendChild(bg);
+            box.appendChild(info);
             return box;
         }
 
@@ -893,6 +1021,14 @@ if ('serviceWorker' in navigator) {
 
     var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
+    var dismissedKey = 'aykent_pwa_install_dismissed_v1';
+    var dismissed = false;
+    try {
+        dismissed = localStorage.getItem(dismissedKey) === '1';
+    } catch (e) {}
+
+    if (dismissed) return;
+
     function show(text) {
         message.textContent = text;
         box.hidden = false;
@@ -909,6 +1045,11 @@ if ('serviceWorker' in navigator) {
         show('Uygulamayı ana ekrana ekleyerek daha kolay açabilirsin.');
     });
 
+    window.addEventListener('appinstalled', function () {
+        box.hidden = true;
+        promptEvent = null;
+    });
+
     button.addEventListener('click', async function () {
         if (ios) {
             show('Safari’de Paylaş → Ana Ekrana Ekle adımlarını uygula.');
@@ -920,22 +1061,15 @@ if ('serviceWorker' in navigator) {
             await promptEvent.userChoice;
             promptEvent = null;
             box.hidden = true;
-        } else {
-            show('Chrome menüsünden (⋮) Uygulamayı yükle veya Ana ekrana ekle seçeneğini kullan.');
         }
     });
 
     close.addEventListener('click', function () {
         box.hidden = true;
+        try {
+            localStorage.setItem(dismissedKey, '1');
+        } catch (e) {}
     });
-
-    if (!ios) {
-        window.setTimeout(function () {
-            if (!promptEvent && !standalone) {
-                show('Tarayıcı menüsünden Uygulamayı yükle veya Ana ekrana ekle seçeneğini kontrol et.');
-            }
-        }, 2000);
-    }
 })();
 </script>
 
