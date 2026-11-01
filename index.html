@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.8.17 Eski Mobil Görünüm: v3.8.16 stabil JS + v3.8.4 mobil CSS geri dönüş -->
+<!-- AYKENT AIDAT PANELİ — v3.9.0 Sekmeli Görünüm | Mevcut API ve veri yapısı korunmuştur -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <link rel="preconnect" href="https://script.google.com">
     <link rel="preconnect" href="https://raw.githubusercontent.com">
-    <title>Aykent Site Yönetimi - Hızlı Aidat Paneli</title>
+    <title>Aykent Site Yönetimi - Aidat Paneli</title>
     <style>
         :root{--navy:#1A2B48;--gold:#d6b25e;--ink:#101827;--line:#e6e9ef;--green:#047857;--red:#be123c;--amber:#92400e;--mint:#E8F5E9;--active-green:#27AE60;--cool-gray:#F8F9FA;}
         *{box-sizing:border-box;margin:0;padding:0;}
@@ -118,9 +118,18 @@
         @keyframes labelFade{0%,100%{opacity:.4}50%{opacity:.8}}
         /* ───────────────────────────────────────────────────────────── */
 
-        .duyuru{position:fixed;top:0;left:0;right:0;z-index:100;background:linear-gradient(90deg,#8a6a22,#d6b25e,#8a6a22);color:#111827;text-align:center;padding:10px;font-size:15px;line-height:1.25;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.22);display:none;}
-        .wrap{display:block;min-height:100vh;padding-top:41px;}
-        .card{width:100%;max-width:none;min-height:calc(100vh - 41px);background:white;padding-bottom:20px;box-shadow:none;border-radius:0; display: none;}
+        .wrap{display:block;min-height:100vh;padding-top:0;}
+        .card{width:100%;max-width:none;min-height:100vh;background:white;padding-bottom:20px;box-shadow:none;border-radius:0;display:none;}
+        .tab-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:12px 10px;background:#fff;border-bottom:1px solid #e8ebf0;position:sticky;top:0;z-index:50;box-shadow:0 3px 12px rgba(15,23,42,.06);}
+        .tab-btn{appearance:none;border:1px solid #e5e7eb;background:#f8fafc;color:#475467;border-radius:12px;min-width:0;min-height:48px;padding:8px 3px;font-size:13px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .2s,border-color .2s,color .2s;}
+        .tab-btn .tab-icon{font-size:16px;line-height:1;}
+        .tab-btn[aria-selected="true"]{background:var(--navy);border-color:var(--gold);color:#f4d47c;box-shadow:0 3px 9px rgba(26,43,72,.18);}
+        .tab-panel{display:none;min-height:220px;padding-bottom:8px;}
+        .tab-panel.active{display:block;}
+        .announcement-card{margin:16px 14px 8px;border:1px solid rgba(214,178,94,.5);border-radius:18px;overflow:hidden;background:#fffdf7;box-shadow:0 5px 16px rgba(15,23,42,.08);}
+        .announcement-head{background:linear-gradient(90deg,#07111f,var(--navy));color:#f4d47c;padding:15px 16px;text-align:center;font-size:18px;font-weight:950;letter-spacing:.3px;}
+        .announcement-body{padding:18px 16px;color:#273449;font-size:16px;line-height:1.55;font-weight:750;white-space:pre-line;overflow-wrap:anywhere;}
+        .announcement-empty{color:#667085;text-align:center;font-weight:700;}
         
         .hero{background:radial-gradient(circle at top left,#355d93 0,#0f2747 42%,#07111f 100%);color:white;text-align:center;padding:26px 20px 22px;border-bottom:4px solid var(--gold);}
         .blok{font-size:31px;line-height:1.1;font-weight:950;letter-spacing:.2px;}
@@ -187,7 +196,11 @@
         @media(max-width:580px){
             .card{max-width:100%;box-shadow:none;border-radius:0;}
             .summary{gap:5px;}
-            .summary-sticky{padding:8px 8px 4px;top:39px;}
+            .summary-sticky{padding:8px 8px 4px;}
+            .tab-nav{padding:9px 7px;gap:4px;}
+            .tab-btn{font-size:11px;min-height:46px;border-radius:10px;}
+            .tab-btn .tab-icon{font-size:14px;}
+            .announcement-card{margin:12px 8px 8px;}
             .table-wrap{padding:10px 8px 0;}
             .payment{margin:12px 8px 8px;}
             .note{margin:10px 8px 0;}
@@ -249,7 +262,6 @@
         </div>
     </div>
 
-    <div id="duyuru" class="duyuru"></div>
     <div id="error" class="error-card"></div>
 
     <div id="wrap" class="wrap">
@@ -258,34 +270,59 @@
                 <div id="panel-baslik" class="blok">-</div>
                 <div id="panel-isim" class="isim">-</div>
             </div>
-            
-            <div class="summary-sticky">
-                <div class="summary" id="summary-row-1"></div>
-                <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
-            </div>
-            
-            <div id="panel-not" class="note"></div>
-            
-            <div class="table-wrap">
-                <table>
-                    <thead><tr><th>AY</th><th>AİDAT</th><th>EK</th></tr></thead>
-                    <tbody id="tablo-govde"></tbody>
-                </table>
-            </div>
-            
-            <div class="payment">
-                <div class="payment-head">ÖDEME BİLGİLERİ</div>
-                <div id="odeme-govde"></div>
+
+            <div class="tab-nav" role="tablist" aria-label="Aidat paneli bölümleri">
+                <button type="button" class="tab-btn" id="tab-ozet" role="tab" aria-controls="panel-ozet" aria-selected="true" data-tab="ozet">
+                    <span class="tab-icon" aria-hidden="true">⌂</span><span>Özet</span>
+                </button>
+                <button type="button" class="tab-btn" id="tab-odemeler" role="tab" aria-controls="panel-odemeler" aria-selected="false" data-tab="odemeler">
+                    <span class="tab-icon" aria-hidden="true">₺</span><span>Ödemeler</span>
+                </button>
+                <button type="button" class="tab-btn" id="tab-duyurular" role="tab" aria-controls="panel-duyurular" aria-selected="false" data-tab="duyurular">
+                    <span class="tab-icon" aria-hidden="true">▤</span><span>Duyurular</span>
+                </button>
+                <button type="button" class="tab-btn" id="tab-iletisim" role="tab" aria-controls="panel-iletisim" aria-selected="false" data-tab="iletisim">
+                    <span class="tab-icon" aria-hidden="true">✉</span><span>İletişim</span>
+                </button>
             </div>
 
-            <!-- Dinamik Akıllı WhatsApp Destek Alanı -->
-            <div id="whatsapp-alan" class="whatsapp-container">
-                <a id="whatsapp-link" href="#" target="_blank" class="whatsapp-btn">
-                    <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.411 0 11.989 0c3.183.001 6.177 1.243 8.432 3.498 2.256 2.255 3.497 5.25 3.496 8.435-.003 6.634-5.354 11.982-11.933 11.982-1.996-.001-3.957-.5-5.698-1.447L0 24zm6.59-4.859c1.72.101 2.382.204 4.417.205 5.516 0 10.029-4.505 10.032-10.016.001-2.64-1.024-5.122-2.887-6.986-1.862-1.864-4.343-2.89-6.984-2.891-5.522 0-10.033 4.508-10.035 10.021-.001 2.007.518 2.975 1.512 4.704l-.956 3.493 3.585-.94c1.643.914 2.32 1.314 4.316 1.314zM16.518 14c-.258-.127-1.526-.749-1.762-.834-.236-.086-.407-.127-.578.128-.171.256-.664.834-.813.1-.148-.127-.297-.181-.554-.308-2.172-.962-3.56-3.137-3.667-3.281-.107-.144-.016-.223.056-.305.105-.119.255-.308.337-.419.082-.11.11-.186.165-.313.055-.128.027-.236-.014-.321-.04-.086-.407-1.012-.557-1.383-.146-.358-.295-.308-.407-.314-.105-.005-.226-.006-.347-.006-.12 0-.317.045-.483.226-.166.181-.634.616-.634 1.501 0 .885.643 1.74 1.731 1.884 2.253 3.22 3.738 3.535 5.234 3.639 1.15.08 2.137-.019 2.946-.139.902-.134 1.873-.762 2.138-1.463.264-.7 0-1.298-.079-1.422-.079-.124-.29-.199-.549-.326z"/></svg>
-                    Yöneticiye WhatsApp'tan Yaz
-                </a>
-            </div>
-            
+            <section class="tab-panel active" id="panel-ozet" role="tabpanel" aria-labelledby="tab-ozet" data-panel="ozet">
+                <div class="summary-sticky">
+                    <div class="summary" id="summary-row-1"></div>
+                    <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
+                </div>
+                <div id="panel-not" class="note"></div>
+            </section>
+
+            <section class="tab-panel" id="panel-odemeler" role="tabpanel" aria-labelledby="tab-odemeler" data-panel="odemeler" hidden>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>AY</th><th>AİDAT</th><th>EK</th></tr></thead>
+                        <tbody id="tablo-govde"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="tab-panel" id="panel-duyurular" role="tabpanel" aria-labelledby="tab-duyurular" data-panel="duyurular" hidden>
+                <div class="announcement-card">
+                    <div class="announcement-head">SİTE DUYURUSU</div>
+                    <div id="duyuru-metni" class="announcement-body announcement-empty">Şu anda yayınlanmış bir duyuru bulunmuyor.</div>
+                </div>
+            </section>
+
+            <section class="tab-panel" id="panel-iletisim" role="tabpanel" aria-labelledby="tab-iletisim" data-panel="iletisim" hidden>
+                <div class="payment">
+                    <div class="payment-head">BANKA / ÖDEME BİLGİLERİ</div>
+                    <div id="odeme-govde"></div>
+                </div>
+                <div id="whatsapp-alan" class="whatsapp-container">
+                    <a id="whatsapp-link" href="#" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
+                        <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.411 0 11.989 0c3.183.001 6.177 1.243 8.432 3.498 2.256 2.255 3.497 5.25 3.496 8.435-.003 6.634-5.354 11.982-11.933 11.982-1.996-.001-3.957-.5-5.698-1.447L0 24zm6.59-4.859c1.72.101 2.382.204 4.417.205 5.516 0 10.029-4.505 10.032-10.016.001-2.64-1.024-5.122-2.887-6.986-1.862-1.864-4.343-2.89-6.984-2.891-5.522 0-10.033 4.508-10.035 10.021-.001 2.007.518 2.975 1.512 4.704l-.956 3.493 3.585-.94c1.643.914 2.32 1.314 4.316 1.314zM16.518 14c-.258-.127-1.526-.749-1.762-.834-.236-.086-.407-.127-.578.128-.171.256-.664.834-.813.1-.148-.127-.297-.181-.554-.308-2.172-.962-3.56-3.137-3.667-3.281-.107-.144-.016-.223.056-.305.105-.119.255-.308.337-.419.082-.11.11-.186.165-.313.055-.128.027-.236-.014-.321-.04-.086-.407-1.012-.557-1.383-.146-.358-.295-.308-.407-.314-.105-.005-.226-.006-.347-.006-.12 0-.317.045-.483.226-.166.181-.634.616-.634 1.501 0 .885.643 1.74 1.731 1.884 2.253 3.22 3.738 3.535 5.234 3.639 1.15.08 2.137-.019 2.946-.139.902-.134 1.873-.762 2.138-1.463.264-.7 0-1.298-.079-1.422-.079-.124-.29-.199-.549-.326z"/></svg>
+                        Yöneticiye WhatsApp'tan Yaz
+                    </a>
+                </div>
+            </section>
+
             <div id="panel-footer" class="footer">
                 <div id="panel-guncelleme"></div>
                 <div class="footer-sign">© 2026 Aykent Site Yönetimi · <span>Tasarım: Fatih Oruç</span></div>
@@ -400,14 +437,42 @@
             if(el) el.textContent = metin || 'Bilgileriniz getiriliyor...';
         }
 
-        function paneliBaslat() {
-var kod = getParam('k') || getParam('id');
+        // Sekmeler yalnızca görünümü değiştirir; API ve veri akışı aynen korunur.
+        function sekmeAc(sekmeAdi) {
+            var gecerliSekmeler = ['ozet', 'odemeler', 'duyurular', 'iletisim'];
+            if(gecerliSekmeler.indexOf(sekmeAdi) === -1) sekmeAdi = 'ozet';
 
-if (!kod) {
-    try {
-        kod = localStorage.getItem('aykent_pwa_test_resident_code') || '';
-    } catch (e) {}
-}
+            document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                var aktif = btn.getAttribute('data-tab') === sekmeAdi;
+                btn.setAttribute('aria-selected', aktif ? 'true' : 'false');
+                btn.tabIndex = aktif ? 0 : -1;
+            });
+
+            document.querySelectorAll('.tab-panel').forEach(function(panel) {
+                var aktif = panel.getAttribute('data-panel') === sekmeAdi;
+                panel.classList.toggle('active', aktif);
+                panel.hidden = !aktif;
+            });
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                sekmeAc(btn.getAttribute('data-tab'));
+            });
+            btn.addEventListener('keydown', function(event) {
+                if(event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                event.preventDefault();
+                var butonlar = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+                var index = butonlar.indexOf(btn);
+                var yon = event.key === 'ArrowRight' ? 1 : -1;
+                var sonraki = butonlar[(index + yon + butonlar.length) % butonlar.length];
+                sekmeAc(sonraki.getAttribute('data-tab'));
+                sonraki.focus();
+            });
+        });
+
+        function paneliBaslat() {
+            var kod = getParam('k') || getParam('id');
             panelKod = kod || '';
             if(!kod) {
                 showError("Geçersiz Bağlantı", "Kullanılan link hatalı veya eksik kod içeriyor. Lütfen site yönetimi ile görüşünüz.");
@@ -492,10 +557,10 @@ if (!kod) {
             data = guvenliPanelVerisi(data);
             if(!cacheRender) lokalPanelCacheYaz_(panelKod, data);
 
-            var d = document.getElementById('duyuru');
-            if(d) {
-                d.textContent = data.duyuru || '';
-                d.style.display = data.duyuru ? 'block' : 'none';
+            var duyuruMetni = document.getElementById('duyuru-metni');
+            if(duyuruMetni) {
+                duyuruMetni.textContent = data.duyuru || 'Şu anda yayınlanmış bir duyuru bulunmuyor.';
+                duyuruMetni.classList.toggle('announcement-empty', !data.duyuru);
             }
             var n = document.getElementById('panel-not');
             if(n) { n.textContent = ''; n.style.display = 'none'; }
@@ -594,6 +659,7 @@ if (!kod) {
             }
 
             document.getElementById('panel-guncelleme').textContent = "Son güncelleme: " + data.guncellemeTarihi + (cacheRender ? " · güncel kontrol ediliyor" : "");
+            sekmeAc('ozet');
             document.getElementById('card').style.display = 'block';
 
             // Panel kullanıcıya gösterildikten sonra ziyaret logunu yalnızca güncel sunucu cevabında arka planda yaz.
@@ -770,169 +836,54 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+
 <style>
-#aykent-pwa-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(12, 25, 45, 0.28);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-}
-#aykent-pwa-backdrop[hidden],
-#aykent-pwa-install[hidden] {
-    display: none !important;
-}
 #aykent-pwa-install {
     position: fixed;
     z-index: 10000;
-    top: max(14px, env(safe-area-inset-top));
-    left: 14px;
-    right: 14px;
-    max-width: 520px;
-    margin: 0 auto;
-    padding: 22px;
-    box-sizing: border-box;
-    color: #172943;
-    background: #fff;
-    border: 1px solid #e0e6ef;
-    border-radius: 22px;
-    box-shadow: 0 18px 55px rgba(13,29,54,.28);
-    font: 500 15px/1.5 Arial, sans-serif;
-    animation: aykentPopIn .42s cubic-bezier(.2,.8,.2,1) both;
-}
-#aykent-pwa-install .pwa-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-right: 24px;
-}
-#aykent-pwa-install .pwa-icon {
-    width: 48px;
-    height: 48px;
-    flex: 0 0 48px;
-    display: grid;
-    place-items: center;
-    color: white;
-    background: #1A2B48;
-    border-radius: 15px;
-    font-size: 27px;
-}
-#aykent-pwa-install .pwa-brand {
-    color: #65748b;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.4px;
-}
-#aykent-pwa-install .pwa-title {
-    margin-top: 3px;
-    font-size: 21px;
-    line-height: 1.25;
-    font-weight: 800;
-}
-#aykent-pwa-install .pwa-copy {
-    margin: 17px 0;
-    color: #526176;
-    font-size: 14px;
-    line-height: 1.6;
-}
-#aykent-pwa-install .pwa-primary {
-    width: 100%;
-    padding: 14px 16px;
-    border: 0;
-    border-radius: 12px;
-    background: #1A2B48;
-    color: white;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-}
-#aykent-pwa-install .pwa-secondary {
-    width: 100%;
-    margin-top: 8px;
-    padding: 10px;
-    border: 0;
-    background: transparent;
-    color: #65748b;
-    font-size: 14px;
-    cursor: pointer;
-}
-#aykent-pwa-install .pwa-close {
-    position: absolute;
-    top: 12px;
+    bottom: 12px;
+    left: 12px;
     right: 12px;
-    width: 32px;
-    height: 32px;
+    max-width: 500px;
+    margin: auto;
+    padding: 14px;
+    background: white;
+    color: #101827;
+    border: 1px solid #d7deea;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.18);
+    font: 600 14px/1.5 Arial, sans-serif;
+}
+#aykent-pwa-install button {
+    padding: 10px 12px;
     border: 0;
-    border-radius: 50%;
-    background: #f0f3f7;
-    color: #43516a;
-    font-size: 22px;
+    border-radius: 8px;
     cursor: pointer;
 }
-#aykent-pwa-install .pwa-note {
-    margin-top: 10px;
-    color: #7a8799;
-    font-size: 11px;
-    text-align: center;
-}
-@keyframes aykentPopIn {
-    from { opacity: 0; transform: translateY(-28px) scale(.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-@media (prefers-reduced-motion: reduce) {
-    #aykent-pwa-install { animation: none; }
+#aykent-pwa-install .primary {
+    background: #1A2B48;
+    color: white;
 }
 </style>
 
-<div id="aykent-pwa-backdrop" hidden></div>
-
-<section id="aykent-pwa-install"
-         role="dialog"
-         aria-modal="true"
-         aria-labelledby="aykent-pwa-title"
-         hidden>
-    <button type="button" class="pwa-close"
-            id="aykent-pwa-close" aria-label="Kapat">×</button>
-
-    <div class="pwa-head">
-        <div class="pwa-icon" aria-hidden="true">＋</div>
-        <div>
-            <div class="pwa-brand">AYKENT SİTESİ</div>
-            <div class="pwa-title" id="aykent-pwa-title">
-                Aidat panelin yanında olsun
-            </div>
-        </div>
-    </div>
-
-    <p class="pwa-copy" id="aykent-pwa-message">
-        Kendi daire bilgilerine ana ekranından tek dokunuşla ulaş.
-        Aykent Aidat'ı ana ekranına ekle.
+<div id="aykent-pwa-install" hidden>
+    <strong>Aykent Aidat'ı ana ekrana ekle</strong>
+    <p id="aykent-pwa-message">
+        Aidat panelini ana ekrandan açabilirsin.
     </p>
-
-    <button type="button" id="aykent-pwa-button" class="pwa-primary">
-        ＋ &nbsp; Ana ekrana ekle
+    <button type="button" id="aykent-pwa-button" class="primary">
+        Ana ekrana ekle
     </button>
-
-    <button type="button" id="aykent-pwa-later" class="pwa-secondary">
-        Şimdi değil
-    </button>
-
-    <div class="pwa-note">Bir kez ekle, kolayca kullan.</div>
-</section>
+    <button type="button" id="aykent-pwa-close">Kapat</button>
+</div>
 
 <script>
 (function () {
     var box = document.getElementById('aykent-pwa-install');
-    var backdrop = document.getElementById('aykent-pwa-backdrop');
     var button = document.getElementById('aykent-pwa-button');
     var message = document.getElementById('aykent-pwa-message');
     var close = document.getElementById('aykent-pwa-close');
-    var later = document.getElementById('aykent-pwa-later');
     var promptEvent = null;
-
-    var dismissedKey = 'aykent_pwa_test_install_dismissed_v1';
-    var installedKey = 'aykent_pwa_test_install_done_v1';
 
     var standalone =
         window.matchMedia('(display-mode: standalone)').matches ||
@@ -940,134 +891,53 @@ if ('serviceWorker' in navigator) {
 
     if (standalone) return;
 
-    var ua = navigator.userAgent;
-    var ios = /iphone|ipad|ipod/i.test(ua) ||
-        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-    var safari = ios && /safari/i.test(ua) &&
-        !/crios|fxios|edgios|OPiOS/i.test(ua);
-
-    var dismissed = false;
-
-    try {
-        dismissed =
-            localStorage.getItem(dismissedKey) === '1' ||
-            localStorage.getItem(installedKey) === '1';
-    } catch (e) {}
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
     function show(text) {
-        if (dismissed || standalone) return;
-        if (text) message.textContent = text;
+        message.textContent = text;
         box.hidden = false;
-        backdrop.hidden = false;
-    }
-
-    function hide(remember) {
-        box.hidden = true;
-        backdrop.hidden = true;
-
-        if (remember) {
-            dismissed = true;
-            try {
-                localStorage.setItem(dismissedKey, '1');
-            } catch (e) {}
-        }
     }
 
     if (ios) {
-        button.textContent = 'Kurulum adımlarını göster';
-
-        if (!safari) {
-            message.textContent =
-                'Ana ekrana eklemek için bu sayfayı Safari’de aç. ' +
-                'Ardından Paylaş menüsünden “Ana Ekrana Ekle” seçeneğini kullan.';
-        } else {
-            message.textContent =
-                'Safari’de Paylaş düğmesine, ardından “Ana Ekrana Ekle” seçeneğine dokun.';
-        }
+        show('Safari’de Paylaş düğmesine, ardından Ana Ekrana Ekle seçeneğine dokun.');
+        button.textContent = 'Kurulum talimatı';
     }
 
     window.addEventListener('beforeinstallprompt', function (event) {
         event.preventDefault();
         promptEvent = event;
-
-        show('Aykent Aidat’ı ana ekranına ekle. Kendi daire panelini tek dokunuşla aç.');
-    });
-
-    window.addEventListener('appinstalled', function () {
-        try {
-            localStorage.setItem(installedKey, '1');
-        } catch (e) {}
-        hide(true);
+        show('Uygulamayı ana ekrana ekleyerek daha kolay açabilirsin.');
     });
 
     button.addEventListener('click', async function () {
         if (ios) {
-            if (!safari) {
-                message.textContent =
-                    'Bu bağlantıyı Safari’de aç. Safari’de Paylaş simgesine dokun, ' +
-                    '“Ana Ekrana Ekle” seçeneğini bul ve Ekle’ye bas.';
-            } else {
-                message.textContent =
-                    'Safari’de Paylaş simgesine dokun. Menüde “Ana Ekrana Ekle” ' +
-                    'seçeneğini seç, ardından Ekle’ye bas.';
-            }
-
-            button.textContent = 'Anladım';
-            button.onclick = function () {
-                hide(true);
-            };
+            show('Safari’de Paylaş → Ana Ekrana Ekle adımlarını uygula.');
             return;
         }
 
         if (promptEvent) {
-            var eventToPrompt = promptEvent;
+            promptEvent.prompt();
+            await promptEvent.userChoice;
             promptEvent = null;
-
-            try {
-                eventToPrompt.prompt();
-                var choice = await eventToPrompt.userChoice;
-
-                if (choice && choice.outcome === 'accepted') {
-                    try {
-                        localStorage.setItem(installedKey, '1');
-                    } catch (e) {}
-                }
-            } catch (e) {}
-
-            hide(false);
+            box.hidden = true;
         } else {
-            message.textContent =
-                'Chrome’da sağ üstteki ⋮ menüsünü aç. ' +
-                '“Uygulamayı yükle” veya “Ana ekrana ekle” seçeneğini kullan.';
-
-            button.textContent = 'Anladım';
-            button.onclick = function () {
-                hide(true);
-            };
+            show('Chrome menüsünden (⋮) Uygulamayı yükle veya Ana ekrana ekle seçeneğini kullan.');
         }
     });
 
     close.addEventListener('click', function () {
-        hide(true);
+        box.hidden = true;
     });
 
-    later.addEventListener('click', function () {
-        hide(true);
-    });
-
-    backdrop.addEventListener('click', function () {
-        hide(true);
-    });
-
-    if (!dismissed) {
+    if (!ios) {
         window.setTimeout(function () {
             if (!promptEvent && !standalone) {
-                show();
+                show('Tarayıcı menüsünden Uygulamayı yükle veya Ana ekrana ekle seçeneğini kontrol et.');
             }
-        }, 1200);
+        }, 2000);
     }
 })();
 </script>
+
 </body>
 </html>
