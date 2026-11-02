@@ -156,13 +156,25 @@
         .accrual-fill.annual{background:#64748b;}
         .accrual-fill.due{background:#2563eb;}
         .accrual-fill.paid{background:#00b83f;opacity:1;filter:none;}
-        .accrual-compare-track{position:relative;background:#e8edf4;}
-        .accrual-compare-track .accrual-fill{position:absolute;left:0;top:0;}
-        .accrual-compare-track .accrual-fill.due{z-index:1;background:#2563eb;}
-        .accrual-compare-track .accrual-fill.paid{z-index:2;background:#00b83f;opacity:1;}
-        .accrual-values-pair{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:5px;font-size:11px;color:#475467;font-weight:750;}
-        .accrual-values-pair strong{color:#1f2937;font-size:12px;font-weight:950;}
-        .accrual-compare-row{margin-top:14px;margin-bottom:12px;}
+        .accrual-compare-row{display:block;margin-top:14px;margin-bottom:12px;}
+        .accrual-compare-row .accrual-label{font-size:12px;margin-bottom:5px;}
+        .accrual-compare-item{margin:11px 0 13px;}
+        .accrual-compare-item-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:5px;font-size:12px;font-weight:900;color:#475467;}
+        .accrual-compare-item-head strong{font-size:13px;font-weight:950;}
+        .accrual-compare-item.due-item strong{color:#2563eb;}
+        .accrual-compare-item.paid-item strong{color:#009b35;}
+        .accrual-track{height:13px;background:#e8edf4;border-radius:999px;overflow:hidden;}
+        .accrual-fill.paid{background:#00b83f;opacity:1;filter:none;}
+        .accrual-gap{position:relative;height:30px;margin:-3px 0 0;color:#b45309;font-size:10px;font-weight:950;pointer-events:none;}
+        .accrual-gap:before{content:"";position:absolute;left:var(--gap-x,50%);top:0;width:3px;height:21px;transform:translateX(-50%);background:radial-gradient(circle,#d97706 1.35px,transparent 1.6px) center top/3px 6px repeat-y;}
+        .accrual-gap-pill{position:absolute;left:var(--gap-x,50%);top:12px;transform:translateX(-50%);display:inline-block;white-space:nowrap;padding:3px 8px;border:1px dashed #d97706;border-radius:999px;background:#fffbeb;box-shadow:0 1px 3px rgba(15,23,42,.08);}
+        .accrual-compare-row .accrual-label{display:none;}
+        .tab-panel.active{animation:panelSlideIn .28s cubic-bezier(.22,.75,.25,1) both;}
+        .tab-panel.active.slide-from-right{animation-name:panelSlideFromRight;}
+        .tab-panel.active.slide-from-left{animation-name:panelSlideFromLeft;}
+        @keyframes panelSlideFromRight{from{opacity:.55;transform:translateX(34px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes panelSlideFromLeft{from{opacity:.55;transform:translateX(-34px)}to{opacity:1;transform:translateX(0)}}
+        @media(prefers-reduced-motion:reduce){.tab-panel.active{animation:none!important}.accrual-fill{transition:none!important}}
         .accrual-value{font-size:12px;font-weight:950;color:#1f2937;text-align:right;margin-top:3px;}
         .accrual-difference{margin-top:13px;padding:10px 12px;border-radius:10px;text-align:center;font-size:13px;font-weight:900;background:#f1f5f9;color:#334155;}
         .accrual-difference.over{background:#ecfdf5;color:#047857;}
@@ -361,13 +373,14 @@
                         <div><div class="accrual-track"><div id="accrual-annual-bar" class="accrual-fill annual"></div></div><div id="accrual-annual-value" class="accrual-value">-</div></div>
                     </div>
                     <div class="accrual-row accrual-compare-row">
-                        <div class="accrual-label">Tahakkuk / Ödenen</div>
-                        <div>
-                            <div class="accrual-track accrual-compare-track">
-                                <div id="accrual-due-bar" class="accrual-fill due"></div>
-                                <div id="accrual-paid-bar" class="accrual-fill paid accrual-paid-overlay"></div>
-                            </div>
-                            <div class="accrual-values-pair"><span>Tahakkuk: <strong id="accrual-due-value">-</strong></span><span>Ödenen: <strong id="accrual-paid-value">-</strong></span></div>
+                        <div class="accrual-compare-item due-item">
+                            <div class="accrual-compare-item-head"><span>Tahakkuk eden</span><strong id="accrual-due-value">-</strong></div>
+                            <div class="accrual-track"><div id="accrual-due-bar" class="accrual-fill due"></div></div>
+                        </div>
+                        <div class="accrual-gap" id="accrual-gap" hidden><span class="accrual-gap-pill" id="accrual-gap-value"></span></div>
+                        <div class="accrual-compare-item paid-item">
+                            <div class="accrual-compare-item-head"><span>Ödenen</span><strong id="accrual-paid-value">-</strong></div>
+                            <div class="accrual-track"><div id="accrual-paid-bar" class="accrual-fill paid"></div></div>
                         </div>
                     </div>
                     <div id="accrual-difference" class="accrual-difference"></div>
@@ -530,9 +543,13 @@
 
         // Sekmeler yalnızca görünümü değiştirir; API ve veri akışı aynen korunur.
         var ilkSekmeGosterildi = false;
-        function sekmeAc(sekmeAdi) {
-            var gecerliSekmeler = ['ozet', 'odemeler', 'duyurular', 'iletisim'];
+        var sekmeSirasi = ['ozet', 'odemeler', 'duyurular', 'iletisim'];
+        function sekmeAc(sekmeAdi, yon) {
+            var gecerliSekmeler = sekmeSirasi;
             if(gecerliSekmeler.indexOf(sekmeAdi) === -1) sekmeAdi = 'ozet';
+            var onceki = document.querySelector('.tab-btn[aria-selected="true"]');
+            var oncekiAd = onceki ? onceki.getAttribute('data-tab') : sekmeAdi;
+            if(!yon) yon = gecerliSekmeler.indexOf(sekmeAdi) >= gecerliSekmeler.indexOf(oncekiAd) ? 1 : -1;
 
             document.querySelectorAll('.tab-btn').forEach(function(btn) {
                 var aktif = btn.getAttribute('data-tab') === sekmeAdi;
@@ -542,8 +559,16 @@
 
             document.querySelectorAll('.tab-panel').forEach(function(panel) {
                 var aktif = panel.getAttribute('data-panel') === sekmeAdi;
+                panel.classList.remove('slide-from-right', 'slide-from-left');
                 panel.classList.toggle('active', aktif);
                 panel.hidden = !aktif;
+                if(aktif) {
+                    panel.classList.add(yon >= 0 ? 'slide-from-right' : 'slide-from-left');
+                    panel.addEventListener('animationend', function temizle() {
+                        panel.classList.remove('slide-from-right', 'slide-from-left');
+                        panel.removeEventListener('animationend', temizle);
+                    });
+                }
             });
         }
 
@@ -583,7 +608,7 @@
                     var aktif = butonlar.findIndex(function(btn) { return btn.getAttribute('aria-selected') === 'true'; });
                     if(aktif < 0) return;
                     var sonrakiIndex = dx < 0 ? Math.min(aktif + 1, butonlar.length - 1) : Math.max(aktif - 1, 0);
-                    if(sonrakiIndex !== aktif) sekmeAc(butonlar[sonrakiIndex].getAttribute('data-tab'));
+                    if(sonrakiIndex !== aktif) sekmeAc(butonlar[sonrakiIndex].getAttribute('data-tab'), dx < 0 ? 1 : -1);
                 }, {passive:true});
             });
         })();
@@ -929,9 +954,11 @@
             var annualRow = document.getElementById('accrual-annual-row');
             var subtitle = document.getElementById('accrual-subtitle');
             annualRow.hidden = !data.yillikTahakkukVar;
+            var ayAdlari = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            var icindeBulunulanAy = ayAdlari[new Date().getMonth()];
             subtitle.textContent = data.yillikTahakkukVar
-                ? 'Yıllık toplam 12 ayı; tahakkuk ise içinde bulunulan aya kadarki tutarı gösterir.'
-                : 'Tahakkuk, içinde bulunulan aya kadarki aidat tutarıdır.';
+                ? 'Yıllık toplam 12 ayı; tahakkuk ise içinde bulunulan ay dahil (' + icindeBulunulanAy + ' dahil) tutarı gösterir.'
+                : 'Tahakkuk, içinde bulunulan ay dahil (' + icindeBulunulanAy + ' dahil) aidat tutarıdır.';
 
             var maxDeger = Math.max(tahakkuk, odenen, yillik, 1);
             function tl(v) { return Math.round(v).toLocaleString('tr-TR') + ' TL'; }
@@ -945,6 +972,18 @@
             document.getElementById('accrual-paid-bar').style.width = oran(odenen) + '%';
             document.getElementById('accrual-due-value').textContent = tl(tahakkuk);
             document.getElementById('accrual-paid-value').textContent = tl(odenen);
+            var gap = Math.abs(tahakkuk - odenen);
+            var gapEl = document.getElementById('accrual-gap');
+            gapEl.hidden = gap === 0;
+            if(gap > 0) {
+                var farkinOrtaNoktasi = (oran(tahakkuk) + oran(odenen)) / 2;
+                gapEl.style.setProperty('--gap-x', farkinOrtaNoktasi + '%');
+                var gapValue = document.getElementById('accrual-gap-value');
+                gapValue.textContent = tl(gap) + (odenen < tahakkuk ? ' eksik' : ' fazla');
+                gapValue.setAttribute('aria-label', tl(gap) + (odenen < tahakkuk ? ' eksik ödeme' : ' fazla ödeme'));
+            } else {
+                document.getElementById('accrual-gap-value').textContent = '';
+            }
 
             var yil = new Date().getFullYear();
             var head = document.getElementById('accrual-head');
