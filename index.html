@@ -155,7 +155,14 @@
         .accrual-fill{height:100%;width:0;border-radius:999px;transition:width .35s ease;}
         .accrual-fill.annual{background:#64748b;}
         .accrual-fill.due{background:#2563eb;}
-        .accrual-fill.paid{background:#16a34a;}
+        .accrual-fill.paid{background:#00b83f;opacity:1;filter:none;}
+        .accrual-compare-track{position:relative;background:#e8edf4;}
+        .accrual-compare-track .accrual-fill{position:absolute;left:0;top:0;}
+        .accrual-compare-track .accrual-fill.due{z-index:1;background:#2563eb;}
+        .accrual-compare-track .accrual-fill.paid{z-index:2;background:#00b83f;opacity:1;}
+        .accrual-values-pair{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:5px;font-size:11px;color:#475467;font-weight:750;}
+        .accrual-values-pair strong{color:#1f2937;font-size:12px;font-weight:950;}
+        .accrual-compare-row{margin-top:14px;margin-bottom:12px;}
         .accrual-value{font-size:12px;font-weight:950;color:#1f2937;text-align:right;margin-top:3px;}
         .accrual-difference{margin-top:13px;padding:10px 12px;border-radius:10px;text-align:center;font-size:13px;font-weight:900;background:#f1f5f9;color:#334155;}
         .accrual-difference.over{background:#ecfdf5;color:#047857;}
@@ -353,13 +360,15 @@
                         <div class="accrual-label">Yıllık toplam</div>
                         <div><div class="accrual-track"><div id="accrual-annual-bar" class="accrual-fill annual"></div></div><div id="accrual-annual-value" class="accrual-value">-</div></div>
                     </div>
-                    <div class="accrual-row">
-                        <div class="accrual-label">Tahakkuk eden</div>
-                        <div><div class="accrual-track"><div id="accrual-due-bar" class="accrual-fill due"></div></div><div id="accrual-due-value" class="accrual-value">-</div></div>
-                    </div>
-                    <div class="accrual-row">
-                        <div class="accrual-label">Ödenen</div>
-                        <div><div class="accrual-track"><div id="accrual-paid-bar" class="accrual-fill paid"></div></div><div id="accrual-paid-value" class="accrual-value">-</div></div>
+                    <div class="accrual-row accrual-compare-row">
+                        <div class="accrual-label">Tahakkuk / Ödenen</div>
+                        <div>
+                            <div class="accrual-track accrual-compare-track">
+                                <div id="accrual-due-bar" class="accrual-fill due"></div>
+                                <div id="accrual-paid-bar" class="accrual-fill paid accrual-paid-overlay"></div>
+                            </div>
+                            <div class="accrual-values-pair"><span>Tahakkuk: <strong id="accrual-due-value">-</strong></span><span>Ödenen: <strong id="accrual-paid-value">-</strong></span></div>
+                        </div>
                     </div>
                     <div id="accrual-difference" class="accrual-difference"></div>
                 </div>
@@ -553,6 +562,31 @@
                 sonraki.focus();
             });
         });
+
+        // Mobilde içerik üzerinde yatay kaydırma ile sekmeler arasında geçiş.
+        (function sekmeKaydirmaKur_() {
+            var paneller = document.querySelectorAll('.tab-panel');
+            var baslangicX = 0;
+            var baslangicY = 0;
+            paneller.forEach(function(panel) {
+                panel.addEventListener('touchstart', function(event) {
+                    if(!event.touches || event.touches.length !== 1) return;
+                    baslangicX = event.touches[0].clientX;
+                    baslangicY = event.touches[0].clientY;
+                }, {passive:true});
+                panel.addEventListener('touchend', function(event) {
+                    if(!event.changedTouches || event.changedTouches.length !== 1) return;
+                    var dx = event.changedTouches[0].clientX - baslangicX;
+                    var dy = event.changedTouches[0].clientY - baslangicY;
+                    if(Math.abs(dx) < 65 || Math.abs(dx) < Math.abs(dy) * 1.35) return;
+                    var butonlar = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+                    var aktif = butonlar.findIndex(function(btn) { return btn.getAttribute('aria-selected') === 'true'; });
+                    if(aktif < 0) return;
+                    var sonrakiIndex = dx < 0 ? Math.min(aktif + 1, butonlar.length - 1) : Math.max(aktif - 1, 0);
+                    if(sonrakiIndex !== aktif) sekmeAc(butonlar[sonrakiIndex].getAttribute('data-tab'));
+                }, {passive:true});
+            });
+        })();
 
         document.addEventListener('click', function() {
             document.querySelectorAll('.info-popover.show').forEach(function(info) {
@@ -861,8 +895,8 @@
                 data.odenenYilRaw !== undefined && data.odenenYilRaw !== null;
             data.tahakkukYilRaw = guvenliSayi(data.tahakkukYilRaw);
             data.odenenYilRaw = guvenliSayi(data.odenenYilRaw);
-            data.yillikTahakkukVar = data.yillikTahakkukRaw !== undefined && data.yillikTahakkukRaw !== null;
             data.yillikTahakkukRaw = guvenliSayi(data.yillikTahakkukRaw);
+            data.yillikTahakkukVar = data.yillikTahakkukRaw > 0;
             data.notlar = guvenliMetin(data.notlar, '');
             data.odemeAlici = guvenliMetin(data.odemeAlici, '-');
             data.odemeIban = guvenliMetin(data.odemeIban, '-');
