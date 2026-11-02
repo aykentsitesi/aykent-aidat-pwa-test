@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.5 Tahakkuk/Ödeme Grafiği | Mevcut panel akışı korunmuştur -->
+<!-- AYKENT AIDAT PANELİ — v3.9.7 HTML arayüz iyileştirmeleri | API ve mevcut panel akışı korunmuştur -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -120,47 +120,49 @@
 
         .wrap{display:block;min-height:100vh;padding-top:0;}
         .card{width:100%;max-width:none;min-height:100vh;background:white;padding-bottom:20px;box-shadow:none;border-radius:0;display:none;}
-        .tab-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:12px 10px;background:#fff;border-bottom:1px solid #e8ebf0;position:sticky;top:0;z-index:50;box-shadow:0 3px 12px rgba(15,23,42,.06);}
-        .tab-btn{appearance:none;border:1px solid #e5e7eb;background:#f8fafc;color:#475467;border-radius:12px;min-width:0;min-height:48px;padding:8px 3px;font-size:13px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .2s,border-color .2s,color .2s;}
+        .tab-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:9px 10px;background:#fff;border-bottom:1px solid #e8ebf0;position:sticky;top:0;z-index:50;box-shadow:0 3px 12px rgba(15,23,42,.06);}
+        .tab-btn{appearance:none;border:1px solid #e5e7eb;background:#f8fafc;color:#475467;border-radius:11px;min-width:0;min-height:44px;padding:6px 2px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .2s,border-color .2s,color .2s;}
         .tab-btn .tab-icon{font-size:16px;line-height:1;}
         .tab-btn[aria-selected="true"]{background:var(--navy);border-color:var(--gold);color:#f4d47c;box-shadow:0 3px 9px rgba(26,43,72,.18);}
         .tab-panel{display:none;min-height:220px;padding-bottom:8px;}
         .tab-panel.active{display:block;}
-        .announcement-card{margin:16px 14px 8px;border:1px solid rgba(214,178,94,.5);border-radius:18px;overflow:hidden;background:#fffdf7;box-shadow:0 5px 16px rgba(15,23,42,.08);}
+        .announcement-card{margin:14px 14px 8px;border:1px solid rgba(214,178,94,.5);border-radius:18px;overflow:hidden;background:#fffdf7;box-shadow:0 5px 16px rgba(15,23,42,.08);}
         .announcement-head{background:linear-gradient(90deg,#07111f,var(--navy));color:#f4d47c;padding:15px 16px;text-align:center;font-size:18px;font-weight:950;letter-spacing:.3px;}
-        .announcement-body{padding:18px 16px;color:#273449;font-size:16px;line-height:1.55;font-weight:750;overflow-wrap:anywhere;}
+        .announcement-body{padding:15px 14px;color:#273449;font-size:15px;line-height:1.5;font-weight:750;overflow-wrap:anywhere;}
         .announcement-list{list-style:none;margin:0;padding:0;}
         .announcement-item{position:relative;padding:9px 4px 9px 27px;border-bottom:1px solid rgba(214,178,94,.22);white-space:pre-wrap;overflow-wrap:anywhere;}
         .announcement-item:last-child{border-bottom:0;}
         .announcement-item::before{content:"✦";position:absolute;left:3px;top:9px;color:#b38a32;font-size:17px;font-weight:950;}
         .announcement-empty{color:#667085;text-align:center;font-weight:700;padding:20px 16px;}
         
-        .hero{background:radial-gradient(circle at top left,#355d93 0,#0f2747 42%,#07111f 100%);color:white;text-align:center;padding:26px 20px 22px;border-bottom:4px solid var(--gold);}
-        .blok{font-size:31px;line-height:1.1;font-weight:950;letter-spacing:.2px;}
-        .isim{margin-top:8px;color:#f4d47c;font-size:22px;line-height:1.2;font-weight:850;word-break:break-word;}
+        .hero{background:radial-gradient(circle at top left,#355d93 0,#0f2747 42%,#07111f 100%);color:white;text-align:center;padding:18px 16px 15px;border-bottom:3px solid var(--gold);}
+        .blok{font-size:27px;line-height:1.1;font-weight:950;letter-spacing:.2px;}
+        .isim{margin-top:5px;color:#f4d47c;font-size:19px;line-height:1.2;font-weight:850;word-break:break-word;}
         
         .summary-sticky{padding:10px 12px 6px;}
         .summary{display:flex;gap:8px;}
         .box{flex:1;min-width:0;border-radius:16px;padding:14px 8px;text-align:center;white-space:pre-line;word-break:break-word;line-height:1.15;box-shadow:0 4px 6px rgba(0,0,0,.08);border:1px solid rgba(214,178,94,.18);transition:transform .2s;}
-        .box:hover{transform:translateY(-2px);}
+        .box:hover{transform:none;}
         .box .small{font-size:13px;display:block;margin-bottom:5px;font-weight:950;letter-spacing:.2px;}
         .box .big{font-size:21px;display:block;font-weight:950;}
         .box{position:relative;}
         .accrual-card{margin:10px 12px 12px;padding:16px 14px;border:1px solid #e5eaf1;border-radius:16px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.07);}
-        .accrual-head{font-size:15px;font-weight:950;color:var(--navy);text-align:center;margin-bottom:14px;letter-spacing:.2px;}
-        .accrual-row{display:grid;grid-template-columns:92px 1fr;gap:9px;align-items:center;margin:11px 0;}
+         .accrual-head{font-size:15px;font-weight:950;color:var(--navy);text-align:center;margin-bottom:5px;letter-spacing:.2px;}
+        .accrual-subtitle{font-size:11px;line-height:1.35;color:#64748b;text-align:center;margin:0 0 12px;font-weight:700;}
+        .accrual-row{display:grid;grid-template-columns:105px minmax(0,1fr);gap:9px;align-items:center;margin:10px 0;}
         .accrual-label{font-size:12px;font-weight:900;color:#475467;}
-        .accrual-track{height:17px;background:#eef2f7;border-radius:999px;overflow:hidden;}
+        .accrual-track{height:15px;background:#e8edf4;border-radius:999px;overflow:hidden;}
         .accrual-fill{height:100%;width:0;border-radius:999px;transition:width .35s ease;}
-        .accrual-fill.due{background:#d6b25e;}
-        .accrual-fill.paid{background:#16a36a;}
-        .accrual-value{font-size:13px;font-weight:950;color:#1f2937;text-align:right;margin-top:3px;}
+        .accrual-fill.annual{background:#64748b;}
+        .accrual-fill.due{background:#2563eb;}
+        .accrual-fill.paid{background:#16a34a;}
+        .accrual-value{font-size:12px;font-weight:950;color:#1f2937;text-align:right;margin-top:3px;}
         .accrual-difference{margin-top:13px;padding:10px 12px;border-radius:10px;text-align:center;font-size:13px;font-weight:900;background:#f1f5f9;color:#334155;}
         .accrual-difference.over{background:#ecfdf5;color:#047857;}
         .accrual-difference.under{background:#fff1f2;color:#be123c;}
-        .summary-label-row{display:flex;align-items:center;justify-content:center;gap:5px;min-height:22px;margin-bottom:5px;}
-        .box .small{display:inline;margin:0;}
-        .info-btn{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;flex:0 0 19px;border:1px solid currentColor;border-radius:50%;background:rgba(255,255,255,.72);color:inherit;font-size:12px;line-height:1;font-weight:950;cursor:pointer;padding:0;}
+         .summary-label-row{position:relative;display:flex;align-items:center;justify-content:center;min-height:22px;margin-bottom:5px;padding:0 22px;}
+        .box .small{display:block;width:100%;margin:0;text-align:center;overflow-wrap:anywhere;}
+        .info-btn{position:absolute;right:0;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;flex:0 0 19px;border:1px solid currentColor;border-radius:50%;background:rgba(255,255,255,.72);color:inherit;font-size:12px;line-height:1;font-weight:950;cursor:pointer;padding:0;}
         .info-btn:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
         .info-popover{display:none;position:fixed;z-index:120;top:0;left:16px;transform:none;width:min(300px,calc(100vw - 32px));padding:12px 13px;border:1px solid rgba(214,178,94,.75);border-radius:12px;background:#fff;color:#273449;text-align:left;font-size:13px;line-height:1.45;font-weight:700;white-space:normal;box-shadow:0 8px 24px rgba(15,23,42,.22);}
         .info-popover.show{display:block;}
@@ -174,11 +176,14 @@
         .yellow{background:linear-gradient(180deg,#fff7ed,#fef3c7);color:var(--amber);}
         .pink{background:linear-gradient(180deg,#fff0f0,#ffd6d6);color:#c0152a;}
         
-        .table-wrap{padding:14px 14px 0;overflow-x:hidden;}
+        .table-wrap{padding:12px 14px 0;overflow-x:hidden;}
         table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(15,23,42,.10);border:1px solid #e5e7eb;}
-        th{background:var(--navy);color:#f4d47c;padding:13px 4px;font-size:17px;font-weight:950;}
-        td{padding:11px 4px;text-align:center;border-bottom:1px solid var(--line);word-break:break-word;font-size:17px;font-weight:900;background:white;}
+        th{background:var(--navy);color:#f4d47c;padding:11px 4px;font-size:15px;font-weight:950;position:sticky;top:0;z-index:2;}
+        td{padding:10px 4px;text-align:center;border-bottom:1px solid var(--line);word-break:break-word;font-size:15px;font-weight:900;background:white;}
         td:first-child{text-align:left;padding-left:14px;color:#111827;background:var(--cool-gray);}
+        tr.current-month-row td{border-top:2px solid #2563eb;border-bottom:2px solid #2563eb;}
+        tr.current-month-row td:first-child{background:#dbeafe;color:#1d4ed8;font-weight:950;}
+        tr.current-month-row td:last-child{border-right:2px solid #2563eb;}
         
         .paid{background:var(--mint)!important;color:#047857;}
         .muted{background:#f1f5f9!important;color:#64748b;}
@@ -197,7 +202,7 @@
         .payment-value{flex:1;min-width:0;padding:12px 10px;font-size:15px;word-break:break-word;line-height:1.22;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:850;}
         .payment-text{flex:1;min-width:0;word-break:break-word;color:#111827;}
         
-        .copy-btn{min-height:42px;min-width:76px;background:linear-gradient(135deg,#1e8449,var(--active-green));color:#ffffff;border:none;padding:8px 14px;font-size:13px;border-radius:8px;cursor:pointer;white-space:nowrap;flex:0 0 auto;font-weight:950;transition:background .3s,transform .15s,box-shadow .3s;box-shadow:0 2px 8px rgba(39,174,96,.3);}
+        .copy-btn{min-height:44px;min-width:76px;min-height:44px;background:linear-gradient(135deg,#1e8449,var(--active-green));color:#ffffff;border:none;padding:8px 14px;font-size:13px;border-radius:8px;cursor:pointer;white-space:nowrap;flex:0 0 auto;font-weight:950;transition:background .3s,transform .15s,box-shadow .3s;box-shadow:0 2px 8px rgba(39,174,96,.3);}
         .copy-btn:hover{background:linear-gradient(135deg,#145a32,#1e8449);box-shadow:0 4px 14px rgba(39,174,96,.45);}
         .copy-btn:active{transform:scale(.94);}
         
@@ -227,14 +232,22 @@
         @media(max-width:580px){
             .card{max-width:100%;box-shadow:none;border-radius:0;}
             .summary{gap:5px;}
-            .summary-sticky{padding:8px 8px 4px;}
-            .accrual-card{margin:8px 8px 10px;padding:14px 11px;}
-            .accrual-row{grid-template-columns:82px 1fr;gap:7px;}
-            .tab-nav{padding:9px 7px;gap:4px;}
-            .tab-btn{font-size:12px;min-height:46px;border-radius:10px;}
-            .tab-btn .tab-icon{font-size:14px;}
-            .announcement-card{margin:12px 8px 8px;}
-            .table-wrap{padding:10px 8px 0;}
+             .summary-sticky{padding:7px 8px 3px;}
+            .summary{gap:5px;}
+            .box{padding:11px 7px;}
+            .box .small{font-size:12px;}
+            .box .big{font-size:19px;}
+            .accrual-card{margin:7px 8px 8px;padding:12px 10px;}
+            .accrual-row{grid-template-columns:88px minmax(0,1fr);gap:7px;margin:8px 0;}
+            .accrual-label{font-size:11px;}
+            .tab-nav{padding:7px 6px;gap:4px;}
+            .tab-btn{font-size:11px;min-height:42px;border-radius:9px;gap:3px;}
+            .tab-btn .tab-icon{font-size:13px;}
+            .announcement-card{margin:10px 8px 8px;max-height:calc(100svh - 145px);}
+            .table-wrap{padding:9px 8px 0;max-height:calc(100svh - 145px);}
+            .contact-card{margin:9px 8px 8px;padding:12px;}
+            .hero .blok{font-size:24px;}
+            .hero .isim{font-size:17px;}
             .payment{margin:12px 8px 8px;}
             .note{margin:10px 8px 0;}
         }
@@ -324,7 +337,7 @@
                     <span class="tab-icon" aria-hidden="true">▤</span><span>Duyurular</span>
                 </button>
                 <button type="button" class="tab-btn" id="tab-iletisim" role="tab" aria-controls="panel-iletisim" aria-selected="false" data-tab="iletisim">
-                    <span class="tab-icon" aria-hidden="true">▣</span><span>Banka Bilgileri</span>
+                    <span class="tab-icon" aria-hidden="true">▣</span><span>Banka</span>
                 </button>
             </div>
 
@@ -333,10 +346,15 @@
                     <div class="summary" id="summary-row-1"></div>
                     <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
                 </div>
-                <div class="accrual-card" id="accrual-card" aria-label="Yıllık tahakkuk ve ödeme karşılaştırması" hidden>
-                    <div class="accrual-head">TAHAKKUK / ÖDEME DURUMU</div>
+                <div class="accrual-card" id="accrual-card" aria-label="Yıllık toplam, tahakkuk ve ödeme karşılaştırması" hidden>
+                    <div class="accrual-head" id="accrual-head">AİDAT KARŞILAŞTIRMASI</div>
+                    <div class="accrual-subtitle" id="accrual-subtitle">Tahakkuk, içinde bulunulan aya kadarki aidat tutarıdır.</div>
+                    <div class="accrual-row" id="accrual-annual-row" hidden>
+                        <div class="accrual-label">Yıllık toplam</div>
+                        <div><div class="accrual-track"><div id="accrual-annual-bar" class="accrual-fill annual"></div></div><div id="accrual-annual-value" class="accrual-value">-</div></div>
+                    </div>
                     <div class="accrual-row">
-                        <div class="accrual-label">Tahakkuk</div>
+                        <div class="accrual-label">Tahakkuk eden</div>
                         <div><div class="accrual-track"><div id="accrual-due-bar" class="accrual-fill due"></div></div><div id="accrual-due-value" class="accrual-value">-</div></div>
                     </div>
                     <div class="accrual-row">
@@ -388,7 +406,7 @@
         </div>
     </div>
 
-    <div id="toast" class="toast">Kopyalandı</div>
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true">Kopyalandı</div>
 
     <script>
         // ⚙️ SADECE GEREKİRSE BU SATIRI DEĞİŞTİR:
@@ -727,6 +745,13 @@
                 var strongAy = document.createElement('strong');
                 strongAy.textContent = satir.ay;
                 tdAy.appendChild(strongAy);
+                var aylar = ['ocak','şubat','mart','nisan','mayıs','haziran','temmuz','ağustos','eylül','ekim','kasım','aralık'];
+                var ayAdi = String(satir.ay || '').toLocaleLowerCase('tr-TR').trim();
+                if(ayAdi === aylar[new Date().getMonth()]) {
+                    tr.className = 'current-month-row';
+                    tr.setAttribute('aria-label', satir.ay + ' - içinde bulunulan ay');
+                    tdAy.classList.add('current-month-cell');
+                }
                 
                 var tdAidat = document.createElement('td');
                 tdAidat.className = satir.aidatClass;
@@ -836,6 +861,8 @@
                 data.odenenYilRaw !== undefined && data.odenenYilRaw !== null;
             data.tahakkukYilRaw = guvenliSayi(data.tahakkukYilRaw);
             data.odenenYilRaw = guvenliSayi(data.odenenYilRaw);
+            data.yillikTahakkukVar = data.yillikTahakkukRaw !== undefined && data.yillikTahakkukRaw !== null;
+            data.yillikTahakkukRaw = guvenliSayi(data.yillikTahakkukRaw);
             data.notlar = guvenliMetin(data.notlar, '');
             data.odemeAlici = guvenliMetin(data.odemeAlici, '-');
             data.odemeIban = guvenliMetin(data.odemeIban, '-');
@@ -861,30 +888,55 @@
             var card = document.getElementById('accrual-card');
             if(!card) return;
             if(!data.grafikVerisiVar) { card.hidden = true; return; }
+
             var tahakkuk = Math.max(0, guvenliSayi(data.tahakkukYilRaw));
             var odenen = Math.max(0, guvenliSayi(data.odenenYilRaw));
-            var maxDeger = Math.max(tahakkuk, odenen, 1);
-            var tahakkukBar = document.getElementById('accrual-due-bar');
-            var odenenBar = document.getElementById('accrual-paid-bar');
-            var tahakkukValue = document.getElementById('accrual-due-value');
-            var odenenValue = document.getElementById('accrual-paid-value');
-            var farkEl = document.getElementById('accrual-difference');
+            var yillik = data.yillikTahakkukVar ? Math.max(0, guvenliSayi(data.yillikTahakkukRaw)) : 0;
+            var annualRow = document.getElementById('accrual-annual-row');
+            var subtitle = document.getElementById('accrual-subtitle');
+            annualRow.hidden = !data.yillikTahakkukVar;
+            subtitle.textContent = data.yillikTahakkukVar
+                ? 'Yıllık toplam 12 ayı; tahakkuk ise içinde bulunulan aya kadarki tutarı gösterir.'
+                : 'Tahakkuk, içinde bulunulan aya kadarki aidat tutarıdır.';
+
+            var maxDeger = Math.max(tahakkuk, odenen, yillik, 1);
             function tl(v) { return Math.round(v).toLocaleString('tr-TR') + ' TL'; }
-            tahakkukBar.style.width = (tahakkuk / maxDeger * 100) + '%';
-            odenenBar.style.width = (odenen / maxDeger * 100) + '%';
-            tahakkukValue.textContent = tl(tahakkuk);
-            odenenValue.textContent = tl(odenen);
+            function oran(v) { return Math.max(0, Math.min(100, v / maxDeger * 100)); }
+
+            if(data.yillikTahakkukVar) {
+                document.getElementById('accrual-annual-bar').style.width = oran(yillik) + '%';
+                document.getElementById('accrual-annual-value').textContent = tl(yillik);
+            }
+            document.getElementById('accrual-due-bar').style.width = oran(tahakkuk) + '%';
+            document.getElementById('accrual-paid-bar').style.width = oran(odenen) + '%';
+            document.getElementById('accrual-due-value').textContent = tl(tahakkuk);
+            document.getElementById('accrual-paid-value').textContent = tl(odenen);
+
+            var yil = new Date().getFullYear();
+            var head = document.getElementById('accrual-head');
+            if(head) head.textContent = yil + ' AİDAT KARŞILAŞTIRMASI';
+
+            // Bu fark yalnızca içinde bulunulan yılın tahakkuk ve ödemelerini karşılaştırır.
+            // Önceki yıldan devreden borç ayrı gösterilir; mahsuplaştırılmaz.
             var fark = odenen - tahakkuk;
+            var farkEl = document.getElementById('accrual-difference');
             farkEl.className = 'accrual-difference';
+            var sonuc = '';
             if(fark > 0) {
-                farkEl.textContent = tl(fark) + ' fazla ödeme';
+                sonuc = yil + ' yılı tahakkukuna göre ' + tl(fark) + ' fazla ödeme';
                 farkEl.classList.add('over');
             } else if(fark < 0) {
-                farkEl.textContent = tl(Math.abs(fark)) + ' eksik ödeme';
+                sonuc = yil + ' yılı tahakkukuna göre ' + tl(Math.abs(fark)) + ' eksik ödeme';
                 farkEl.classList.add('under');
             } else {
-                farkEl.textContent = 'Tahakkuk tutarı tamamen ödenmiş';
+                sonuc = yil + ' yılı tahakkuku tamamen ödenmiş';
             }
+            if(guvenliSayi(data.devirRaw) > 0) {
+                sonuc += ' · Önceki yıldan ' + tl(data.devirRaw) + ' devir borcu ayrıca bulunmaktadır.';
+            }
+            farkEl.textContent = sonuc;
+            farkEl.setAttribute('role', 'status');
+            farkEl.setAttribute('aria-live', 'polite');
             card.hidden = false;
         }
 
@@ -938,14 +990,16 @@
                     infoButton.setAttribute('aria-expanded', 'true');
                     // Bilgi kutusunu ekranın dışına taşmadan, dokunulan düğmenin altında göster.
                     var buttonRect = infoButton.getBoundingClientRect();
-                    var popWidth = Math.min(300, window.innerWidth - 32);
-                    var left = Math.max(16, Math.min(
+                    var popWidth = Math.max(220, Math.min(300, window.innerWidth - 24));
+                    var left = Math.max(12, Math.min(
                         buttonRect.left + buttonRect.width / 2 - popWidth / 2,
-                        window.innerWidth - popWidth - 16
+                        window.innerWidth - popWidth - 12
                     ));
                     info.style.width = popWidth + 'px';
                     info.style.left = left + 'px';
-                    info.style.top = Math.min(buttonRect.bottom + 10, window.innerHeight - 125) + 'px';
+                    var infoTop = buttonRect.bottom + 10;
+                    if(infoTop > window.innerHeight - 150) infoTop = Math.max(12, buttonRect.top - 110);
+                    info.style.top = infoTop + 'px';
                     var arrowLeft = Math.max(12, Math.min(
                         buttonRect.left + buttonRect.width / 2 - left - 6,
                         popWidth - 24
@@ -991,6 +1045,8 @@
             var btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.textContent = 'Kopyala';
+            btn.type = 'button';
+            btn.setAttribute('aria-label', label + ' bilgisini kopyala');
             btn.setAttribute('data-copy', copyVal);
             btn.onclick = function() { kopyaBtn(this); };
             
@@ -1035,8 +1091,8 @@
 
         function kopyaBtn(btn){kopya(btn.getAttribute("data-copy")||"");}
         function kopya(m){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(m).then(function(){toast("Kopyalandı");}).catch(function(){fallback(m);});}else{fallback(m);}}
-        function fallback(m){var e=document.createElement("textarea");e.value=m;e.style.position="fixed";e.style.opacity="0";document.body.appendChild(e);e.focus();e.select();try{document.execCommand("copy");toast("Kopyalandı");}catch(x){toast("Manuel kopyalayın");}document.body.removeChild(e);}
-        function toast(m){var t=document.getElementById("toast");t.textContent=m||"Kopyalandı";t.classList.add("show");setTimeout(function(){t.classList.remove("show");},1400);}
+        function fallback(m){var e=document.createElement("textarea");e.value=m;e.style.position="fixed";e.style.opacity="0";document.body.appendChild(e);e.focus();e.select();try{var ok=document.execCommand("copy");toast(ok?"Kopyalandı":"Kopyalama başarısız · Metni elle kopyalayın");}catch(x){toast("Kopyalama başarısız · Metni elle kopyalayın");}document.body.removeChild(e);}
+        function toast(m){var t=document.getElementById("toast");if(!t)return;t.textContent=m||"Kopyalandı";t.classList.add("show");if(window.toastTimer)clearTimeout(window.toastTimer);window.toastTimer=setTimeout(function(){t.classList.remove("show");},2200);}
     </script>
     
 <script>
