@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.7 HTML arayüz iyileştirmeleri | API ve mevcut panel akışı korunmuştur -->
+<!-- AYKENT AIDAT PANELİ — v3.9.14 Özet sekmesi son düzenlemeleri | API ve mevcut panel akışı korunmuştur -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -279,6 +279,78 @@
                 transition-duration: 0.01ms !important;
             }
         }
+        /* ─── v3.9.12: ÖZET SEKMESİ GÖRSEL SADELEŞTİRME (yalnızca görünüm) ─── */
+        #panel-ozet{padding:12px 12px 6px;background:#f5f7fb;}
+        #panel-ozet .summary-sticky{padding:0;}
+        #panel-ozet .summary{gap:10px;margin-bottom:10px;}
+        #panel-ozet .summary + .summary{margin-top:0 !important;}
+        #panel-ozet .box{
+            padding:16px 12px 14px;border-radius:18px;border:1px solid #e3e8f0;
+            box-shadow:0 2px 10px rgba(15,23,42,.06);background:#fff;
+            display:flex;flex-direction:column;justify-content:center;min-height:112px;
+        }
+        #panel-ozet .box.green{background:#fff;color:#0f5132;border-color:#bfe6cf;}
+        #panel-ozet .box.red{background:#fff;color:#9f1239;border-color:#f5b5c2;}
+        #panel-ozet .box.yellow{background:#fff;color:#7c3a0a;border-color:#f3d7a6;}
+        #panel-ozet .box.gray{background:#fff;color:#334155;border-color:#d7dde7;}
+        #panel-ozet .box.pink{background:#fff1f2;color:#9f1239;border:2px solid #e11d48;box-shadow:0 4px 14px rgba(225,29,72,.14);}
+        #panel-ozet .box .small{font-size:14px;font-weight:900;letter-spacing:.1px;margin-bottom:8px;line-height:1.25;}
+        #panel-ozet .box .big{font-size:26px;font-weight:950;line-height:1.1;letter-spacing:-.2px;}
+        #panel-ozet .summary-label-row{min-height:24px;margin-bottom:6px;}
+        #panel-ozet .info-btn{width:24px;height:24px;flex:0 0 24px;font-size:14px;}
+        #panel-ozet .accrual-card{margin:12px 0 10px;padding:18px 16px;border-radius:18px;border:1px solid #e3e8f0;box-shadow:0 2px 10px rgba(15,23,42,.06);}
+        #panel-ozet .accrual-head{font-size:17px;font-weight:950;color:#0f2747;text-align:left;margin-bottom:4px;}
+        #panel-ozet .accrual-subtitle{font-size:13px;text-align:left;margin-bottom:14px;line-height:1.4;}
+        #panel-ozet .accrual-compare-item-head{font-size:15px;margin-bottom:6px;}
+        #panel-ozet .accrual-compare-item-head strong{font-size:18px;}
+        #panel-ozet .accrual-track{height:16px;}
+        #panel-ozet .accrual-difference{font-size:15px;padding:12px 14px;border-radius:12px;margin-top:14px;}
+        #panel-ozet .note{margin:10px 0 0;font-size:16px;border-radius:16px;padding:16px;}
+        #panel-ozet .contact-card{margin:12px 0 4px;padding:18px 16px;border-radius:18px;border:1px solid #e3e8f0;background:#fff;box-shadow:0 2px 10px rgba(15,23,42,.06);}
+        #panel-ozet .contact-card-head{font-size:15px;font-weight:950;color:#0f2747;margin-bottom:6px;}
+        #panel-ozet .contact-card p{font-size:14px;line-height:1.45;color:#475467;margin-bottom:12px;}
+        #panel-ozet .whatsapp-btn{min-height:56px;font-size:17px;border-radius:16px;}
+        @media(max-width:380px){
+            #panel-ozet .box .big{font-size:23px;}
+            #panel-ozet .box .small{font-size:13px;}
+        }
+        /* ─── /v3.9.12 ─── */
+
+
+        /* ─── v3.9.13: ÖZET SEKME SON DÜZENLEMELERİ ─── */
+        #panel-ozet .box.green{background:linear-gradient(180deg,#f0fdf4,#e3f8eb);color:#065f46;border-color:#a7dfbd;}
+        #panel-ozet .box.red{background:linear-gradient(180deg,#fff5f5,#ffe7eb);color:#9f1239;border-color:#f3b5c2;}
+        #panel-ozet .box.yellow{background:linear-gradient(180deg,#fffbeb,#fff3cf);color:#854d0e;border-color:#f0d28b;}
+        #panel-ozet .box.gray{background:linear-gradient(180deg,#f8fafc,#edf1f6);color:#334155;border-color:#cbd5e1;}
+        #panel-ozet .box.pink{background:linear-gradient(180deg,#fff1f2,#ffe0e6);color:#9f1239;border:2px solid #e11d48;box-shadow:0 4px 14px rgba(225,29,72,.13);}
+        #panel-ozet .box{min-height:108px;}
+        #panel-ozet .box.green .big{color:#047857;}
+        #panel-ozet .box.red .big,#panel-ozet .box.pink .big{color:#be123c;}
+        #panel-ozet .box.yellow .big{color:#a16207;}
+        #panel-ozet .box.gray .big{color:#475569;}
+        #panel-ozet .accrual-compare-row{display:block;position:relative;}
+        #panel-ozet .accrual-compare-item{margin:10px 0 0;}
+        #panel-ozet .accrual-compare-item:first-child{margin-top:0;}
+        #panel-ozet .accrual-gap{height:31px;margin:0;position:relative;overflow:visible;}
+        #panel-ozet .accrual-gap:before{content:"";position:absolute;left:var(--gap-left,50%);top:5px;width:var(--gap-width,0%);height:6px;background:radial-gradient(circle,var(--gap-color,#d97706) 1.5px,transparent 1.8px) left center/6px 6px repeat-x;}
+        #panel-ozet .accrual-gap:after{content:"";position:absolute;left:var(--gap-left,50%);top:5px;width:var(--gap-width,0%);height:6px;background:radial-gradient(circle at 3px 3px,var(--gap-color,#d97706) 2.5px,transparent 2.8px),radial-gradient(circle at calc(100% - 3px) 3px,var(--gap-color,#d97706) 2.5px,transparent 2.8px);pointer-events:none;}
+        #panel-ozet .accrual-gap-pill{top:13px;left:var(--gap-mid,50%);padding:3px 9px;border:1px solid var(--gap-color,#d97706);background:#fff;border-radius:999px;color:var(--gap-color,#b45309);font-size:11px;}
+        #panel-ozet .accrual-compare-item-head strong{font-variant-numeric:tabular-nums;}
+        #panel-ozet .accrual-fill{transition:width .45s cubic-bezier(.22,.75,.25,1);}
+        #panel-ozet .accrual-fill.paid{background:#00a838;}
+        #panel-ozet .accrual-difference{line-height:1.45;}
+        @media(max-width:380px){
+            #panel-ozet{padding:9px 8px 5px;}
+            #panel-ozet .summary{gap:7px;}
+            #panel-ozet .box{min-height:98px;padding:12px 8px;}
+            #panel-ozet .box .big{font-size:22px;}
+            #panel-ozet .accrual-card{padding:14px 12px;}
+            #panel-ozet .accrual-compare-item-head{font-size:13px;}
+            #panel-ozet .accrual-compare-item-head strong{font-size:16px;}
+            #panel-ozet .accrual-gap-pill{font-size:10px;padding:2px 7px;}
+        }
+        /* ─── /v3.9.13 ─── */
+
 </style>
     
 <script>
@@ -613,6 +685,54 @@
             });
         })();
 
+        // v3.9.12: Parmak hareketi sırasında aktif sekme içeriği parmağı takip eder (görsel geri bildirim).
+        // Geçiş kararı ve sekmeAc çağrısı önceki bloktaki mantıkla aynıdır; yalnızca takip efekti eklenmiştir.
+        (function sekmeParmakTakibiKur_() {
+            var aktifPanel = null;
+            var x0 = 0, y0 = 0, yatayMi = null;
+            var MAX_SURUKLEME = 90;
+
+            function panelAl() {
+                return document.querySelector('.tab-panel.active');
+            }
+            function panelSifirla(gecisli) {
+                if(!aktifPanel) return;
+                aktifPanel.style.transition = gecisli ? 'transform .22s ease' : 'none';
+                aktifPanel.style.transform = '';
+                aktifPanel = null;
+            }
+
+            document.addEventListener('touchstart', function(event) {
+                if(!event.touches || event.touches.length !== 1) return;
+                if(event.target.closest && event.target.closest('input, textarea, select, .info-popover, .info-btn, .copy-btn, a')) return;
+                var panel = panelAl();
+                if(!panel || !panel.contains(event.target)) return;
+                aktifPanel = panel;
+                x0 = event.touches[0].clientX;
+                y0 = event.touches[0].clientY;
+                yatayMi = null;
+            }, {passive:true});
+
+            document.addEventListener('touchmove', function(event) {
+                if(!aktifPanel || !event.touches || event.touches.length !== 1) return;
+                var dx = event.touches[0].clientX - x0;
+                var dy = event.touches[0].clientY - y0;
+                if(yatayMi === null) {
+                    if(Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+                    yatayMi = Math.abs(dx) > Math.abs(dy) * 1.35;
+                }
+                if(!yatayMi) return;
+                var sinirli = Math.max(-MAX_SURUKLEME, Math.min(MAX_SURUKLEME, dx));
+                aktifPanel.style.transition = 'none';
+                aktifPanel.style.transform = 'translateX(' + Math.round(sinirli * 0.6) + 'px)';
+            }, {passive:true});
+
+            document.addEventListener('touchend', function() {
+                panelSifirla(true);
+                yatayMi = null;
+            }, {passive:true});
+        })();
+
         document.addEventListener('click', function() {
             document.querySelectorAll('.info-popover.show').forEach(function(info) {
                 info.classList.remove('show');
@@ -754,18 +874,22 @@
             var devirTemiz = temizleKurus(data.devir);
             var toplamTemiz = temizleKurus(data.toplamBorc);
 
+            // Açıklama yılı öncelikle Apps Script'ten gelen sistem/tahakkuk yılıdır.
+            var cariYil = panelYiliniAl_(data);
+            var oncekiYil = cariYil - 1;
+
             // 🔒 XSS Korumalı 1. Özet Satırı Yapılandırması
             var row1 = document.getElementById('summary-row-1');
             row1.innerHTML = '';
             
             row1.appendChild(createSummaryBox(data.etiketOdenen, odenenTemiz, 'green',
-                '2026 yılında yapılan aidat ödemelerinin toplamı.'));
+                cariYil + ' yılında yapılan aidat ödemelerinin toplamı.'));
             if(data.borcYilRaw > 0) {
                 row1.appendChild(createSummaryBox(data.etiketBorc, borcTemiz, 'red',
-                    '2026 yılında tahakkuk etmiş, henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında tahakkuk etmiş, henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
             } else {
                 row1.appendChild(createSummaryBox(data.etiketBorc, '0 TL', 'green',
-                    '2026 yılında tahakkuk etmiş, henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında tahakkuk etmiş, henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
             }
 
             // 🔒 XSS Korumalı 2. Özet Satırı Yapılandırması
@@ -774,18 +898,18 @@
 
             if(data.devirRaw > 0) {
                 row2.appendChild(createSummaryBox(data.etiketDevir, devirTemiz, 'yellow',
-                    '2025 yılından devreden, henüz ödenmemiş borç.'));
+                    oncekiYil + ' yılından devreden, henüz ödenmemiş borç.'));
             } else {
                 row2.appendChild(createSummaryBox(data.etiketDevir, 'Borç yok', 'gray',
-                    '2025 yılından devreden, henüz ödenmemiş borç.'));
+                    oncekiYil + ' yılından devreden, henüz ödenmemiş borç.'));
             }
 
             if(data.toplamBorcRaw <= 0) {
                 row2.appendChild(createSummaryBox('TOPLAM DURUM', 'BORÇ YOK 👍', 'green',
-                    '2026 yılında tahakkuk etmiş ödenmemiş aidat + 2025 yılından devreden borç. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında tahakkuk etmiş ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
             } else {
                 row2.appendChild(createSummaryBox('TOPLAM BORÇ', toplamTemiz, 'pink',
-                    '2026 yılında tahakkuk etmiş ödenmemiş aidat + 2025 yılından devreden borç. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında tahakkuk etmiş ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
             }
 
             if(data.notlar && data.notlar !== '0') {
@@ -900,6 +1024,14 @@
             return (v === 'paid' || v === 'muted') ? v : '';
         }
 
+        // Öncelik Apps Script yanıtındaki sistem/tahakkuk yılıdır. Eski API yanıtlarında alan yoksa cihaz yılına geri düşer.
+        function panelYiliniAl_(data) {
+            var yil = Number(data && data.tahakkukYil);
+            return Number.isInteger(yil) && yil >= 2000 && yil <= 2100
+                ? yil
+                : new Date().getFullYear();
+        }
+
         function guvenliPanelVerisi(data) {
             data = data || {};
             data.blok = guvenliMetin(data.blok, '-');
@@ -976,16 +1108,25 @@
             var gapEl = document.getElementById('accrual-gap');
             gapEl.hidden = gap === 0;
             if(gap > 0) {
-                var farkinOrtaNoktasi = (oran(tahakkuk) + oran(odenen)) / 2;
-                gapEl.style.setProperty('--gap-x', farkinOrtaNoktasi + '%');
+                var duePct = oran(tahakkuk);
+                var paidPct = oran(odenen);
+                var gapLeft = Math.min(duePct, paidPct);
+                var gapWidth = Math.abs(duePct - paidPct);
+                var gapMid = gapLeft + gapWidth / 2;
+                var gapColor = odenen < tahakkuk ? '#d97706' : '#059669';
+                gapEl.style.setProperty('--gap-left', gapLeft + '%');
+                gapEl.style.setProperty('--gap-width', gapWidth + '%');
+                gapEl.style.setProperty('--gap-mid', gapMid + '%');
+                gapEl.style.setProperty('--gap-color', gapColor);
                 var gapValue = document.getElementById('accrual-gap-value');
                 gapValue.textContent = tl(gap) + (odenen < tahakkuk ? ' eksik' : ' fazla');
                 gapValue.setAttribute('aria-label', tl(gap) + (odenen < tahakkuk ? ' eksik ödeme' : ' fazla ödeme'));
             } else {
+                gapEl.style.setProperty('--gap-width', '0%');
                 document.getElementById('accrual-gap-value').textContent = '';
             }
 
-            var yil = new Date().getFullYear();
+            var yil = panelYiliniAl_(data);
             var head = document.getElementById('accrual-head');
             if(head) head.textContent = yil + ' AİDAT KARŞILAŞTIRMASI';
 
@@ -1078,6 +1219,7 @@
                         popWidth - 24
                     ));
                     info.style.setProperty('--info-arrow-left', arrowLeft + 'px');
+                    // Önceki davranış korunur: bilgi balonu 5 saniye sonra otomatik kapanır.
                     summaryInfoTimer = setTimeout(function() {
                         info.classList.remove('show');
                         box.classList.remove('info-open');
