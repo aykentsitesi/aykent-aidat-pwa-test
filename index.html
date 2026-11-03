@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.14 Özet sekmesi son düzenlemeleri | API ve mevcut panel akışı korunmuştur -->
+<!-- AYKENT AIDAT PANELİ — v3.9.15 Özet sekmesi son düzenlemeleri | API ve mevcut panel akışı korunmuştur -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -351,6 +351,35 @@
         }
         /* ─── /v3.9.13 ─── */
 
+
+        /* ─── v3.9.15: YILLIK AİDAT / BUGÜNE KADAR DURUM AYRIMI ─── */
+        #panel-ozet .accrual-card{padding:0;overflow:hidden;border:1px solid #dfe5ec;border-radius:18px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06);}
+        #panel-ozet .annual-aidat-section{padding:19px 18px 16px;background:linear-gradient(180deg,#f4f6f8,#edf1f4);text-align:center;}
+        #panel-ozet .section-kicker{font-size:14px;line-height:1.35;font-weight:900;letter-spacing:.35px;color:#475569;}
+        #panel-ozet .annual-total{margin-top:9px;font-size:32px;line-height:1.12;font-weight:950;letter-spacing:-.5px;color:#263445;font-variant-numeric:tabular-nums;}
+        #panel-ozet .annual-caption{margin-top:4px;font-size:14px;font-weight:700;color:#64748b;}
+        #panel-ozet .monthly-aidat-line{display:flex;justify-content:center;align-items:center;gap:8px;margin:13px auto 0;padding:9px 12px;max-width:260px;border-top:1px solid #d8e0e8;font-size:15px;color:#475569;}
+        #panel-ozet .monthly-aidat-line strong{font-size:17px;color:#263445;font-variant-numeric:tabular-nums;}
+        #panel-ozet .current-status-section{padding:17px 18px 16px;}
+        #panel-ozet .current-status-section .section-kicker{margin-bottom:15px;color:#263445;}
+        #panel-ozet .status-item{margin:0 0 17px;}
+        #panel-ozet .status-item:last-of-type{margin-bottom:0;}
+        #panel-ozet .status-item-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;font-size:15px;font-weight:800;color:#475569;}
+        #panel-ozet .status-item-head strong{font-size:18px;font-weight:950;color:#263445;white-space:nowrap;font-variant-numeric:tabular-nums;}
+        #panel-ozet .status-track{height:14px;border-radius:999px;overflow:hidden;background:#e9edf2;}
+        #panel-ozet .status-fill{height:100%;width:0;border-radius:999px;transition:width .45s ease;}
+        #panel-ozet .status-fill.due{background:#626d7a;}
+        #panel-ozet .status-fill.paid{background:#2785d8;}
+        #panel-ozet .status-note{margin-top:15px;padding-top:11px;border-top:1px solid #edf0f3;font-size:13px;line-height:1.4;color:#64748b;text-align:center;}
+        @media(max-width:380px){
+            #panel-ozet .annual-aidat-section{padding:16px 12px 14px;}
+            #panel-ozet .annual-total{font-size:29px;}
+            #panel-ozet .current-status-section{padding:15px 13px 14px;}
+            #panel-ozet .section-kicker{font-size:13px;}
+            #panel-ozet .status-item-head{font-size:14px;}
+            #panel-ozet .status-item-head strong{font-size:17px;}
+        }
+        /* ─── /v3.9.15 ─── */
 </style>
     
 <script>
@@ -437,25 +466,25 @@
                     <div class="summary" id="summary-row-1"></div>
                     <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
                 </div>
-                <div class="accrual-card" id="accrual-card" aria-label="Yıllık toplam, tahakkuk ve ödeme karşılaştırması" hidden>
-                    <div class="accrual-head" id="accrual-head">AİDAT KARŞILAŞTIRMASI</div>
-                    <div class="accrual-subtitle" id="accrual-subtitle">Tahakkuk, içinde bulunulan aya kadarki aidat tutarıdır.</div>
-                    <div class="accrual-row" id="accrual-annual-row" hidden>
-                        <div class="accrual-label">Yıllık toplam</div>
-                        <div><div class="accrual-track"><div id="accrual-annual-bar" class="accrual-fill annual"></div></div><div id="accrual-annual-value" class="accrual-value">-</div></div>
-                    </div>
-                    <div class="accrual-row accrual-compare-row">
-                        <div class="accrual-compare-item due-item">
-                            <div class="accrual-compare-item-head"><span>Tahakkuk eden</span><strong id="accrual-due-value">-</strong></div>
-                            <div class="accrual-track"><div id="accrual-due-bar" class="accrual-fill due"></div></div>
+                <div class="accrual-card" id="accrual-card" aria-label="Yıllık aidat ve bugüne kadarki durum" hidden>
+                    <section class="annual-aidat-section" id="accrual-annual-row" hidden aria-label="Yıllık aidat bilgisi">
+                        <div class="section-kicker" id="accrual-head">2026 YILLIK AİDATINIZ</div>
+                        <div class="annual-total" id="accrual-annual-value">-</div>
+                        <div class="annual-caption">12 aylık toplam</div>
+                        <div class="monthly-aidat-line"><span>Aylık aidat</span><strong id="accrual-monthly-value">-</strong></div>
+                    </section>
+                    <div class="current-status-section">
+                        <div class="section-kicker" id="accrual-status-head">BUGÜNE KADAR DURUM (KASIM DAHİL)</div>
+                        <div class="status-item due-item">
+                            <div class="status-item-head"><span>Tahakkuk eden</span><strong id="accrual-due-value">-</strong></div>
+                            <div class="status-track"><div id="accrual-due-bar" class="status-fill due"></div></div>
                         </div>
-                        <div class="accrual-gap" id="accrual-gap" hidden><span class="accrual-gap-pill" id="accrual-gap-value"></span></div>
-                        <div class="accrual-compare-item paid-item">
-                            <div class="accrual-compare-item-head"><span>Ödenen</span><strong id="accrual-paid-value">-</strong></div>
-                            <div class="accrual-track"><div id="accrual-paid-bar" class="accrual-fill paid"></div></div>
+                        <div class="status-item paid-item">
+                            <div class="status-item-head"><span>Ödenen</span><strong id="accrual-paid-value">-</strong></div>
+                            <div class="status-track"><div id="accrual-paid-bar" class="status-fill paid"></div></div>
                         </div>
+                        <div class="status-note">Ödemeler, aidat tahakkukuna göre yapılan kayıtlardır.</div>
                     </div>
-                    <div id="accrual-difference" class="accrual-difference"></div>
                 </div>
                 <div id="panel-not" class="note"></div>
                 <div class="contact-card">
@@ -1084,73 +1113,29 @@
             var odenen = Math.max(0, guvenliSayi(data.odenenYilRaw));
             var yillik = data.yillikTahakkukVar ? Math.max(0, guvenliSayi(data.yillikTahakkukRaw)) : 0;
             var annualRow = document.getElementById('accrual-annual-row');
-            var subtitle = document.getElementById('accrual-subtitle');
             annualRow.hidden = !data.yillikTahakkukVar;
+
+            var yil = panelYiliniAl_(data);
             var ayAdlari = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
-            var icindeBulunulanAy = ayAdlari[new Date().getMonth()];
-            subtitle.textContent = data.yillikTahakkukVar
-                ? 'Yıllık toplam 12 ayı; tahakkuk ise içinde bulunulan ay dahil (' + icindeBulunulanAy + ' dahil) tutarı gösterir.'
-                : 'Tahakkuk, içinde bulunulan ay dahil (' + icindeBulunulanAy + ' dahil) aidat tutarıdır.';
+            var ay = ayAdlari[new Date().getMonth()];
+            var statusHead = document.getElementById('accrual-status-head');
+            if(statusHead) statusHead.textContent = 'BUGÜNE KADAR DURUM (' + ay.toLocaleUpperCase('tr-TR') + ' DAHİL)';
+            var head = document.getElementById('accrual-head');
+            if(head) head.textContent = yil + ' YILLIK AİDATINIZ';
 
-            var maxDeger = Math.max(tahakkuk, odenen, yillik, 1);
             function tl(v) { return Math.round(v).toLocaleString('tr-TR') + ' TL'; }
-            function oran(v) { return Math.max(0, Math.min(100, v / maxDeger * 100)); }
-
             if(data.yillikTahakkukVar) {
-                document.getElementById('accrual-annual-bar').style.width = oran(yillik) + '%';
                 document.getElementById('accrual-annual-value').textContent = tl(yillik);
+                document.getElementById('accrual-monthly-value').textContent = tl(yillik / 12);
             }
+
+            // İki tutar aynı ölçeği kullanır; fark/eksik/fazla yorumu üretilmez.
+            var maxDeger = Math.max(tahakkuk, odenen, 1);
+            function oran(v) { return Math.max(0, Math.min(100, v / maxDeger * 100)); }
             document.getElementById('accrual-due-bar').style.width = oran(tahakkuk) + '%';
             document.getElementById('accrual-paid-bar').style.width = oran(odenen) + '%';
             document.getElementById('accrual-due-value').textContent = tl(tahakkuk);
             document.getElementById('accrual-paid-value').textContent = tl(odenen);
-            var gap = Math.abs(tahakkuk - odenen);
-            var gapEl = document.getElementById('accrual-gap');
-            gapEl.hidden = gap === 0;
-            if(gap > 0) {
-                var duePct = oran(tahakkuk);
-                var paidPct = oran(odenen);
-                var gapLeft = Math.min(duePct, paidPct);
-                var gapWidth = Math.abs(duePct - paidPct);
-                var gapMid = gapLeft + gapWidth / 2;
-                var gapColor = odenen < tahakkuk ? '#d97706' : '#059669';
-                gapEl.style.setProperty('--gap-left', gapLeft + '%');
-                gapEl.style.setProperty('--gap-width', gapWidth + '%');
-                gapEl.style.setProperty('--gap-mid', gapMid + '%');
-                gapEl.style.setProperty('--gap-color', gapColor);
-                var gapValue = document.getElementById('accrual-gap-value');
-                gapValue.textContent = tl(gap) + (odenen < tahakkuk ? ' eksik' : ' fazla');
-                gapValue.setAttribute('aria-label', tl(gap) + (odenen < tahakkuk ? ' eksik ödeme' : ' fazla ödeme'));
-            } else {
-                gapEl.style.setProperty('--gap-width', '0%');
-                document.getElementById('accrual-gap-value').textContent = '';
-            }
-
-            var yil = panelYiliniAl_(data);
-            var head = document.getElementById('accrual-head');
-            if(head) head.textContent = yil + ' AİDAT KARŞILAŞTIRMASI';
-
-            // Bu fark yalnızca içinde bulunulan yılın tahakkuk ve ödemelerini karşılaştırır.
-            // Önceki yıldan devreden borç ayrı gösterilir; mahsuplaştırılmaz.
-            var fark = odenen - tahakkuk;
-            var farkEl = document.getElementById('accrual-difference');
-            farkEl.className = 'accrual-difference';
-            var sonuc = '';
-            if(fark > 0) {
-                sonuc = yil + ' yılı tahakkukuna göre ' + tl(fark) + ' fazla ödeme';
-                farkEl.classList.add('over');
-            } else if(fark < 0) {
-                sonuc = yil + ' yılı tahakkukuna göre ' + tl(Math.abs(fark)) + ' eksik ödeme';
-                farkEl.classList.add('under');
-            } else {
-                sonuc = yil + ' yılı tahakkuku tamamen ödenmiş';
-            }
-            if(guvenliSayi(data.devirRaw) > 0) {
-                sonuc += ' · Önceki yıldan ' + tl(data.devirRaw) + ' devir borcu ayrıca bulunmaktadır.';
-            }
-            farkEl.textContent = sonuc;
-            farkEl.setAttribute('role', 'status');
-            farkEl.setAttribute('aria-live', 'polite');
             card.hidden = false;
         }
 
