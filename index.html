@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.15 Özet sekmesi son düzenlemeleri | API ve mevcut panel akışı korunmuştur -->
+<!-- AYKENT AIDAT PANELİ — v3.9.15 Özet sekmesi görsel ve grafik düzeltmeleri | API ve mevcut panel akışı korunmuştur -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -351,35 +351,30 @@
         }
         /* ─── /v3.9.13 ─── */
 
+        /* ─── v3.9.14: SORU TABANLI ÖZET ─── */
+        #ozet-sorular{padding:12px 12px 6px;background:#f4f6fa;}
+        #ozet-sorular .oz-q{background:#fff;border:1px solid #e3e8f0;border-radius:16px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(15,23,42,.05);}
+        #ozet-sorular .oz-label{font-size:15px;font-weight:700;color:#334155;line-height:1.35;}
+        #ozet-sorular .oz-answer{margin-top:6px;font-size:28px;font-weight:900;color:#1A2B48;line-height:1.1;overflow-wrap:anywhere;}
+        #ozet-sorular .oz-answer small{font-size:14px;font-weight:700;color:#5b6678;margin-left:6px;}
+        #ozet-sorular .oz-answer.blue{color:#2563EB;}
+        #ozet-sorular .oz-q.ok{background:#ecfdf5;border-color:#a7dfbd;}
+        #ozet-sorular .oz-q.ok .oz-answer{color:#047857;}
+        #ozet-sorular .oz-q.warn{background:#fff8ec;border-color:#f0d28b;}
+        #ozet-sorular .oz-q.warn .oz-answer{color:#7c4a03;}
+        #ozet-sorular .oz-hint{font-size:13px;color:#5b6678;margin-top:6px;line-height:1.35;}
+        #ozet-sorular .oz-progress{margin-top:10px;height:12px;border-radius:99px;background:#e5e7eb;overflow:hidden;}
+        #ozet-sorular .oz-progress span{display:block;height:100%;background:#2563EB;border-radius:99px;transition:width .3s ease;}
+        #ozet-sorular ~ .summary-sticky,
+        #ozet-sorular ~ .accrual-card{display:none !important;}
+        @media(max-width:380px){ #ozet-sorular .oz-answer{font-size:24px;} }
+        /* ─── /v3.9.14 ─── */
 
-        /* ─── v3.9.15: YILLIK AİDAT / BUGÜNE KADAR DURUM AYRIMI ─── */
-        #panel-ozet .accrual-card{padding:0;overflow:hidden;border:1px solid #dfe5ec;border-radius:18px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06);}
-        #panel-ozet .annual-aidat-section{padding:19px 18px 16px;background:linear-gradient(180deg,#f4f6f8,#edf1f4);text-align:center;}
-        #panel-ozet .section-kicker{font-size:14px;line-height:1.35;font-weight:900;letter-spacing:.35px;color:#475569;}
-        #panel-ozet .annual-total{margin-top:9px;font-size:32px;line-height:1.12;font-weight:950;letter-spacing:-.5px;color:#263445;font-variant-numeric:tabular-nums;}
-        #panel-ozet .annual-caption{margin-top:4px;font-size:14px;font-weight:700;color:#64748b;}
-        #panel-ozet .monthly-aidat-line{display:flex;justify-content:center;align-items:center;gap:8px;margin:13px auto 0;padding:9px 12px;max-width:260px;border-top:1px solid #d8e0e8;font-size:15px;color:#475569;}
-        #panel-ozet .monthly-aidat-line strong{font-size:17px;color:#263445;font-variant-numeric:tabular-nums;}
-        #panel-ozet .current-status-section{padding:17px 18px 16px;}
-        #panel-ozet .current-status-section .section-kicker{margin-bottom:15px;color:#263445;}
-        #panel-ozet .status-item{margin:0 0 17px;}
-        #panel-ozet .status-item:last-of-type{margin-bottom:0;}
-        #panel-ozet .status-item-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;font-size:15px;font-weight:800;color:#475569;}
-        #panel-ozet .status-item-head strong{font-size:18px;font-weight:950;color:#263445;white-space:nowrap;font-variant-numeric:tabular-nums;}
-        #panel-ozet .status-track{height:14px;border-radius:999px;overflow:hidden;background:#e9edf2;}
-        #panel-ozet .status-fill{height:100%;width:0;border-radius:999px;transition:width .45s ease;}
-        #panel-ozet .status-fill.due{background:#626d7a;}
-        #panel-ozet .status-fill.paid{background:#2785d8;}
-        #panel-ozet .status-note{margin-top:15px;padding-top:11px;border-top:1px solid #edf0f3;font-size:13px;line-height:1.4;color:#64748b;text-align:center;}
-        @media(max-width:380px){
-            #panel-ozet .annual-aidat-section{padding:16px 12px 14px;}
-            #panel-ozet .annual-total{font-size:29px;}
-            #panel-ozet .current-status-section{padding:15px 13px 14px;}
-            #panel-ozet .section-kicker{font-size:13px;}
-            #panel-ozet .status-item-head{font-size:14px;}
-            #panel-ozet .status-item-head strong{font-size:17px;}
-        }
+        /* ─── v3.9.15: iPhone geçiş stili ─── */
+        .tab-panel{transform:translate3d(0,0,0);backface-visibility:hidden;}
+        @media(prefers-reduced-motion:reduce){ .tab-panel{transition:none!important;} }
         /* ─── /v3.9.15 ─── */
+
 </style>
     
 <script>
@@ -462,29 +457,30 @@
             </div>
 
             <section class="tab-panel active" id="panel-ozet" role="tabpanel" aria-labelledby="tab-ozet" data-panel="ozet">
+                <div id="ozet-sorular" aria-live="polite"></div>
                 <div class="summary-sticky">
                     <div class="summary" id="summary-row-1"></div>
                     <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
                 </div>
-                <div class="accrual-card" id="accrual-card" aria-label="Yıllık aidat ve bugüne kadarki durum" hidden>
-                    <section class="annual-aidat-section" id="accrual-annual-row" hidden aria-label="Yıllık aidat bilgisi">
-                        <div class="section-kicker" id="accrual-head">2026 YILLIK AİDATINIZ</div>
-                        <div class="annual-total" id="accrual-annual-value">-</div>
-                        <div class="annual-caption">12 aylık toplam</div>
-                        <div class="monthly-aidat-line"><span>Aylık aidat</span><strong id="accrual-monthly-value">-</strong></div>
-                    </section>
-                    <div class="current-status-section">
-                        <div class="section-kicker" id="accrual-status-head">BUGÜNE KADAR DURUM (KASIM DAHİL)</div>
-                        <div class="status-item due-item">
-                            <div class="status-item-head"><span>Tahakkuk eden</span><strong id="accrual-due-value">-</strong></div>
-                            <div class="status-track"><div id="accrual-due-bar" class="status-fill due"></div></div>
-                        </div>
-                        <div class="status-item paid-item">
-                            <div class="status-item-head"><span>Ödenen</span><strong id="accrual-paid-value">-</strong></div>
-                            <div class="status-track"><div id="accrual-paid-bar" class="status-fill paid"></div></div>
-                        </div>
-                        <div class="status-note">Ödemeler, aidat tahakkukuna göre yapılan kayıtlardır.</div>
+                <div class="accrual-card" id="accrual-card" aria-label="Yıllık toplam, tahakkuk ve ödeme karşılaştırması" hidden>
+                    <div class="accrual-head" id="accrual-head">AİDAT KARŞILAŞTIRMASI</div>
+                    <div class="accrual-subtitle" id="accrual-subtitle">Tahakkuk, içinde bulunulan aya kadarki aidat tutarıdır.</div>
+                    <div class="accrual-row" id="accrual-annual-row" hidden>
+                        <div class="accrual-label">Yıllık toplam</div>
+                        <div><div class="accrual-track"><div id="accrual-annual-bar" class="accrual-fill annual"></div></div><div id="accrual-annual-value" class="accrual-value">-</div></div>
                     </div>
+                    <div class="accrual-row accrual-compare-row">
+                        <div class="accrual-compare-item due-item">
+                            <div class="accrual-compare-item-head"><span>Tahakkuk eden</span><strong id="accrual-due-value">-</strong></div>
+                            <div class="accrual-track"><div id="accrual-due-bar" class="accrual-fill due"></div></div>
+                        </div>
+                        <div class="accrual-gap" id="accrual-gap" hidden><span class="accrual-gap-pill" id="accrual-gap-value"></span></div>
+                        <div class="accrual-compare-item paid-item">
+                            <div class="accrual-compare-item-head"><span>Ödenen</span><strong id="accrual-paid-value">-</strong></div>
+                            <div class="accrual-track"><div id="accrual-paid-bar" class="accrual-fill paid"></div></div>
+                        </div>
+                    </div>
+                    <div id="accrual-difference" class="accrual-difference"></div>
                 </div>
                 <div id="panel-not" class="note"></div>
                 <div class="contact-card">
@@ -645,7 +641,7 @@
         // Sekmeler yalnızca görünümü değiştirir; API ve veri akışı aynen korunur.
         var ilkSekmeGosterildi = false;
         var sekmeSirasi = ['ozet', 'odemeler', 'duyurular', 'iletisim'];
-        function sekmeAc(sekmeAdi, yon) {
+        function sekmeAc(sekmeAdi, yon, sessiz) {
             var gecerliSekmeler = sekmeSirasi;
             if(gecerliSekmeler.indexOf(sekmeAdi) === -1) sekmeAdi = 'ozet';
             var onceki = document.querySelector('.tab-btn[aria-selected="true"]');
@@ -663,7 +659,7 @@
                 panel.classList.remove('slide-from-right', 'slide-from-left');
                 panel.classList.toggle('active', aktif);
                 panel.hidden = !aktif;
-                if(aktif) {
+                if(aktif && !sessiz) {
                     panel.classList.add(yon >= 0 ? 'slide-from-right' : 'slide-from-left');
                     panel.addEventListener('animationend', function temizle() {
                         panel.classList.remove('slide-from-right', 'slide-from-left');
@@ -675,7 +671,7 @@
 
         document.querySelectorAll('.tab-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                sekmeAc(btn.getAttribute('data-tab'));
+                iphoneGecis_(btn.getAttribute('data-tab'));
             });
             btn.addEventListener('keydown', function(event) {
                 if(event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -689,76 +685,210 @@
             });
         });
 
-        // Mobilde içerik üzerinde yatay kaydırma ile sekmeler arasında geçiş.
-        (function sekmeKaydirmaKur_() {
-            var paneller = document.querySelectorAll('.tab-panel');
-            var baslangicX = 0;
-            var baslangicY = 0;
-            paneller.forEach(function(panel) {
-                panel.addEventListener('touchstart', function(event) {
-                    if(!event.touches || event.touches.length !== 1) return;
-                    baslangicX = event.touches[0].clientX;
-                    baslangicY = event.touches[0].clientY;
-                }, {passive:true});
-                panel.addEventListener('touchend', function(event) {
-                    if(!event.changedTouches || event.changedTouches.length !== 1) return;
-                    var dx = event.changedTouches[0].clientX - baslangicX;
-                    var dy = event.changedTouches[0].clientY - baslangicY;
-                    if(Math.abs(dx) < 65 || Math.abs(dx) < Math.abs(dy) * 1.35) return;
-                    var butonlar = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
-                    var aktif = butonlar.findIndex(function(btn) { return btn.getAttribute('aria-selected') === 'true'; });
-                    if(aktif < 0) return;
-                    var sonrakiIndex = dx < 0 ? Math.min(aktif + 1, butonlar.length - 1) : Math.max(aktif - 1, 0);
-                    if(sonrakiIndex !== aktif) sekmeAc(butonlar[sonrakiIndex].getAttribute('data-tab'), dx < 0 ? 1 : -1);
-                }, {passive:true});
-            });
-        })();
 
-        // v3.9.12: Parmak hareketi sırasında aktif sekme içeriği parmağı takip eder (görsel geri bildirim).
-        // Geçiş kararı ve sekmeAc çağrısı önceki bloktaki mantıkla aynıdır; yalnızca takip efekti eklenmiştir.
-        (function sekmeParmakTakibiKur_() {
-            var aktifPanel = null;
-            var x0 = 0, y0 = 0, yatayMi = null;
-            var MAX_SURUKLEME = 90;
+        // ─── v3.9.15: iPhone benzeri sekme geçişi + ekranın HER yerinden yatay kaydırma ───
+        // Yalnızca görünüm. Veri, API ve hesaplamalara dokunmaz. Yalnızca transform ve opacity animasyonlu.
+        (function iphoneSekmeModulu_() {
+            var SURE_MS = 300;
+            var EASE = 'cubic-bezier(.2,.9,.25,1)';
+            var YON_ESIK = 1.5;      // yatay baskınlık oranı
+            var BASLAMA_ESIK = 10;   // px
+            var REZERV = 0.22;       // sınırda (son sekme) esneme katsayısı
+            var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+            var mesgul = false;
+            var jest = null;
 
-            function panelAl() {
-                return document.querySelector('.tab-panel.active');
+            function sekmeAdlari_() {
+                return Array.prototype.slice.call(document.querySelectorAll('.tab-btn')).map(function(b) {
+                    return b.getAttribute('data-tab');
+                });
             }
-            function panelSifirla(gecisli) {
-                if(!aktifPanel) return;
-                aktifPanel.style.transition = gecisli ? 'transform .22s ease' : 'none';
-                aktifPanel.style.transform = '';
-                aktifPanel = null;
+            function aktifAd_() {
+                var b = document.querySelector('.tab-btn[aria-selected="true"]');
+                return b ? b.getAttribute('data-tab') : 'ozet';
+            }
+            function panel_(ad) {
+                return document.querySelector('.tab-panel[data-panel="' + ad + '"]');
+            }
+            function genislik_() {
+                var p = panel_(aktifAd_());
+                return (p && p.offsetWidth) || window.innerWidth || 360;
+            }
+            // Karar: saf fonksiyon (test edilebilir).
+            function hedefBul_(dx, sekmeler, aktif) {
+                var i = sekmeler.indexOf(aktif);
+                if(i < 0) return null;
+                if(dx < 0) return sekmeler[i + 1] || null;   // sola sürükle → sonraki
+                if(dx > 0) return sekmeler[i - 1] || null;   // sağa sürükle → önceki
+                return null;
+            }
+            function gecisKarari_(dx, v, W, hedefVar) {
+                if(!hedefVar) return false;
+                if(Math.abs(dx) > W * 0.25) return true;
+                return Math.abs(v) > 0.6 && (v < 0) === (dx < 0);
             }
 
-            document.addEventListener('touchstart', function(event) {
-                if(!event.touches || event.touches.length !== 1) return;
-                if(event.target.closest && event.target.closest('input, textarea, select, .info-popover, .info-btn, .copy-btn, a')) return;
-                var panel = panelAl();
-                if(!panel || !panel.contains(event.target)) return;
-                aktifPanel = panel;
-                x0 = event.touches[0].clientX;
-                y0 = event.touches[0].clientY;
-                yatayMi = null;
+            function animasyonAyarla_(el, ms) {
+                el.style.transition = ms ? ('transform ' + ms + 'ms ' + EASE + ', opacity ' + ms + 'ms ' + EASE) : 'none';
+            }
+            function stilTemizle_(el) {
+                if(!el) return;
+                el.style.transition = '';
+                el.style.transform = '';
+                el.style.opacity = '';
+                el.style.willChange = '';
+            }
+
+            function bitir_(hedefAd, yon, gecis) {
+                var aktifEl = panel_(aktifAd_());
+                var yeniEl = panel_(hedefAd);
+                if(gecis) {
+                    sekmeAc(hedefAd, yon, true);     // mevcut sekme mantığı; kendi slide animasyonu yok
+                } else {
+                    if(yeniEl) { yeniEl.classList.remove('active'); yeniEl.hidden = true; }
+                }
+                stilTemizle_(aktifEl);
+                stilTemizle_(yeniEl);
+                document.querySelectorAll('.tab-panel').forEach(stilTemizle_);
+                mesgul = false;
+            }
+
+            // Tıklamayla geçiş (sekme düğmesi)
+            window.iphoneGecis_ = function(hedefAd) {
+                var aktif = aktifAd_();
+                if(hedefAd === aktif || mesgul || reduce) { sekmeAc(hedefAd); return; }
+                var sek = sekmeAdlari_();
+                var yon = sek.indexOf(hedefAd) > sek.indexOf(aktif) ? -1 : 1; // sağdaki sekme → içerik sola kayar
+                var W = genislik_();
+                var aktifEl = panel_(aktif), yeniEl = panel_(hedefAd);
+                if(!aktifEl || !yeniEl) { sekmeAc(hedefAd); return; }
+                mesgul = true;
+                yeniEl.hidden = false;
+                yeniEl.classList.add('active');
+                animasyonAyarla_(yeniEl, 0);
+                yeniEl.style.transform = 'translate3d(' + (-yon * W) + 'px,0,0)';
+                yeniEl.style.opacity = '1';
+                aktifEl.style.willChange = 'transform,opacity';
+                yeniEl.style.willChange = 'transform,opacity';
+                void yeniEl.offsetWidth;
+                animasyonAyarla_(aktifEl, SURE_MS);
+                animasyonAyarla_(yeniEl, SURE_MS);
+                aktifEl.style.transform = 'translate3d(' + (yon * W * 0.3) + 'px,0,0)';
+                aktifEl.style.opacity = '.6';
+                yeniEl.style.transform = 'translate3d(0,0,0)';
+                var bitti = false;
+                setTimeout(function() {
+                    if(bitti) return; bitti = true;
+                    bitir_(hedefAd, yon, true);
+                }, SURE_MS + 40);
+            };
+
+            // Parmak hareketi
+            function haricAlan_(hedef) {
+                if(!hedef || !hedef.closest) return false;
+                return !!hedef.closest('input, textarea, select, [contenteditable="true"]');
+            }
+            document.addEventListener('touchstart', function(e) {
+                if(reduce || mesgul || !e.touches || e.touches.length !== 1) { jest = null; return; }
+                if(haricAlan_(e.target)) { jest = null; return; }
+                var sek = sekmeAdlari_(), aktif = aktifAd_();
+                jest = {
+                    x0: e.touches[0].clientX, y0: e.touches[0].clientY,
+                    lastX: e.touches[0].clientX, lastT: Date.now(), v: 0,
+                    mod: null, hedef: null, yon: 0, W: genislik_(),
+                    aktifAd: aktif, sek: sek,
+                    aktifEl: null, yeniEl: null, dx: 0
+                };
             }, {passive:true});
 
-            document.addEventListener('touchmove', function(event) {
-                if(!aktifPanel || !event.touches || event.touches.length !== 1) return;
-                var dx = event.touches[0].clientX - x0;
-                var dy = event.touches[0].clientY - y0;
-                if(yatayMi === null) {
-                    if(Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-                    yatayMi = Math.abs(dx) > Math.abs(dy) * 1.35;
+            document.addEventListener('touchmove', function(e) {
+                if(!jest || !e.touches || e.touches.length !== 1) return;
+                var x = e.touches[0].clientX, y = e.touches[0].clientY;
+                var dx = x - jest.x0, dy = y - jest.y0;
+                var now = Date.now();
+                var dt = Math.max(1, now - jest.lastT);
+                jest.v = (x - jest.lastX) / dt;
+                jest.lastX = x; jest.lastT = now;
+
+                if(jest.mod === null) {
+                    if(Math.abs(dx) < BASLAMA_ESIK && Math.abs(dy) < BASLAMA_ESIK) return;
+                    if(Math.abs(dx) > Math.abs(dy) * YON_ESIK) {
+                        jest.mod = 'yatay';
+                        jest.yon = dx < 0 ? 1 : -1;
+                        jest.hedef = hedefBul_(dx, jest.sek, jest.aktifAd);
+                        jest.aktifEl = panel_(jest.aktifAd);
+                        jest.yeniEl = jest.hedef ? panel_(jest.hedef) : null;
+                        if(jest.aktifEl) jest.aktifEl.style.willChange = 'transform';
+                        if(jest.yeniEl) {
+                            jest.yeniEl.hidden = false;
+                            jest.yeniEl.classList.add('active');
+                            jest.yeniEl.style.willChange = 'transform';
+                        }
+                    } else {
+                        jest = null; // dikey kaydırma: tarayıcıya bırak
+                        return;
+                    }
                 }
-                if(!yatayMi) return;
-                var sinirli = Math.max(-MAX_SURUKLEME, Math.min(MAX_SURUKLEME, dx));
-                aktifPanel.style.transition = 'none';
-                aktifPanel.style.transform = 'translateX(' + Math.round(sinirli * 0.6) + 'px)';
+                if(jest.mod !== 'yatay') return;
+
+                jest.dx = dx;
+                var W = jest.W;
+                var hedefVar = !!jest.hedef;
+                var ofset = hedefVar ? dx : dx * REZERV;
+                if(!jest.aktifEl) return;
+                requestAnimationFrame(function() {
+                    if(!jest || jest.mod !== 'yatay') return;
+                    animasyonAyarla_(jest.aktifEl, 0);
+                    jest.aktifEl.style.transform = 'translate3d(' + ofset + 'px,0,0)';
+                    jest.aktifEl.style.opacity = String(Math.max(0.7, 1 - Math.abs(ofset) / (W * 2)));
+                    if(jest.yeniEl) {
+                        animasyonAyarla_(jest.yeniEl, 0);
+                        var baslangic = (jest.yon === 1 ? W : -W);
+                        jest.yeniEl.style.transform = 'translate3d(' + (baslangic + dx) + 'px,0,0)';
+                        jest.yeniEl.style.opacity = '1';
+                    }
+                });
             }, {passive:true});
 
             document.addEventListener('touchend', function() {
-                panelSifirla(true);
-                yatayMi = null;
+                if(!jest || jest.mod !== 'yatay') { jest = null; return; }
+                var j = jest; jest = null;
+                if(!j.aktifEl) { mesgul = false; return; }
+                var gecis = gecisKarari_(j.dx, j.v, j.W, !!j.hedef);
+                mesgul = true;
+                var hedefOfset, hedefOpak;
+                if(gecis) {
+                    hedefOfset = j.yon === 1 ? -j.W * 0.3 : j.W * 0.3;
+                    hedefOpak = '.6';
+                } else {
+                    hedefOfset = 0;
+                    hedefOpak = '1';
+                }
+                animasyonAyarla_(j.aktifEl, SURE_MS);
+                j.aktifEl.style.transform = 'translate3d(' + hedefOfset + 'px,0,0)';
+                j.aktifEl.style.opacity = hedefOpak;
+                if(j.yeniEl) {
+                    animasyonAyarla_(j.yeniEl, SURE_MS);
+                    j.yeniEl.style.transform = gecis
+                        ? 'translate3d(0,0,0)'
+                        : 'translate3d(' + (j.yon === 1 ? j.W : -j.W) + 'px,0,0)';
+                }
+                var bitti = false;
+                setTimeout(function() {
+                    if(bitti) return; bitti = true;
+                    if(gecis) {
+                        bitir_(j.hedef, j.yon === 1 ? -1 : 1, true);
+                    } else {
+                        bitir_(j.hedef || j.aktifAd, 0, false);
+                        // geri dönüşte aktif sekme yeniden görünür kalmalı
+                        var a = panel_(j.aktifAd);
+                        if(a) { a.hidden = false; a.classList.add('active'); }
+                        document.querySelectorAll('.tab-panel').forEach(function(p) {
+                            if(p.getAttribute('data-panel') !== j.aktifAd) { p.classList.remove('active'); p.hidden = true; }
+                        });
+                        mesgul = false;
+                    }
+                }, SURE_MS + 40);
             }, {passive:true});
         })();
 
@@ -826,6 +956,64 @@
             document.addEventListener('DOMContentLoaded', paneliBaslat);
         } else {
             paneliBaslat();
+        }
+
+
+        // ─── v3.9.14: Soru tabanlı Özet ───
+        // Yalnızca mevcut data alanlarını okur, veri yazmaz. Hata olursa eski render'ı bozmaz.
+        function ozetTL_(n) {
+            var v = Math.round(Number(n) * 100) / 100;
+            if(!isFinite(v)) v = 0;
+            var tam = Math.abs(v) % 1 === 0;
+            var s = tam
+                ? v.toLocaleString('tr-TR')
+                : v.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
+            return s + ' TL';
+        }
+
+        function ozetSorulariRender_(data, ayIdx) {
+            var kap = document.getElementById('ozet-sorular');
+            if(!kap || !data) return;
+            var AYLAR_TR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+            var bugun = new Date();
+            var yil = bugun.getFullYear();
+            var ay = AYLAR_TR[(typeof ayIdx === 'number' ? ayIdx : bugun.getMonth())] || '';
+
+            var yillik  = Math.max(0, Number(data.yillikTahakkukRaw) || 0);
+            var tahakkuk = Math.max(0, Number(data.tahakkukYilRaw) || 0);
+            var odenen  = Math.max(0, Number(data.odenenYilRaw) || 0);
+            var devir   = Math.max(0, Number(data.devirRaw) || 0);
+
+            var yillikVar = yillik > 0;
+            var pct = tahakkuk > 0 ? Math.min(100, Math.round(odenen / tahakkuk * 100)) : (odenen > 0 ? 100 : 0);
+
+            var h = '';
+            h += '<div class="oz-q"><div class="oz-label">' + yil + ' için toplam ne ödemem gerekiyor?</div>'
+               + '<div class="oz-answer">' + (yillikVar ? ozetTL_(yillik) : '-') + '<small>12 aylık</small></div>'
+               + (yillikVar ? '' : '<div class="oz-hint">Yıllık toplam şu an hesaplanamadı.</div>')
+               + '</div>';
+
+            h += '<div class="oz-q"><div class="oz-label">' + yil + ' için şu ana kadar ne ödedim?</div>'
+               + '<div class="oz-answer blue">' + ozetTL_(odenen) + '</div></div>';
+
+            var q3Hint;
+            if(tahakkuk <= 0) q3Hint = 'Bu döneme ait aidat tahakkuku yok.';
+            else if(odenen >= tahakkuk) q3Hint = 'Ödenen: ' + ozetTL_(odenen) + ' · gereken tutar karşılandı.';
+            else q3Hint = 'Ödenen: ' + ozetTL_(odenen);
+            h += '<div class="oz-q"><div class="oz-label">' + ay + ' dahil, bu aya kadar ne ödemem gerekiyor?</div>'
+               + '<div class="oz-answer">' + ozetTL_(tahakkuk) + '</div>'
+               + '<div class="oz-progress" role="img" aria-label="Ödenen oran yüzde ' + pct + '"><span style="width:' + pct + '%"></span></div>'
+               + '<div class="oz-hint">' + q3Hint + '</div></div>';
+
+            if(devir > 0) {
+                h += '<div class="oz-q warn"><div class="oz-label">' + (yil - 1) + ' yılından kalan borcum var mı?</div>'
+                   + '<div class="oz-answer">Evet, ' + ozetTL_(devir) + '</div>'
+                   + '<div class="oz-hint">Yönetimle iletişime geçebilirsiniz.</div></div>';
+            } else {
+                h += '<div class="oz-q ok"><div class="oz-label">' + (yil - 1) + ' yılından kalan borcum var mı?</div>'
+                   + '<div class="oz-answer">Hayır, borç yok</div></div>';
+            }
+            kap.innerHTML = h;
         }
 
         function veriYukle(data, cacheRender) {
@@ -903,8 +1091,8 @@
             var devirTemiz = temizleKurus(data.devir);
             var toplamTemiz = temizleKurus(data.toplamBorc);
 
-            // Açıklama yılı öncelikle Apps Script'ten gelen sistem/tahakkuk yılıdır.
-            var cariYil = panelYiliniAl_(data);
+            // Açıklama yılları cihazın cari yılına göre otomatik oluşturulur.
+            var cariYil = new Date().getFullYear();
             var oncekiYil = cariYil - 1;
 
             // 🔒 XSS Korumalı 1. Özet Satırı Yapılandırması
@@ -1004,6 +1192,7 @@
                 waAlan.style.display = 'block';
             }
 
+            try { ozetSorulariRender_(data); } catch(ozetHata) { console.warn('Özet render:', ozetHata); }
             document.getElementById('panel-guncelleme').textContent = "Son güncelleme: " + data.guncellemeTarihi + (cacheRender ? " · güncel kontrol ediliyor" : "");
             if(!ilkSekmeGosterildi) {
                 sekmeAc('ozet');
@@ -1051,14 +1240,6 @@
         function guvenliClass(deger) {
             var v = guvenliMetin(deger, '').trim();
             return (v === 'paid' || v === 'muted') ? v : '';
-        }
-
-        // Öncelik Apps Script yanıtındaki sistem/tahakkuk yılıdır. Eski API yanıtlarında alan yoksa cihaz yılına geri düşer.
-        function panelYiliniAl_(data) {
-            var yil = Number(data && data.tahakkukYil);
-            return Number.isInteger(yil) && yil >= 2000 && yil <= 2100
-                ? yil
-                : new Date().getFullYear();
         }
 
         function guvenliPanelVerisi(data) {
@@ -1113,29 +1294,73 @@
             var odenen = Math.max(0, guvenliSayi(data.odenenYilRaw));
             var yillik = data.yillikTahakkukVar ? Math.max(0, guvenliSayi(data.yillikTahakkukRaw)) : 0;
             var annualRow = document.getElementById('accrual-annual-row');
+            var subtitle = document.getElementById('accrual-subtitle');
             annualRow.hidden = !data.yillikTahakkukVar;
-
-            var yil = panelYiliniAl_(data);
             var ayAdlari = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
-            var ay = ayAdlari[new Date().getMonth()];
-            var statusHead = document.getElementById('accrual-status-head');
-            if(statusHead) statusHead.textContent = 'BUGÜNE KADAR DURUM (' + ay.toLocaleUpperCase('tr-TR') + ' DAHİL)';
-            var head = document.getElementById('accrual-head');
-            if(head) head.textContent = yil + ' YILLIK AİDATINIZ';
+            var icindeBulunulanAy = ayAdlari[new Date().getMonth()];
+            subtitle.textContent = data.yillikTahakkukVar
+                ? 'Yıllık toplam 12 ayı; tahakkuk ise içinde bulunulan ay dahil (' + icindeBulunulanAy + ' dahil) tutarı gösterir.'
+                : 'Tahakkuk, içinde bulunulan ay dahil (' + icindeBulunulanAy + ' dahil) aidat tutarıdır.';
 
+            var maxDeger = Math.max(tahakkuk, odenen, yillik, 1);
             function tl(v) { return Math.round(v).toLocaleString('tr-TR') + ' TL'; }
-            if(data.yillikTahakkukVar) {
-                document.getElementById('accrual-annual-value').textContent = tl(yillik);
-                document.getElementById('accrual-monthly-value').textContent = tl(yillik / 12);
-            }
-
-            // İki tutar aynı ölçeği kullanır; fark/eksik/fazla yorumu üretilmez.
-            var maxDeger = Math.max(tahakkuk, odenen, 1);
             function oran(v) { return Math.max(0, Math.min(100, v / maxDeger * 100)); }
+
+            if(data.yillikTahakkukVar) {
+                document.getElementById('accrual-annual-bar').style.width = oran(yillik) + '%';
+                document.getElementById('accrual-annual-value').textContent = tl(yillik);
+            }
             document.getElementById('accrual-due-bar').style.width = oran(tahakkuk) + '%';
             document.getElementById('accrual-paid-bar').style.width = oran(odenen) + '%';
             document.getElementById('accrual-due-value').textContent = tl(tahakkuk);
             document.getElementById('accrual-paid-value').textContent = tl(odenen);
+            var gap = Math.abs(tahakkuk - odenen);
+            var gapEl = document.getElementById('accrual-gap');
+            gapEl.hidden = gap === 0;
+            if(gap > 0) {
+                var duePct = oran(tahakkuk);
+                var paidPct = oran(odenen);
+                var gapLeft = Math.min(duePct, paidPct);
+                var gapWidth = Math.abs(duePct - paidPct);
+                var gapMid = gapLeft + gapWidth / 2;
+                var gapColor = odenen < tahakkuk ? '#d97706' : '#059669';
+                gapEl.style.setProperty('--gap-left', gapLeft + '%');
+                gapEl.style.setProperty('--gap-width', gapWidth + '%');
+                gapEl.style.setProperty('--gap-mid', gapMid + '%');
+                gapEl.style.setProperty('--gap-color', gapColor);
+                var gapValue = document.getElementById('accrual-gap-value');
+                gapValue.textContent = tl(gap) + (odenen < tahakkuk ? ' eksik' : ' fazla');
+                gapValue.setAttribute('aria-label', tl(gap) + (odenen < tahakkuk ? ' eksik ödeme' : ' fazla ödeme'));
+            } else {
+                gapEl.style.setProperty('--gap-width', '0%');
+                document.getElementById('accrual-gap-value').textContent = '';
+            }
+
+            var yil = new Date().getFullYear();
+            var head = document.getElementById('accrual-head');
+            if(head) head.textContent = yil + ' AİDAT KARŞILAŞTIRMASI';
+
+            // Bu fark yalnızca içinde bulunulan yılın tahakkuk ve ödemelerini karşılaştırır.
+            // Önceki yıldan devreden borç ayrı gösterilir; mahsuplaştırılmaz.
+            var fark = odenen - tahakkuk;
+            var farkEl = document.getElementById('accrual-difference');
+            farkEl.className = 'accrual-difference';
+            var sonuc = '';
+            if(fark > 0) {
+                sonuc = yil + ' yılı tahakkukuna göre ' + tl(fark) + ' fazla ödeme';
+                farkEl.classList.add('over');
+            } else if(fark < 0) {
+                sonuc = yil + ' yılı tahakkukuna göre ' + tl(Math.abs(fark)) + ' eksik ödeme';
+                farkEl.classList.add('under');
+            } else {
+                sonuc = yil + ' yılı tahakkuku tamamen ödenmiş';
+            }
+            if(guvenliSayi(data.devirRaw) > 0) {
+                sonuc += ' · Önceki yıldan ' + tl(data.devirRaw) + ' devir borcu ayrıca bulunmaktadır.';
+            }
+            farkEl.textContent = sonuc;
+            farkEl.setAttribute('role', 'status');
+            farkEl.setAttribute('aria-live', 'polite');
             card.hidden = false;
         }
 
@@ -1204,13 +1429,8 @@
                         popWidth - 24
                     ));
                     info.style.setProperty('--info-arrow-left', arrowLeft + 'px');
-                    // Önceki davranış korunur: bilgi balonu 5 saniye sonra otomatik kapanır.
-                    summaryInfoTimer = setTimeout(function() {
-                        info.classList.remove('show');
-                        box.classList.remove('info-open');
-                        infoButton.setAttribute('aria-expanded', 'false');
-                        summaryInfoTimer = null;
-                    }, 5000);
+                    // Açıklama, kullanıcı dışarı dokunana veya başka bir bilgi ikonunu seçene kadar açık kalır.
+                    summaryInfoTimer = null;
                 }
             });
 
