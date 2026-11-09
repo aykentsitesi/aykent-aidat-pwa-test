@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.15 Özet sekmesi son düzenlemeleri | API ve mevcut panel akışı korunmuştur -->
+<!-- AYKENT AIDAT PANELİ — v3.9.23 TEST | v3.9.22 tabanı; API başlangıcı ve mevcut iş akışı korunmuştur -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -380,6 +380,43 @@
             #panel-ozet .status-item-head strong{font-size:17px;}
         }
         /* ─── /v3.9.15 ─── */
+
+
+        /* ─── v3.9.23 TEST: erişilebilirlik, sade dil ve mobil taşma koruması ─── */
+        .panel-section-title{margin:14px 14px 4px;padding:0 2px;color:#1A2B48;font-size:16px;line-height:1.3;font-weight:950;letter-spacing:.25px;}
+        .tab-nav{scroll-margin-top:0;}
+        .tab-btn{font-size:12px;line-height:1.2;white-space:normal;text-align:center;overflow-wrap:anywhere;}
+        .tab-btn:last-child{padding-left:5px;padding-right:5px;}
+        .tab-panel{scroll-margin-top:78px;}
+        #panel-ozet .box .small{font-size:15px;line-height:1.3;}
+        #panel-ozet .box .big{max-width:100%;font-size:clamp(19px,5.5vw,26px);line-height:1.18;overflow-wrap:anywhere;word-break:normal;}
+        #panel-ozet .info-btn{width:44px;height:44px;min-width:44px;min-height:44px;flex:0 0 44px;font-size:19px;right:-7px;}
+        #panel-ozet .summary-label-row{min-height:46px;padding-right:39px;padding-left:6px;}
+        #panel-ozet .info-popover{font-size:15px;line-height:1.5;padding:14px 15px;max-height:min(55vh,360px);overflow-y:auto;}
+        #panel-ozet .status-item-head{font-size:15px;gap:8px;align-items:flex-start;}
+        #panel-ozet .status-item-head span{min-width:0;line-height:1.35;}
+        #panel-ozet .status-item-head strong{white-space:normal;text-align:right;overflow-wrap:anywhere;word-break:normal;font-size:17px;}
+        #panel-ozet .annual-total{font-size:clamp(25px,7vw,32px);overflow-wrap:anywhere;word-break:normal;}
+        #panel-ozet .monthly-aidat-line[hidden]{display:none!important;}
+        #panel-ozet .status-fill.paid{background:#16803c;}
+        .announcement-body,.contact-card p,.payment-value,.payment-label{font-size:15px;line-height:1.45;}
+        .contact-card-head{font-size:16px;}
+        .table-wrap th,.table-wrap td{font-size:15px;}
+        @media(max-width:420px){
+            .panel-section-title{margin:12px 10px 3px;font-size:15px;}
+            .tab-nav{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:7px 5px;}
+            .tab-btn{min-height:48px;font-size:11px;padding:5px 2px;}
+            .tab-btn .tab-icon{font-size:13px;}
+            #panel-ozet .box{min-width:0;padding:13px 7px 12px;}
+            #panel-ozet .box .small{font-size:14px;}
+            #panel-ozet .box .big{font-size:clamp(18px,5vw,23px);}
+            #panel-ozet .info-btn{right:-8px;}
+            #panel-ozet .summary-label-row{padding-right:34px;padding-left:2px;}
+            #panel-ozet .annual-aidat-section{padding-left:12px;padding-right:12px;}
+            #panel-ozet .status-item-head strong{font-size:16px;}
+        }
+        @media(prefers-reduced-motion:reduce){.tab-panel{scroll-behavior:auto!important}}
+        /* ─── /v3.9.23 TEST ─── */
 </style>
     
 <script>
@@ -476,25 +513,26 @@
                         <div class="section-kicker" id="accrual-head">2026 YILLIK AİDATINIZ</div>
                         <div class="annual-total" id="accrual-annual-value">-</div>
                         <div class="annual-caption">12 aylık toplam</div>
-                        <div class="monthly-aidat-line"><span>Aylık aidat</span><strong id="accrual-monthly-value">-</strong></div>
+                        <div class="monthly-aidat-line" id="accrual-monthly-row" hidden><span>Aylık aidat</span><strong id="accrual-monthly-value">-</strong></div>
                     </section>
                     <div class="current-status-section">
-                        <div class="section-kicker" id="accrual-status-head">BUGÜNE KADAR DURUM (KASIM DAHİL)</div>
+                        <div class="section-kicker" id="accrual-status-head">BUGÜNE KADAR DURUM</div>
                         <div class="status-item due-item">
-                            <div class="status-item-head"><span>Tahakkuk eden</span><strong id="accrual-due-value">-</strong></div>
+                            <div class="status-item-head"><span>Bugüne kadar oluşan aidat</span><strong id="accrual-due-value">-</strong></div>
                             <div class="status-track"><div id="accrual-due-bar" class="status-fill due"></div></div>
                         </div>
                         <div class="status-item paid-item">
                             <div class="status-item-head"><span>Ödenen</span><strong id="accrual-paid-value">-</strong></div>
                             <div class="status-track"><div id="accrual-paid-bar" class="status-fill paid"></div></div>
                         </div>
-                        <div class="status-note">Ödemeler, aidat tahakkukuna göre yapılan kayıtlardır.</div>
+                        <div class="status-note">Bu bölüm, içinde bulunulan yılın aidat ve ödeme toplamlarını gösterir.</div>
                     </div>
                 </div>
                 <div id="panel-not" class="note"></div>
             </section>
 
             <section class="tab-panel" id="panel-odemeler" role="tabpanel" aria-labelledby="tab-odemeler" data-panel="odemeler">
+                <h2 class="panel-section-title">AYLIK ÖDEME DURUMU</h2>
                 <div class="table-wrap">
                     <table>
                         <thead><tr><th>AY</th><th>AİDAT</th><th>EK</th></tr></thead>
@@ -511,6 +549,7 @@
             </section>
 
             <section class="tab-panel" id="panel-duyurular" role="tabpanel" aria-labelledby="tab-duyurular" data-panel="duyurular">
+                <h2 class="panel-section-title">İLETİŞİM VE DUYURULAR</h2>
                 <div class="announcement-card">
                     <div class="announcement-head">SİTE DUYURUSU</div>
                     <div id="duyuru-metni" class="announcement-body announcement-empty">Şu anda yayınlanmış bir duyuru bulunmuyor.</div>
@@ -672,10 +711,14 @@
             var nav = document.querySelector('.tab-nav');
             var esik = (nav ? nav.getBoundingClientRect().height : 0) + 42;
             var secili = 'ozet';
+            var enYakin = -Infinity;
             sekmeSirasi.forEach(function(ad) {
                 var panel = document.querySelector('.tab-panel[data-panel="' + ad + '"]');
-                if(panel && panel.getBoundingClientRect().top <= esik) secili = ad;
+                if(!panel) return;
+                var top = panel.getBoundingClientRect().top;
+                if(top <= esik && top > enYakin) { enYakin = top; secili = ad; }
             });
+            if(window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 4) secili = sekmeSirasi[sekmeSirasi.length - 1];
             document.querySelectorAll('.tab-btn').forEach(function(btn) {
                 var aktif = btn.getAttribute('data-tab') === secili;
                 btn.setAttribute('aria-selected', aktif ? 'true' : 'false');
@@ -705,7 +748,7 @@
         }, {passive:true});
         window.addEventListener('resize', kaydirmaSekmesiniGuncelle_);
 
-        document.addEventListener('click', function() {
+        function summaryInfoKapat_() {
             document.querySelectorAll('.info-popover.show').forEach(function(info) {
                 info.classList.remove('show');
                 var box = info.closest('.box');
@@ -715,10 +758,13 @@
                     if(button) button.setAttribute('aria-expanded', 'false');
                 }
             });
-            if(summaryInfoTimer) {
-                clearTimeout(summaryInfoTimer);
-                summaryInfoTimer = null;
-            }
+        }
+        document.addEventListener('click', function(event) {
+            if(event.target && event.target.closest && event.target.closest('.box.info-open')) return;
+            summaryInfoKapat_();
+        });
+        document.addEventListener('keydown', function(event) {
+            if(event.key === 'Escape') summaryInfoKapat_();
         });
 
         function paneliBaslat() {
@@ -846,7 +892,7 @@
             var devirTemiz = temizleKurus(data.devir);
             var toplamTemiz = temizleKurus(data.toplamBorc);
 
-            // Açıklama yılı öncelikle Apps Script'ten gelen sistem/tahakkuk yılıdır.
+            // Açıklama yılı öncelikle Apps Script'ten gelen aidat yılıdır.
             var cariYil = panelYiliniAl_(data);
             var oncekiYil = cariYil - 1;
 
@@ -858,10 +904,10 @@
                 cariYil + ' yılında yapılan aidat ödemelerinin toplamı.'));
             if(data.borcYilRaw > 0) {
                 row1.appendChild(createSummaryBox(data.etiketBorc, borcTemiz, 'red',
-                    cariYil + ' yılında tahakkuk etmiş, henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
             } else {
                 row1.appendChild(createSummaryBox(data.etiketBorc, '0 TL', 'green',
-                    cariYil + ' yılında tahakkuk etmiş, henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
             }
 
             // 🔒 XSS Korumalı 2. Özet Satırı Yapılandırması
@@ -878,10 +924,10 @@
 
             if(data.toplamBorcRaw <= 0) {
                 row2.appendChild(createSummaryBox('TOPLAM DURUM', 'BORÇ YOK 👍', 'green',
-                    cariYil + ' yılında tahakkuk etmiş ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında henüz ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
             } else {
                 row2.appendChild(createSummaryBox('TOPLAM BORÇ', toplamTemiz, 'pink',
-                    cariYil + ' yılında tahakkuk etmiş ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında henüz ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
             }
 
             if(data.notlar && data.notlar !== '0') {
@@ -993,12 +1039,11 @@
             return (v === 'paid' || v === 'muted') ? v : '';
         }
 
-        // Öncelik Apps Script yanıtındaki sistem/tahakkuk yılıdır. Eski API yanıtlarında alan yoksa cihaz yılına geri düşer.
+        // Öncelik Apps Script yanıtındaki aidat yılıdır. Alan yoksa Türkiye saatine göre yıl kullanılır.
         function panelYiliniAl_(data) {
             var yil = Number(data && data.tahakkukYil);
-            return Number.isInteger(yil) && yil >= 2000 && yil <= 2100
-                ? yil
-                : new Date().getFullYear();
+            if(Number.isInteger(yil) && yil >= 2000 && yil <= 2100) return yil;
+            return Number(new Intl.DateTimeFormat('en-US', {timeZone:'Europe/Istanbul', year:'numeric'}).format(new Date()));
         }
 
         function guvenliPanelVerisi(data) {
@@ -1023,6 +1068,8 @@
             data.odenenYilRaw = guvenliSayi(data.odenenYilRaw);
             data.yillikTahakkukRaw = guvenliSayi(data.yillikTahakkukRaw);
             data.yillikTahakkukVar = data.yillikTahakkukRaw > 0;
+            data.aktifAy = data.aktifAy === undefined || data.aktifAy === null ? null : Number(data.aktifAy);
+            data.aylikAidat = data.aylikAidat === undefined || data.aylikAidat === null || data.aylikAidat === '' ? null : guvenliSayi(data.aylikAidat);
             data.notlar = guvenliMetin(data.notlar, '');
             data.odemeAlici = guvenliMetin(data.odemeAlici, '-');
             data.odemeIban = guvenliMetin(data.odemeIban, '-');
@@ -1056,8 +1103,11 @@
             annualRow.hidden = !data.yillikTahakkukVar;
 
             var yil = panelYiliniAl_(data);
+            var istanbulAy = Number(new Intl.DateTimeFormat('en-US', {timeZone:'Europe/Istanbul', month:'numeric'}).format(new Date()));
+            var apiAktifAy = Number(data.aktifAy);
+            var ayNo = Number.isInteger(apiAktifAy) && apiAktifAy >= 1 && apiAktifAy <= 12 ? apiAktifAy : istanbulAy;
             var ayAdlari = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
-            var ay = ayAdlari[Number(new Intl.DateTimeFormat('en-US', {timeZone:'Europe/Istanbul', month:'numeric'}).format(new Date())) - 1];
+            var ay = ayAdlari[ayNo - 1];
             var statusHead = document.getElementById('accrual-status-head');
             if(statusHead) statusHead.textContent = 'BUGÜNE KADAR DURUM (' + ay.toLocaleUpperCase('tr-TR') + ' DAHİL)';
             var head = document.getElementById('accrual-head');
@@ -1066,8 +1116,14 @@
             function tl(v) { return Math.round(v).toLocaleString('tr-TR') + ' TL'; }
             if(data.yillikTahakkukVar) {
                 document.getElementById('accrual-annual-value').textContent = tl(yillik);
-                document.getElementById('accrual-monthly-value').textContent = tl(yillik / 12);
             }
+            // Aylık tutar yalnızca API'nin verdiği aktif ay aidatından gösterilir.
+            // Yıllık toplamı 12'ye bölerek yaklaşık tutar üretilmez.
+            var monthlyRow = document.getElementById('accrual-monthly-row');
+            var monthlyValue = Number(data.aylikAidat);
+            var monthlyExists = data.aylikAidat !== undefined && data.aylikAidat !== null && data.aylikAidat !== '' && isFinite(monthlyValue) && monthlyValue > 0;
+            if(monthlyRow) monthlyRow.hidden = !monthlyExists;
+            if(monthlyExists) document.getElementById('accrual-monthly-value').textContent = tl(monthlyValue);
 
             // İki tutar aynı ölçeği kullanır; fark/eksik/fazla yorumu üretilmez.
             var maxDeger = Math.max(tahakkuk, odenen, 1);
@@ -1079,8 +1135,7 @@
             card.hidden = false;
         }
 
-        // Özet kutularındaki bilgi açıklamaları: dokununca açılır, 5 saniye sonra kapanır.
-        var summaryInfoTimer = null;
+        // Özet kutularındaki bilgi açıklamaları: dokununca açılır, dışarı dokununca kapanır.
         function createSummaryBox(label, val, className, infoText) {
             var box = document.createElement('div');
             box.className = 'box ' + className;
@@ -1118,10 +1173,6 @@
                     }
                 });
 
-                if(summaryInfoTimer) {
-                    clearTimeout(summaryInfoTimer);
-                    summaryInfoTimer = null;
-                }
 
                 if(!wasOpen) {
                     info.classList.add('show');
@@ -1144,13 +1195,6 @@
                         popWidth - 24
                     ));
                     info.style.setProperty('--info-arrow-left', arrowLeft + 'px');
-                    // Önceki davranış korunur: bilgi balonu 5 saniye sonra otomatik kapanır.
-                    summaryInfoTimer = setTimeout(function() {
-                        info.classList.remove('show');
-                        box.classList.remove('info-open');
-                        infoButton.setAttribute('aria-expanded', 'false');
-                        summaryInfoTimer = null;
-                    }, 5000);
                 }
             });
 
