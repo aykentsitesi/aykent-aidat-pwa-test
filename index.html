@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.19 TEST | Sabit sekmeli, kaydırmalı tek sayfa görünüm -->
+<!-- AYKENT AIDAT PANELİ — v3.9.20 TEST | v3.9.15 tasarım temeli, kaydırmalı sekmeler ve sadeleştirilmiş sakin ekranı -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -17,7 +17,7 @@
     <style>
         :root{--navy:#1A2B48;--gold:#d6b25e;--ink:#101827;--line:#e6e9ef;--green:#047857;--red:#be123c;--amber:#92400e;--mint:#E8F5E9;--active-green:#27AE60;--cool-gray:#F8F9FA;}
         *{box-sizing:border-box;margin:0;padding:0;}
-        html{height:100%;overflow-y:scroll;overflow-x:clip;-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+        html{height:100%;overflow-y:scroll;overflow-x:clip;-webkit-text-size-adjust:100%;}
         body{min-height:100%;overflow-x:clip;background:#f3f6fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);font-weight:700;}
         
         /* ── PREMIUM GLASSMORPHISM LOADER DESIGN ── */
@@ -120,11 +120,11 @@
 
         .wrap{display:block;min-height:100vh;padding-top:0;}
         .card{width:100%;max-width:none;min-height:100vh;background:white;padding-bottom:20px;box-shadow:none;border-radius:0;display:none;}
-        .tab-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:9px 10px;background:#fff;border-bottom:1px solid #e8ebf0;position:sticky;top:0;z-index:50;box-shadow:0 3px 12px rgba(15,23,42,.06);}
+        .tab-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:9px 10px;background:#fff;border-bottom:1px solid #e8ebf0;position:sticky;top:0;z-index:500;box-shadow:0 3px 12px rgba(15,23,42,.06);}
         .tab-btn{appearance:none;border:1px solid #e5e7eb;background:#f8fafc;color:#475467;border-radius:11px;min-width:0;min-height:44px;padding:6px 2px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .2s,border-color .2s,color .2s;}
         .tab-btn .tab-icon{font-size:16px;line-height:1;}
         .tab-btn[aria-selected="true"]{background:var(--navy);border-color:var(--gold);color:#f4d47c;box-shadow:0 3px 9px rgba(26,43,72,.18);}
-        .tab-panel{display:none;min-height:220px;padding-bottom:8px;}
+        .tab-panel{display:block;min-height:120px;padding-bottom:8px;scroll-margin-top:78px;}
         .tab-panel.active{display:block;}
         .announcement-card{margin:14px 14px 8px;border:1px solid rgba(214,178,94,.5);border-radius:18px;overflow:hidden;background:#fffdf7;box-shadow:0 5px 16px rgba(15,23,42,.08);}
         .announcement-head{background:linear-gradient(90deg,#07111f,var(--navy));color:#f4d47c;padding:15px 16px;text-align:center;font-size:18px;font-weight:950;letter-spacing:.3px;}
@@ -148,7 +148,14 @@
         .box{position:relative;}
         .accrual-card{margin:10px 12px 12px;padding:16px 14px;border:1px solid #e5eaf1;border-radius:16px;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.07);}
          .accrual-head{font-size:15px;font-weight:950;color:var(--navy);text-align:center;margin-bottom:5px;letter-spacing:.2px;}
-        .accrual-subtitle{font-size:11px;line-height:1.35;color:#64748b;text-align:center;margin:0 0 12px;font-weight:700;}
+        .accrual-subtitle{display:none;}
+
+        .accrual-title-row{position:relative;display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+        .accrual-title-row .accrual-head{margin:0;flex:1;}
+        .accrual-info-btn{position:static;transform:none;flex:0 0 22px;width:22px;height:22px;}
+        .accrual-title-row .info-popover{top:30px;left:0;z-index:600;}
+        @media(max-width:580px){.accrual-title-row{margin-bottom:8px;}}
+
         .accrual-row{display:grid;grid-template-columns:105px minmax(0,1fr);gap:9px;align-items:center;margin:10px 0;}
         .accrual-label{font-size:12px;font-weight:900;color:#475467;}
         .accrual-track{height:15px;background:#e8edf4;border-radius:999px;overflow:hidden;}
@@ -169,11 +176,8 @@
         .accrual-gap:before{content:"";position:absolute;left:var(--gap-x,50%);top:0;width:3px;height:21px;transform:translateX(-50%);background:radial-gradient(circle,#d97706 1.35px,transparent 1.6px) center top/3px 6px repeat-y;}
         .accrual-gap-pill{position:absolute;left:var(--gap-x,50%);top:12px;transform:translateX(-50%);display:inline-block;white-space:nowrap;padding:3px 8px;border:1px dashed #d97706;border-radius:999px;background:#fffbeb;box-shadow:0 1px 3px rgba(15,23,42,.08);}
         .accrual-compare-row .accrual-label{display:none;}
-        .tab-panel.active{animation:panelSlideIn .28s cubic-bezier(.22,.75,.25,1) both;}
-        .tab-panel.active.slide-from-right{animation-name:panelSlideFromRight;}
-        .tab-panel.active.slide-from-left{animation-name:panelSlideFromLeft;}
-        @keyframes panelSlideFromRight{from{opacity:.55;transform:translateX(34px)}to{opacity:1;transform:translateX(0)}}
-        @keyframes panelSlideFromLeft{from{opacity:.55;transform:translateX(-34px)}to{opacity:1;transform:translateX(0)}}
+        .tab-panel.active{animation:none;}
+        
         @media(prefers-reduced-motion:reduce){.tab-panel.active{animation:none!important}.accrual-fill{transition:none!important}}
         .accrual-value{font-size:12px;font-weight:950;color:#1f2937;text-align:right;margin-top:3px;}
         .accrual-difference{margin-top:13px;padding:10px 12px;border-radius:10px;text-align:center;font-size:13px;font-weight:900;background:#f1f5f9;color:#334155;}
@@ -197,7 +201,7 @@
         
         .table-wrap{padding:12px 14px 0;overflow-x:hidden;}
         table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(15,23,42,.10);border:1px solid #e5e7eb;}
-        th{background:var(--navy);color:#f4d47c;padding:11px 4px;font-size:15px;font-weight:950;position:sticky;top:64px;z-index:2;}
+        th{background:var(--navy);color:#f4d47c;padding:11px 4px;font-size:15px;font-weight:950;position:sticky;top:0;z-index:2;}
         td{padding:10px 4px;text-align:center;border-bottom:1px solid var(--line);word-break:break-word;font-size:15px;font-weight:900;background:white;}
         td:first-child{text-align:left;padding-left:14px;color:#111827;background:var(--cool-gray);}
         tr.current-month-row td{border-top:2px solid #2563eb;border-bottom:2px solid #2563eb;}
@@ -260,10 +264,10 @@
             .accrual-row{grid-template-columns:88px minmax(0,1fr);gap:7px;margin:8px 0;}
             .accrual-label{font-size:11px;}
             .tab-nav{padding:7px 6px;gap:4px;}
-            .tab-btn{font-size:11px;min-height:42px;border-radius:9px;gap:3px;}
+            .tab-btn{font-size:10px;min-height:42px;border-radius:9px;gap:2px;padding-left:1px;padding-right:1px;}
             .tab-btn .tab-icon{font-size:13px;}
-            .announcement-card{margin:10px 8px 8px;max-height:calc(100svh - 145px);}
-            .table-wrap{padding:9px 8px 0;max-height:calc(100svh - 145px);}
+            .announcement-card{margin:10px 8px 8px;max-height:none;}
+            .table-wrap{padding:9px 8px 0;max-height:none;}
             .contact-card{margin:9px 8px 8px;padding:12px;}
             .hero .blok{font-size:24px;}
             .hero .isim{font-size:17px;}
@@ -352,7 +356,7 @@
         /* ─── /v3.9.13 ─── */
 
         /* ─── v3.9.14: SORU TABANLI ÖZET ─── */
-        #ozet-sorular{padding:12px 12px 6px;background:#f4f6fa;}
+        #ozet-sorular{display:none !important;}
         #ozet-sorular .oz-q{background:#fff;border:1px solid #e3e8f0;border-radius:16px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(15,23,42,.05);}
         #ozet-sorular .oz-label{font-size:15px;font-weight:700;color:#334155;line-height:1.35;}
         #ozet-sorular .oz-answer{margin-top:6px;font-size:28px;font-weight:900;color:#1A2B48;line-height:1.1;overflow-wrap:anywhere;}
@@ -365,35 +369,15 @@
         #ozet-sorular .oz-hint{font-size:13px;color:#5b6678;margin-top:6px;line-height:1.35;}
         #ozet-sorular .oz-progress{margin-top:10px;height:12px;border-radius:99px;background:#e5e7eb;overflow:hidden;}
         #ozet-sorular .oz-progress span{display:block;height:100%;background:#2563EB;border-radius:99px;transition:width .3s ease;}
-        #ozet-sorular ~ .summary-sticky,
-        #ozet-sorular ~ .accrual-card{display:none !important;}
+        #ozet-sorular{display:none !important;}
         @media(max-width:380px){ #ozet-sorular .oz-answer{font-size:24px;} }
         /* ─── /v3.9.14 ─── */
 
         /* ─── v3.9.15: iPhone geçiş stili ─── */
-        .tab-panel{transform:translate3d(0,0,0);backface-visibility:hidden;}
+        .tab-panel{transform:none;backface-visibility:visible;}
         @media(prefers-reduced-motion:reduce){ .tab-panel{transition:none!important;} }
         /* ─── /v3.9.15 ─── */
 
-
-        /* v3.9.19 TEST: Tek sayfa + üstte sabit sekmeler; tüm bölümler doğal akışta görünür. */
-        .tab-nav{position:sticky;top:0;z-index:500;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:8px 10px;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #e5e9f0;box-shadow:0 3px 12px rgba(15,23,42,.08);}
-        .tab-btn{min-height:44px;font-size:12px;white-space:normal;line-height:1.15;}
-        .tab-panel,.tab-panel[hidden]{display:block!important;min-height:0;padding:10px 0 8px;scroll-margin-top:76px;}
-        .tab-panel.active{animation:none!important;}
-        #ozet-sorular,#accrual-card{display:none!important;}
-        #ozet-sorular ~ .summary-sticky{display:block!important;}
-        @media(max-width:380px){.tab-nav{gap:4px;padding:7px 6px}.tab-btn{font-size:10.5px;min-height:42px;padding:5px 1px}.tab-btn .tab-icon{font-size:13px}}
-        @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.tab-btn{transition:none!important}}
-        .annual-total-row{position:relative;display:flex;align-items:center;gap:8px;margin:4px 12px 10px;padding:11px 12px;border-top:1px solid #e6e9ef;border-bottom:1px solid #e6e9ef;background:#fff;color:var(--navy);}
-        .annual-total-row[hidden]{display:none!important;}
-        .annual-total-label{font-size:13px;font-weight:850;flex:1;}
-        .annual-total-value{font-size:16px;font-weight:950;white-space:nowrap;color:var(--navy);}
-        .annual-total-info{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;flex:0 0 19px;border:1px solid #8a6a22;border-radius:50%;background:#fff;color:#8a6a22;font-size:12px;font-weight:950;cursor:pointer;padding:0;}
-        .annual-total-popover{display:none;position:absolute;z-index:150;right:10px;top:calc(100% + 6px);width:min(290px,calc(100vw - 44px));padding:11px 12px;border:1px solid rgba(214,178,94,.75);border-radius:10px;background:#fff;color:#273449;font-size:12px;line-height:1.45;font-weight:700;box-shadow:0 8px 22px rgba(15,23,42,.18);}
-        .annual-total-popover.show{display:block;}
-        .single-page-heading{margin:10px 14px 0;padding:10px 0 7px;border-bottom:1px solid #e6e9ef;color:var(--navy);font-size:14px;font-weight:950;letter-spacing:.2px;}
-        .bank-guidance{margin:10px 14px 14px;padding:10px 12px;border-radius:10px;background:#fffaf0;color:#6f5a2a;font-size:12px;line-height:1.45;font-weight:750;}
 </style>
     
 <script>
@@ -460,27 +444,32 @@
                 <div id="panel-isim" class="isim">-</div>
             </div>
 
-            <nav class="tab-nav" role="tablist" aria-label="Aidat paneli bölümleri">
-                <button type="button" class="tab-btn" id="tab-ozet" role="tab" aria-selected="true" data-tab="ozet"><span class="tab-icon" aria-hidden="true">▦</span><span>Özet</span></button>
-                <button type="button" class="tab-btn" id="tab-odemeler" role="tab" aria-selected="false" data-tab="odemeler"><span class="tab-icon" aria-hidden="true">▤</span><span>Ödemeler</span></button>
-                <button type="button" class="tab-btn" id="tab-banka" role="tab" aria-selected="false" data-tab="banka"><span class="tab-icon" aria-hidden="true">⌂</span><span>Banka Bilgileri</span></button>
-                <button type="button" class="tab-btn" id="tab-iletisim" role="tab" aria-selected="false" data-tab="iletisim"><span class="tab-icon" aria-hidden="true">☏</span><span>İletişim ve Duyurular</span></button>
-            </nav>
+            <div class="tab-nav" role="tablist" aria-label="Aidat paneli bölümleri">
+                <button type="button" class="tab-btn" id="tab-ozet" role="tab" aria-controls="panel-ozet" aria-selected="true" data-tab="ozet">
+                    <span class="tab-icon" aria-hidden="true">⌂</span><span>Özet</span>
+                </button>
+                <button type="button" class="tab-btn" id="tab-odemeler" role="tab" aria-controls="panel-odemeler" aria-selected="false" data-tab="odemeler">
+                    <span class="tab-icon" aria-hidden="true">₺</span><span>Ödemeler</span>
+                </button>
+                <button type="button" class="tab-btn" id="tab-iletisim" role="tab" aria-controls="panel-iletisim" aria-selected="false" data-tab="iletisim">
+                    <span class="tab-icon" aria-hidden="true">▣</span><span>Banka Bilgileri</span>
+                </button>
+                <button type="button" class="tab-btn" id="tab-duyurular" role="tab" aria-controls="panel-duyurular" aria-selected="false" data-tab="duyurular">
+                    <span class="tab-icon" aria-hidden="true">▤</span><span>İletişim ve Duyurular</span>
+                </button>
+            </div>
 
             <section class="tab-panel active" id="panel-ozet" role="tabpanel" aria-labelledby="tab-ozet" data-panel="ozet">
-                <div id="ozet-sorular" aria-live="polite"></div>
                 <div class="summary-sticky">
                     <div class="summary" id="summary-row-1"></div>
                     <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
                 </div>
-                <div class="annual-total-row" id="annual-total-row" hidden>
-                    <span class="annual-total-label" id="annual-total-label">2026 Yılı Toplam Aidat</span>
-                    <strong class="annual-total-value" id="annual-total-value">-</strong>
-                    <button type="button" class="annual-total-info" id="annual-total-info-btn" aria-label="Yıllık toplam aidat hakkında bilgi" aria-expanded="false">i</button>
-                    <div class="annual-total-popover" id="annual-total-popover" role="tooltip">Bu tutar, Ana Ayarlar bölümündeki Ocak–Aralık aylık aidatlarının toplamıdır.</div>
-                </div>
                 <div class="accrual-card" id="accrual-card" aria-label="Yıllık toplam, tahakkuk ve ödeme karşılaştırması" hidden>
-                    <div class="accrual-head" id="accrual-head">AİDAT KARŞILAŞTIRMASI</div>
+                    <div class="accrual-title-row">
+                        <div class="accrual-head" id="accrual-head">2026 YILI TOPLAM AİDAT</div>
+                        <button type="button" class="info-btn accrual-info-btn" id="annual-info-btn" aria-label="Yıllık aidat hakkında bilgi" aria-expanded="false">i</button>
+                        <div class="info-popover" id="annual-info-popover" role="tooltip">Bu tutar, Ana Ayarlar bölümündeki 12 aylık aidat tutarlarının toplamıdır.</div>
+                    </div>
                     <div class="accrual-row" id="accrual-annual-row" hidden>
                         <div class="accrual-label">Yıllık toplam</div>
                         <div><div class="accrual-track"><div id="accrual-annual-bar" class="accrual-fill annual"></div></div><div id="accrual-annual-value" class="accrual-value">-</div></div>
@@ -502,7 +491,6 @@
             </section>
 
             <section class="tab-panel" id="panel-odemeler" role="tabpanel" aria-labelledby="tab-odemeler" data-panel="odemeler">
-                <div class="single-page-heading">AYLIK ÖDEME DURUMU</div>
                 <div class="table-wrap">
                     <table>
                         <thead><tr><th>AY</th><th>AİDAT</th><th>EK</th></tr></thead>
@@ -511,16 +499,16 @@
                 </div>
             </section>
 
-            <section class="tab-panel" id="panel-banka" data-panel="banka" role="tabpanel" aria-labelledby="tab-banka">
+            <section class="tab-panel" id="panel-iletisim" role="tabpanel" aria-labelledby="tab-iletisim" data-panel="iletisim">
                 <div class="payment">
                     <div class="payment-head">BANKA BİLGİLERİ</div>
                     <div id="odeme-govde"></div>
                 </div>
             </section>
 
-            <section class="tab-panel" id="panel-iletisim" data-panel="iletisim" role="tabpanel" aria-labelledby="tab-iletisim">
+            <section class="tab-panel" id="panel-duyurular" role="tabpanel" aria-labelledby="tab-duyurular" data-panel="duyurular">
                 <div class="announcement-card">
-                    <div class="announcement-head">SİTE DUYURULARI</div>
+                    <div class="announcement-head">SİTE DUYURUSU</div>
                     <div id="duyuru-metni" class="announcement-body announcement-empty">Şu anda yayınlanmış bir duyuru bulunmuyor.</div>
                 </div>
                 <div class="contact-card">
@@ -548,8 +536,6 @@
         // ⚙️ SADECE GEREKİRSE BU SATIRI DEĞİŞTİR:
         // Apps Script Web App dağıtımındaki /exec URL adresi. GitHub WEB_APP_URL ile karıştırma.
         const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbyYZv0MqrPYX2wCXQhiv83nZA8TfzhjN7QEP98LKQFGjUgnBjng96ngUxT_cLbH_W-L/exec";
-        // TEST BUILD: mevcut API yalnızca veri okumak için kullanılır; ziyaret logu gönderilmez.
-        const TEST_MODE = true;
 
         // Dengeli hız modu: varsa son panel verisini hemen gösterir, güncel veriyi arkadan yeniler.
         // Local cache en fazla 5 dakika kullanılır; gerçek güncel veri arkadan kontrol edilir.
@@ -657,122 +643,81 @@
             if(el) el.textContent = metin || 'Bilgileriniz getiriliyor...';
         }
 
-        // Sekmeler yalnızca görünümü değiştirir; API ve veri akışı aynen korunur.
-        var ilkSekmeGosterildi = false;
-        var sekmeSirasi = ['ozet', 'odemeler', 'banka', 'iletisim'];
-        function sekmeAc(sekmeAdi, yon, sessiz) {
-            var gecerliSekmeler = sekmeSirasi;
-            if(gecerliSekmeler.indexOf(sekmeAdi) === -1) sekmeAdi = 'ozet';
-            var onceki = document.querySelector('.tab-btn[aria-selected="true"]');
-            var oncekiAd = onceki ? onceki.getAttribute('data-tab') : sekmeAdi;
-            if(!yon) yon = gecerliSekmeler.indexOf(sekmeAdi) >= gecerliSekmeler.indexOf(oncekiAd) ? 1 : -1;
+        // Kaydırmalı sekme sistemi: tüm bölümler tek sayfada görünür.
+        // Sekme satırı sabit kalır; dokunma ilgili bölüme yumuşak kaydırır.
+        var sekmeSirasi = ['ozet', 'odemeler', 'iletisim', 'duyurular'];
+        var aktifSekmeAdi = 'ozet';
+        var scrollRaf = false;
 
+        function sekmeVurgula_(ad) {
+            if(sekmeSirasi.indexOf(ad) === -1) ad = 'ozet';
+            aktifSekmeAdi = ad;
             document.querySelectorAll('.tab-btn').forEach(function(btn) {
-                var aktif = btn.getAttribute('data-tab') === sekmeAdi;
+                var aktif = btn.getAttribute('data-tab') === ad;
                 btn.setAttribute('aria-selected', aktif ? 'true' : 'false');
                 btn.tabIndex = aktif ? 0 : -1;
             });
+        }
 
-            document.querySelectorAll('.tab-panel').forEach(function(panel) {
-                var aktif = panel.getAttribute('data-panel') === sekmeAdi;
-                panel.classList.remove('slide-from-right', 'slide-from-left');
-                panel.classList.toggle('active', aktif);
-                panel.hidden = !aktif;
-                if(aktif && !sessiz) {
-                    panel.classList.add(yon >= 0 ? 'slide-from-right' : 'slide-from-left');
-                    panel.addEventListener('animationend', function temizle() {
-                        panel.classList.remove('slide-from-right', 'slide-from-left');
-                        panel.removeEventListener('animationend', temizle);
-                    });
-                }
+        function bolumeKaydir_(ad) {
+            if(sekmeSirasi.indexOf(ad) === -1) return;
+            var panel = document.querySelector('.tab-panel[data-panel="' + ad + '"]');
+            if(!panel) return;
+            sekmeVurgula_(ad);
+            var nav = document.querySelector('.tab-nav');
+            var offset = (nav ? nav.offsetHeight : 0) + 10;
+            var y = panel.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({top: Math.max(0, y), behavior: 'smooth'});
+        }
+
+        function sayfayaGoreSekmeGuncelle_() {
+            scrollRaf = false;
+            var nav = document.querySelector('.tab-nav');
+            var esik = (nav ? nav.getBoundingClientRect().height : 0) + 42;
+            var secili = 'ozet';
+            sekmeSirasi.forEach(function(ad) {
+                var p = document.querySelector('.tab-panel[data-panel="' + ad + '"]');
+                if(p && p.getBoundingClientRect().top <= esik) secili = ad;
             });
+            sekmeVurgula_(secili);
         }
 
         document.querySelectorAll('.tab-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                iphoneGecis_(btn.getAttribute('data-tab'));
+                bolumeKaydir_(btn.getAttribute('data-tab'));
             });
             btn.addEventListener('keydown', function(event) {
                 if(event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
                 event.preventDefault();
-                var butonlar = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
-                var index = butonlar.indexOf(btn);
-                var yon = event.key === 'ArrowRight' ? 1 : -1;
-                var sonraki = butonlar[(index + yon + butonlar.length) % butonlar.length];
-                sekmeAc(sonraki.getAttribute('data-tab'));
-                sonraki.focus();
+                var buttons = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+                var index = buttons.indexOf(btn);
+                var direction = event.key === 'ArrowRight' ? 1 : -1;
+                var next = buttons[(index + direction + buttons.length) % buttons.length];
+                next.focus();
+                bolumeKaydir_(next.getAttribute('data-tab'));
             });
         });
 
-
-        // v3.9.19: Sekmeler sayfa içi bölümlere kaydırır; yatay sürükleme panel geçişi kaldırıldı.
-
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.info-popover.show').forEach(function(info) {
-                info.classList.remove('show');
-                var box = info.closest('.box');
-                if(box) {
-                    box.classList.remove('info-open');
-                    var button = box.querySelector('.info-btn');
-                    if(button) button.setAttribute('aria-expanded', 'false');
-                }
-            });
-            if(summaryInfoTimer) {
-                clearTimeout(summaryInfoTimer);
-                summaryInfoTimer = null;
-            }
-        });
-
-        function paneliBaslat() {
-            var kod = getParam('k') || getParam('id');
-            panelKod = kod || '';
-            if(!kod) {
-                showError("Geçersiz Bağlantı", "Kullanılan link hatalı veya eksik kod içeriyor. Lütfen site yönetimi ile görüşünüz.");
+        window.addEventListener('scroll', function() {
+            if(scrollRaf) return;
+            scrollRaf = true;
+            window.requestAnimationFrame(sayfayaGoreSekmeGuncelle_);
+        }, {passive:true});
+        window.addEventListener('resize', sayfayaGoreSekmeGuncelle_);
+        document.addEventListener('click', function(event) {
+            var annualButton = event.target.closest && event.target.closest('#annual-info-btn');
+            var annualInfo = document.getElementById('annual-info-popover');
+            if(annualButton && annualInfo) {
+                var open = annualInfo.classList.toggle('show');
+                annualButton.setAttribute('aria-expanded', open ? 'true' : 'false');
                 return;
             }
-
-            var cached = lokalPanelCacheOku_(kod);
-            if(cached) {
-                panelCacheGosterildi = true;
-                veriYukle(cached, true);
+            if(annualInfo && !event.target.closest('#annual-info-popover')) {
+                annualInfo.classList.remove('show');
+                var b = document.getElementById('annual-info-btn');
+                if(b) b.setAttribute('aria-expanded', 'false');
             }
-
-            apiSoftTimeoutHandle = setTimeout(function() {
-                if(apiCevapGeldi || panelCacheGosterildi) return;
-                beklemeYazisiGuncelle_("Sistem biraz yoğun, bilgileriniz getirilmeye devam ediyor...");
-            }, API_SOFT_TIMEOUT_MS);
-
-            apiTimeoutHandle = setTimeout(function() {
-                if(apiCevapGeldi) return;
-                if(panelCacheGosterildi) {
-                    // Cache ekrandayken kullanıcıyı kırmızı hata kartına düşürme.
-                    toast("Güncel kontrol uzun sürdü; son kayıt gösteriliyor");
-                    return;
-                }
-                showError("Bağlantı Zaman Aşımı", "Sistem şu anda yanıt vermedi. Lütfen internet bağlantınızı kontrol edip sayfayı yenileyiniz veya site yönetimi ile görüşünüz.");
-            }, API_HARD_TIMEOUT_MS);
-
-            aktifApiScript = document.createElement('script');
-            aktifApiScript.async = true;
-            aktifApiScript.src = GOOGLE_API_URL + '?k=' + encodeURIComponent(kod) + '&callback=veriYukle&_t=' + Date.now();
-            aktifApiScript.onerror = function() {
-                if(apiCevapGeldi) return;
-                apiZamanlayicilariTemizle_();
-                if(panelCacheGosterildi) {
-                    toast("Güncel bağlantı alınamadı; son kayıt gösteriliyor");
-                    return;
-                }
-                showError("Bağlantı Hatası", "Aidat sistemiyle bağlantı kurulamadı. Lütfen daha sonra tekrar deneyiniz veya site yönetimi ile görüşünüz.");
-            };
-            document.body.appendChild(aktifApiScript);
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', paneliBaslat);
-        } else {
-            paneliBaslat();
-        }
-
+        });
 
         // ─── v3.9.14: Soru tabanlı Özet ───
         // Yalnızca mevcut data alanlarını okur, veri yazmaz. Hata olursa eski render'ı bozmaz.
@@ -910,38 +855,25 @@
             var cariYil = new Date().getFullYear();
             var oncekiYil = cariYil - 1;
 
-            // Dört temel bilgi kutusu: sıralama ve açıklamalar sadeleştirildi.
+            // Sakin ekranı: yalnızca kullanıcıyı ilgilendiren dört temel bilgi.
             var row1 = document.getElementById('summary-row-1');
-            row1.innerHTML = '';
             var row2 = document.getElementById('summary-row-2');
+            row1.innerHTML = '';
             row2.innerHTML = '';
 
-            row1.appendChild(createSummaryBox(oncekiYil + ' YILI BORCU', data.devirRaw > 0 ? devirTemiz : 'Borç yok',
-                data.devirRaw > 0 ? 'yellow' : 'gray',
-                oncekiYil + ' yılında ödenmeyen aidatlardan kalan borcunuzdur.'));
-
-            row1.appendChild(createSummaryBox(cariYil + ' YILI BORCU', data.borcYilRaw > 0 ? borcTemiz : '0 TL',
-                data.borcYilRaw > 0 ? 'red' : 'green',
-                cariYil + ' yılında vadesi gelen aidatlardan kalan borcunuzdur. Gelecek aylar dahil değildir.'));
-
-            row2.appendChild(createSummaryBox(cariYil + ' YILINDA ÖDENEN', odenenTemiz, 'green',
-                cariYil + ' yılında sisteme kaydedilen toplam ödemenizdir.'));
-
-            row2.appendChild(createSummaryBox('TOPLAM BORÇ', data.toplamBorcRaw > 0 ? toplamTemiz : 'Borç yok',
+            row1.appendChild(createSummaryBox(oncekiYil + ' YILI BORCU',
+                devirTemiz, data.devirRaw > 0 ? 'yellow' : 'gray',
+                oncekiYil + ' yılına ait ödenmemiş aidat borcunuzdur.'));
+            row1.appendChild(createSummaryBox(cariYil + ' YILI BORCU',
+                borcTemiz, data.borcYilRaw > 0 ? 'red' : 'green',
+                cariYil + ' yılında vadesi gelen aidatlardan ödemeleriniz düşüldükten sonra kalan borcunuzdur.'));
+            row2.appendChild(createSummaryBox(cariYil + ' YILINDA ÖDENEN',
+                odenenTemiz, 'green',
+                cariYil + ' yılında sisteme kaydedilmiş toplam ödemenizdir.'));
+            row2.appendChild(createSummaryBox(data.toplamBorcRaw > 0 ? 'TOPLAM BORÇ' : 'TOPLAM DURUM',
+                data.toplamBorcRaw > 0 ? toplamTemiz : 'BORÇ YOK',
                 data.toplamBorcRaw > 0 ? 'pink' : 'green',
                 oncekiYil + ' ve ' + cariYil + ' yıllarına ait borçlarınızın toplamıdır.'));
-
-            // Yıllık toplam hedef, yalnızca API bu alanı sağladığında gösterilir.
-            // Değer, test Apps Script tarafında AYARLAR'daki 12 aylık aidatların toplamıdır.
-            var annualTarget = Math.max(0, guvenliSayi(data.yillikTahakkukRaw));
-            var annualRow = document.getElementById('annual-total-row');
-            var annualValue = document.getElementById('annual-total-value');
-            var annualLabel = document.getElementById('annual-total-label');
-            if(annualRow && annualValue && annualLabel) {
-                annualRow.hidden = !(annualTarget > 0);
-                annualLabel.textContent = cariYil + ' YILI TOPLAM AİDAT';
-                if(annualTarget > 0) annualValue.textContent = ozetTL_(annualTarget);
-            }
 
             if(data.notlar && data.notlar !== '0') {
                 var n = document.getElementById('panel-not');
@@ -987,12 +919,7 @@
             
             oGovde.appendChild(paymentRowNode('Alıcı', data.odemeAlici, data.odemeAlici));
             oGovde.appendChild(paymentRowNode('IBAN', data.odemeIban, ibanTemizleKopya(data.odemeIban)));
-            
             oGovde.appendChild(paymentRowNode('Açıklama', data.odemeAciklama, data.odemeAciklama));
-            var bankaNotu = document.createElement('div');
-            bankaNotu.className = 'bank-guidance';
-            bankaNotu.textContent = 'Ödeme tutarınızı ana ekrandaki toplam borç bilgisinden kontrol edebilirsiniz.';
-            oGovde.appendChild(bankaNotu);
 
             // 💬 Google Sheets'ten Dinamik WhatsApp Numarası ve Akıllı Hazır Mesaj Entegrasyonu
             var waDigits = data.whatsappNo.replace(/[^0-9]/g, '');
@@ -1007,16 +934,15 @@
                 waAlan.style.display = 'block';
             }
 
-            try { ozetSorulariRender_(data); } catch(ozetHata) { console.warn('Özet render:', ozetHata); }
             document.getElementById('panel-guncelleme').textContent = "Son güncelleme: " + data.guncellemeTarihi + (cacheRender ? " · güncel kontrol ediliyor" : "");
             if(!ilkSekmeGosterildi) {
-                sekmeAc('ozet');
+                sekmeVurgula_('ozet');
                 ilkSekmeGosterildi = true;
             }
             document.getElementById('card').style.display = 'block';
+            sayfayaGoreSekmeGuncelle_();
 
-            // Panel kullanıcıya gösterildikten sonra ziyaret logunu yalnızca güncel sunucu cevabında arka planda yaz.
-            if(!cacheRender && !TEST_MODE) setTimeout(logZiyaretiArkaPlandaGonder, 80);
+            // TEST SÜRÜMÜ: ziyaret kaydı gönderilmez; mevcut veriler yalnızca okunur.
         }
 
         function logZiyaretiArkaPlandaGonder() {
@@ -1109,7 +1035,11 @@
             var odenen = Math.max(0, guvenliSayi(data.odenenYilRaw));
             var yillik = data.yillikTahakkukVar ? Math.max(0, guvenliSayi(data.yillikTahakkukRaw)) : 0;
             var annualRow = document.getElementById('accrual-annual-row');
+            var subtitle = document.getElementById('accrual-subtitle');
             annualRow.hidden = !data.yillikTahakkukVar;
+            var ayAdlari = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            var icindeBulunulanAy = ayAdlari[new Date().getMonth()];
+            if(subtitle) subtitle.textContent = '';
 
             var maxDeger = Math.max(tahakkuk, odenen, yillik, 1);
             function tl(v) { return Math.round(v).toLocaleString('tr-TR') + ' TL'; }
@@ -1147,7 +1077,7 @@
 
             var yil = new Date().getFullYear();
             var head = document.getElementById('accrual-head');
-            if(head) head.textContent = yil + ' AİDAT KARŞILAŞTIRMASI';
+            if(head) head.textContent = yil + ' YILI TOPLAM AİDAT';
 
             // Bu fark yalnızca içinde bulunulan yılın tahakkuk ve ödemelerini karşılaştırır.
             // Önceki yıldan devreden borç ayrı gösterilir; mahsuplaştırılmaz.
@@ -1256,28 +1186,9 @@
             return box;
         }
 
-        (function annualTargetInfoInit_() {
-            var btn = document.getElementById('annual-total-info-btn');
-            var pop = document.getElementById('annual-total-popover');
-            if(!btn || !pop) return;
-            btn.addEventListener('click', function(event) {
-                event.stopPropagation();
-                var open = pop.classList.contains('show');
-                pop.classList.toggle('show', !open);
-                btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-            });
-            document.addEventListener('click', function(event) {
-                if(!event.target.closest('.annual-total-row')) {
-                    pop.classList.remove('show');
-                    btn.setAttribute('aria-expanded', 'false');
-                }
-            });
-        })();
-
         function paymentRowNode(label, val, copyVal) {
             var row = document.createElement('div');
             row.className = 'payment-row';
-            row.setAttribute('data-payment-label', label);
             
             var lblNode = document.createElement('div');
             lblNode.className = 'payment-label';
@@ -1343,67 +1254,6 @@
         function toast(m){var t=document.getElementById("toast");if(!t)return;t.textContent=m||"Kopyalandı";t.classList.add("show");if(window.toastTimer)clearTimeout(window.toastTimer);window.toastTimer=setTimeout(function(){t.classList.remove("show");},2200);}
     </script>
     
-<script>
-(function () {
-    var nav = document.querySelector('.tab-nav');
-    if (!nav) return;
-    var buttons = Array.prototype.slice.call(nav.querySelectorAll('.tab-btn'));
-    var sections = buttons.map(function (button) {
-        return document.querySelector('.tab-panel[data-panel="' + button.getAttribute('data-tab') + '"]');
-    }).filter(Boolean);
-    var rafPending = false;
-
-    function setActive(id) {
-        buttons.forEach(function (button) {
-            var active = button.getAttribute('data-tab') === id;
-            button.setAttribute('aria-selected', active ? 'true' : 'false');
-            button.tabIndex = active ? 0 : -1;
-        });
-    }
-
-    function scrollToSection(id) {
-        var target = document.querySelector('.tab-panel[data-panel="' + id + '"]');
-        if (!target) return;
-        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        var navHeight = nav.getBoundingClientRect().height;
-        var y = window.pageYOffset + target.getBoundingClientRect().top - navHeight - 8;
-        window.scrollTo({ top: Math.max(0, y), behavior: reduceMotion ? 'auto' : 'smooth' });
-        setActive(id);
-    }
-
-    // The original tab listener calls this global function; redefine it as a scroll action.
-    window.iphoneGecis_ = scrollToSection;
-
-    buttons.forEach(function (button, index) {
-        button.addEventListener('keydown', function (event) {
-            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-            event.preventDefault();
-            var next = (index + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
-            buttons[next].focus();
-            scrollToSection(buttons[next].getAttribute('data-tab'));
-        });
-    });
-
-    function updateActiveFromScroll() {
-        rafPending = false;
-        var navBottom = nav.getBoundingClientRect().bottom;
-        var active = sections[0];
-        sections.forEach(function (section) {
-            if (section.getBoundingClientRect().top <= navBottom + 42) active = section;
-        });
-        if (active) setActive(active.getAttribute('data-panel'));
-    }
-
-    window.addEventListener('scroll', function () {
-        if (rafPending) return;
-        rafPending = true;
-        window.requestAnimationFrame(updateActiveFromScroll);
-    }, { passive: true });
-    window.addEventListener('resize', updateActiveFromScroll, { passive: true });
-    updateActiveFromScroll();
-})();
-</script>
-
 <script>
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
