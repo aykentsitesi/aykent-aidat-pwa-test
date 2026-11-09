@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.18 TEST | Tek sayfa sade görünüm, bilgi açıklamaları ve banka tutar satırı kaldırıldı -->
+<!-- AYKENT AIDAT PANELİ — v3.9.19 TEST | Sabit sekmeli, kaydırmalı tek sayfa görünüm -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -17,7 +17,7 @@
     <style>
         :root{--navy:#1A2B48;--gold:#d6b25e;--ink:#101827;--line:#e6e9ef;--green:#047857;--red:#be123c;--amber:#92400e;--mint:#E8F5E9;--active-green:#27AE60;--cool-gray:#F8F9FA;}
         *{box-sizing:border-box;margin:0;padding:0;}
-        html{height:100%;overflow-y:scroll;overflow-x:clip;-webkit-text-size-adjust:100%;}
+        html{height:100%;overflow-y:scroll;overflow-x:clip;-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
         body{min-height:100%;overflow-x:clip;background:#f3f6fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);font-weight:700;}
         
         /* ── PREMIUM GLASSMORPHISM LOADER DESIGN ── */
@@ -197,7 +197,7 @@
         
         .table-wrap{padding:12px 14px 0;overflow-x:hidden;}
         table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(15,23,42,.10);border:1px solid #e5e7eb;}
-        th{background:var(--navy);color:#f4d47c;padding:11px 4px;font-size:15px;font-weight:950;position:sticky;top:0;z-index:2;}
+        th{background:var(--navy);color:#f4d47c;padding:11px 4px;font-size:15px;font-weight:950;position:sticky;top:64px;z-index:2;}
         td{padding:10px 4px;text-align:center;border-bottom:1px solid var(--line);word-break:break-word;font-size:15px;font-weight:900;background:white;}
         td:first-child{text-align:left;padding-left:14px;color:#111827;background:var(--cool-gray);}
         tr.current-month-row td{border-top:2px solid #2563eb;border-bottom:2px solid #2563eb;}
@@ -376,12 +376,15 @@
         /* ─── /v3.9.15 ─── */
 
 
-        /* v3.9.18 TEST: Sekmesiz tek sayfa görünüm; mevcut renkler ve yazı karakterleri korunur. */
-        .tab-nav{display:none!important;}
-        .tab-panel,.tab-panel[hidden]{display:block!important;min-height:0;padding:10px 0 8px;}
+        /* v3.9.19 TEST: Tek sayfa + üstte sabit sekmeler; tüm bölümler doğal akışta görünür. */
+        .tab-nav{position:sticky;top:0;z-index:500;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:8px 10px;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #e5e9f0;box-shadow:0 3px 12px rgba(15,23,42,.08);}
+        .tab-btn{min-height:44px;font-size:12px;white-space:normal;line-height:1.15;}
+        .tab-panel,.tab-panel[hidden]{display:block!important;min-height:0;padding:10px 0 8px;scroll-margin-top:76px;}
         .tab-panel.active{animation:none!important;}
         #ozet-sorular,#accrual-card{display:none!important;}
         #ozet-sorular ~ .summary-sticky{display:block!important;}
+        @media(max-width:380px){.tab-nav{gap:4px;padding:7px 6px}.tab-btn{font-size:10.5px;min-height:42px;padding:5px 1px}.tab-btn .tab-icon{font-size:13px}}
+        @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.tab-btn{transition:none!important}}
         .annual-total-row{position:relative;display:flex;align-items:center;gap:8px;margin:4px 12px 10px;padding:11px 12px;border-top:1px solid #e6e9ef;border-bottom:1px solid #e6e9ef;background:#fff;color:var(--navy);}
         .annual-total-row[hidden]{display:none!important;}
         .annual-total-label{font-size:13px;font-weight:850;flex:1;}
@@ -457,6 +460,13 @@
                 <div id="panel-isim" class="isim">-</div>
             </div>
 
+            <nav class="tab-nav" role="tablist" aria-label="Aidat paneli bölümleri">
+                <button type="button" class="tab-btn" id="tab-ozet" role="tab" aria-selected="true" data-tab="ozet"><span class="tab-icon" aria-hidden="true">▦</span><span>Özet</span></button>
+                <button type="button" class="tab-btn" id="tab-odemeler" role="tab" aria-selected="false" data-tab="odemeler"><span class="tab-icon" aria-hidden="true">▤</span><span>Ödemeler</span></button>
+                <button type="button" class="tab-btn" id="tab-banka" role="tab" aria-selected="false" data-tab="banka"><span class="tab-icon" aria-hidden="true">⌂</span><span>Banka Bilgileri</span></button>
+                <button type="button" class="tab-btn" id="tab-iletisim" role="tab" aria-selected="false" data-tab="iletisim"><span class="tab-icon" aria-hidden="true">☏</span><span>İletişim ve Duyurular</span></button>
+            </nav>
+
             <section class="tab-panel active" id="panel-ozet" role="tabpanel" aria-labelledby="tab-ozet" data-panel="ozet">
                 <div id="ozet-sorular" aria-live="polite"></div>
                 <div class="summary-sticky">
@@ -471,7 +481,6 @@
                 </div>
                 <div class="accrual-card" id="accrual-card" aria-label="Yıllık toplam, tahakkuk ve ödeme karşılaştırması" hidden>
                     <div class="accrual-head" id="accrual-head">AİDAT KARŞILAŞTIRMASI</div>
-                    <div class="accrual-subtitle" id="accrual-subtitle">Tahakkuk, içinde bulunulan aya kadarki aidat tutarıdır.</div>
                     <div class="accrual-row" id="accrual-annual-row" hidden>
                         <div class="accrual-label">Yıllık toplam</div>
                         <div><div class="accrual-track"><div id="accrual-annual-bar" class="accrual-fill annual"></div></div><div id="accrual-annual-value" class="accrual-value">-</div></div>
@@ -490,19 +499,9 @@
                     <div id="accrual-difference" class="accrual-difference"></div>
                 </div>
                 <div id="panel-not" class="note"></div>
-                <div class="contact-card">
-                    <div class="contact-card-head">YÖNETİMLE İLETİŞİM</div>
-                    <p>Soru ve talepleriniz için yöneticiye WhatsApp üzerinden ulaşabilirsiniz.</p>
-                    <div id="whatsapp-alan" class="whatsapp-container">
-                    <a id="whatsapp-link" href="#" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
-                        <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.411 0 11.989 0c3.183.001 6.177 1.243 8.432 3.498 2.256 2.255 3.497 5.25 3.496 8.435-.003 6.634-5.354 11.982-11.933 11.982-1.996-.001-3.957-.5-5.698-1.447L0 24zm6.59-4.859c1.72.101 2.382.204 4.417.205 5.516 0 10.029-4.505 10.032-10.016.001-2.64-1.024-5.122-2.887-6.986-1.862-1.864-4.343-2.89-6.984-2.891-5.522 0-10.033 4.508-10.035 10.021-.001 2.007.518 2.975 1.512 4.704l-.956 3.493 3.585-.94c1.643.914 2.32 1.314 4.316 1.314zM16.518 14c-.258-.127-1.526-.749-1.762-.834-.236-.086-.407-.127-.578.128-.171.256-.664.834-.813.1-.148-.127-.297-.181-.554-.308-2.172-.962-3.56-3.137-3.667-3.281-.107-.144-.016-.223.056-.305.105-.119.255-.308.337-.419.082-.11.11-.186.165-.313.055-.128.027-.236-.014-.321-.04-.086-.407-1.012-.557-1.383-.146-.358-.295-.308-.407-.314-.105-.005-.226-.006-.347-.006-.12 0-.317.045-.483.226-.166.181-.634.616-.634 1.501 0 .885.643 1.74 1.731 1.884 2.253 3.22 3.738 3.535 5.234 3.639 1.15.08 2.137-.019 2.946-.139.902-.134 1.873-.762 2.138-1.463.264-.7 0-1.298-.079-1.422-.079-.124-.29-.199-.549-.326z"/></svg>
-                        Yöneticiye WhatsApp'tan Yaz
-                    </a>
-                </div>
-                </div>
             </section>
 
-            <section class="tab-panel" id="panel-odemeler" data-panel="odemeler">
+            <section class="tab-panel" id="panel-odemeler" role="tabpanel" aria-labelledby="tab-odemeler" data-panel="odemeler">
                 <div class="single-page-heading">AYLIK ÖDEME DURUMU</div>
                 <div class="table-wrap">
                     <table>
@@ -512,17 +511,27 @@
                 </div>
             </section>
 
-            <section class="tab-panel" id="panel-duyurular" data-panel="duyurular">
-                <div class="announcement-card">
-                    <div class="announcement-head">SİTE DUYURUSU</div>
-                    <div id="duyuru-metni" class="announcement-body announcement-empty">Şu anda yayınlanmış bir duyuru bulunmuyor.</div>
-                </div>
-            </section>
-
-            <section class="tab-panel" id="panel-iletisim" data-panel="iletisim">
+            <section class="tab-panel" id="panel-banka" data-panel="banka" role="tabpanel" aria-labelledby="tab-banka">
                 <div class="payment">
                     <div class="payment-head">BANKA BİLGİLERİ</div>
                     <div id="odeme-govde"></div>
+                </div>
+            </section>
+
+            <section class="tab-panel" id="panel-iletisim" data-panel="iletisim" role="tabpanel" aria-labelledby="tab-iletisim">
+                <div class="announcement-card">
+                    <div class="announcement-head">SİTE DUYURULARI</div>
+                    <div id="duyuru-metni" class="announcement-body announcement-empty">Şu anda yayınlanmış bir duyuru bulunmuyor.</div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-card-head">YÖNETİMLE İLETİŞİM</div>
+                    <p>Soru ve talepleriniz için yöneticiye WhatsApp üzerinden ulaşabilirsiniz.</p>
+                    <div id="whatsapp-alan" class="whatsapp-container">
+                    <a id="whatsapp-link" href="#" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
+                        <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.411 0 11.989 0c3.183.001 6.177 1.243 8.432 3.498 2.256 2.255 3.497 5.25 3.496 8.435-.003 6.634-5.354 11.982-11.933 11.982-1.996-.001-3.957-.5-5.698-1.447L0 24zm6.59-4.859c1.72.101 2.382.204 4.417.205 5.516 0 10.029-4.505 10.032-10.016.001-2.64-1.024-5.122-2.887-6.986-1.862-1.864-4.343-2.89-6.984-2.891-5.522 0-10.033 4.508-10.035 10.021-.001 2.007.518 2.975 1.512 4.704l-.956 3.493 3.585-.94c1.643.914 2.32 1.314 4.316 1.314zM16.518 14c-.258-.127-1.526-.749-1.762-.834-.236-.086-.407-.127-.578.128-.171.256-.664.834-.813.1-.148-.127-.297-.181-.554-.308-2.172-.962-3.56-3.137-3.667-3.281-.107-.144-.016-.223.056-.305.105-.119.255-.308.337-.419.082-.11.11-.186.165-.313.055-.128.027-.236-.014-.321-.04-.086-.407-1.012-.557-1.383-.146-.358-.295-.308-.407-.314-.105-.005-.226-.006-.347-.006-.12 0-.317.045-.483.226-.166.181-.634.616-.634 1.501 0 .885.643 1.74 1.731 1.884 2.253 3.22 3.738 3.535 5.234 3.639 1.15.08 2.137-.019 2.946-.139.902-.134 1.873-.762 2.138-1.463.264-.7 0-1.298-.079-1.422-.079-.124-.29-.199-.549-.326z"/></svg>
+                        Yöneticiye WhatsApp'tan Yaz
+                    </a>
+                </div>
                 </div>
             </section>
 
@@ -650,7 +659,7 @@
 
         // Sekmeler yalnızca görünümü değiştirir; API ve veri akışı aynen korunur.
         var ilkSekmeGosterildi = false;
-        var sekmeSirasi = ['ozet', 'odemeler', 'duyurular', 'iletisim'];
+        var sekmeSirasi = ['ozet', 'odemeler', 'banka', 'iletisim'];
         function sekmeAc(sekmeAdi, yon, sessiz) {
             var gecerliSekmeler = sekmeSirasi;
             if(gecerliSekmeler.indexOf(sekmeAdi) === -1) sekmeAdi = 'ozet';
@@ -696,211 +705,7 @@
         });
 
 
-        // ─── v3.9.15: iPhone benzeri sekme geçişi + ekranın HER yerinden yatay kaydırma ───
-        // Yalnızca görünüm. Veri, API ve hesaplamalara dokunmaz. Yalnızca transform ve opacity animasyonlu.
-        (function iphoneSekmeModulu_() {
-            var SURE_MS = 300;
-            var EASE = 'cubic-bezier(.2,.9,.25,1)';
-            var YON_ESIK = 1.5;      // yatay baskınlık oranı
-            var BASLAMA_ESIK = 10;   // px
-            var REZERV = 0.22;       // sınırda (son sekme) esneme katsayısı
-            var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-            var mesgul = false;
-            var jest = null;
-
-            function sekmeAdlari_() {
-                return Array.prototype.slice.call(document.querySelectorAll('.tab-btn')).map(function(b) {
-                    return b.getAttribute('data-tab');
-                });
-            }
-            function aktifAd_() {
-                var b = document.querySelector('.tab-btn[aria-selected="true"]');
-                return b ? b.getAttribute('data-tab') : 'ozet';
-            }
-            function panel_(ad) {
-                return document.querySelector('.tab-panel[data-panel="' + ad + '"]');
-            }
-            function genislik_() {
-                var p = panel_(aktifAd_());
-                return (p && p.offsetWidth) || window.innerWidth || 360;
-            }
-            // Karar: saf fonksiyon (test edilebilir).
-            function hedefBul_(dx, sekmeler, aktif) {
-                var i = sekmeler.indexOf(aktif);
-                if(i < 0) return null;
-                if(dx < 0) return sekmeler[i + 1] || null;   // sola sürükle → sonraki
-                if(dx > 0) return sekmeler[i - 1] || null;   // sağa sürükle → önceki
-                return null;
-            }
-            function gecisKarari_(dx, v, W, hedefVar) {
-                if(!hedefVar) return false;
-                if(Math.abs(dx) > W * 0.25) return true;
-                return Math.abs(v) > 0.6 && (v < 0) === (dx < 0);
-            }
-
-            function animasyonAyarla_(el, ms) {
-                el.style.transition = ms ? ('transform ' + ms + 'ms ' + EASE + ', opacity ' + ms + 'ms ' + EASE) : 'none';
-            }
-            function stilTemizle_(el) {
-                if(!el) return;
-                el.style.transition = '';
-                el.style.transform = '';
-                el.style.opacity = '';
-                el.style.willChange = '';
-            }
-
-            function bitir_(hedefAd, yon, gecis) {
-                var aktifEl = panel_(aktifAd_());
-                var yeniEl = panel_(hedefAd);
-                if(gecis) {
-                    sekmeAc(hedefAd, yon, true);     // mevcut sekme mantığı; kendi slide animasyonu yok
-                } else {
-                    if(yeniEl) { yeniEl.classList.remove('active'); yeniEl.hidden = true; }
-                }
-                stilTemizle_(aktifEl);
-                stilTemizle_(yeniEl);
-                document.querySelectorAll('.tab-panel').forEach(stilTemizle_);
-                mesgul = false;
-            }
-
-            // Tıklamayla geçiş (sekme düğmesi)
-            window.iphoneGecis_ = function(hedefAd) {
-                var aktif = aktifAd_();
-                if(hedefAd === aktif || mesgul || reduce) { sekmeAc(hedefAd); return; }
-                var sek = sekmeAdlari_();
-                var yon = sek.indexOf(hedefAd) > sek.indexOf(aktif) ? -1 : 1; // sağdaki sekme → içerik sola kayar
-                var W = genislik_();
-                var aktifEl = panel_(aktif), yeniEl = panel_(hedefAd);
-                if(!aktifEl || !yeniEl) { sekmeAc(hedefAd); return; }
-                mesgul = true;
-                yeniEl.hidden = false;
-                yeniEl.classList.add('active');
-                animasyonAyarla_(yeniEl, 0);
-                yeniEl.style.transform = 'translate3d(' + (-yon * W) + 'px,0,0)';
-                yeniEl.style.opacity = '1';
-                aktifEl.style.willChange = 'transform,opacity';
-                yeniEl.style.willChange = 'transform,opacity';
-                void yeniEl.offsetWidth;
-                animasyonAyarla_(aktifEl, SURE_MS);
-                animasyonAyarla_(yeniEl, SURE_MS);
-                aktifEl.style.transform = 'translate3d(' + (yon * W * 0.3) + 'px,0,0)';
-                aktifEl.style.opacity = '.6';
-                yeniEl.style.transform = 'translate3d(0,0,0)';
-                var bitti = false;
-                setTimeout(function() {
-                    if(bitti) return; bitti = true;
-                    bitir_(hedefAd, yon, true);
-                }, SURE_MS + 40);
-            };
-
-            // Parmak hareketi
-            function haricAlan_(hedef) {
-                if(!hedef || !hedef.closest) return false;
-                return !!hedef.closest('input, textarea, select, [contenteditable="true"]');
-            }
-            document.addEventListener('touchstart', function(e) {
-                if(reduce || mesgul || !e.touches || e.touches.length !== 1) { jest = null; return; }
-                if(haricAlan_(e.target)) { jest = null; return; }
-                var sek = sekmeAdlari_(), aktif = aktifAd_();
-                jest = {
-                    x0: e.touches[0].clientX, y0: e.touches[0].clientY,
-                    lastX: e.touches[0].clientX, lastT: Date.now(), v: 0,
-                    mod: null, hedef: null, yon: 0, W: genislik_(),
-                    aktifAd: aktif, sek: sek,
-                    aktifEl: null, yeniEl: null, dx: 0
-                };
-            }, {passive:true});
-
-            document.addEventListener('touchmove', function(e) {
-                if(!jest || !e.touches || e.touches.length !== 1) return;
-                var x = e.touches[0].clientX, y = e.touches[0].clientY;
-                var dx = x - jest.x0, dy = y - jest.y0;
-                var now = Date.now();
-                var dt = Math.max(1, now - jest.lastT);
-                jest.v = (x - jest.lastX) / dt;
-                jest.lastX = x; jest.lastT = now;
-
-                if(jest.mod === null) {
-                    if(Math.abs(dx) < BASLAMA_ESIK && Math.abs(dy) < BASLAMA_ESIK) return;
-                    if(Math.abs(dx) > Math.abs(dy) * YON_ESIK) {
-                        jest.mod = 'yatay';
-                        jest.yon = dx < 0 ? 1 : -1;
-                        jest.hedef = hedefBul_(dx, jest.sek, jest.aktifAd);
-                        jest.aktifEl = panel_(jest.aktifAd);
-                        jest.yeniEl = jest.hedef ? panel_(jest.hedef) : null;
-                        if(jest.aktifEl) jest.aktifEl.style.willChange = 'transform';
-                        if(jest.yeniEl) {
-                            jest.yeniEl.hidden = false;
-                            jest.yeniEl.classList.add('active');
-                            jest.yeniEl.style.willChange = 'transform';
-                        }
-                    } else {
-                        jest = null; // dikey kaydırma: tarayıcıya bırak
-                        return;
-                    }
-                }
-                if(jest.mod !== 'yatay') return;
-
-                jest.dx = dx;
-                var W = jest.W;
-                var hedefVar = !!jest.hedef;
-                var ofset = hedefVar ? dx : dx * REZERV;
-                if(!jest.aktifEl) return;
-                requestAnimationFrame(function() {
-                    if(!jest || jest.mod !== 'yatay') return;
-                    animasyonAyarla_(jest.aktifEl, 0);
-                    jest.aktifEl.style.transform = 'translate3d(' + ofset + 'px,0,0)';
-                    jest.aktifEl.style.opacity = String(Math.max(0.7, 1 - Math.abs(ofset) / (W * 2)));
-                    if(jest.yeniEl) {
-                        animasyonAyarla_(jest.yeniEl, 0);
-                        var baslangic = (jest.yon === 1 ? W : -W);
-                        jest.yeniEl.style.transform = 'translate3d(' + (baslangic + dx) + 'px,0,0)';
-                        jest.yeniEl.style.opacity = '1';
-                    }
-                });
-            }, {passive:true});
-
-            document.addEventListener('touchend', function() {
-                if(!jest || jest.mod !== 'yatay') { jest = null; return; }
-                var j = jest; jest = null;
-                if(!j.aktifEl) { mesgul = false; return; }
-                var gecis = gecisKarari_(j.dx, j.v, j.W, !!j.hedef);
-                mesgul = true;
-                var hedefOfset, hedefOpak;
-                if(gecis) {
-                    hedefOfset = j.yon === 1 ? -j.W * 0.3 : j.W * 0.3;
-                    hedefOpak = '.6';
-                } else {
-                    hedefOfset = 0;
-                    hedefOpak = '1';
-                }
-                animasyonAyarla_(j.aktifEl, SURE_MS);
-                j.aktifEl.style.transform = 'translate3d(' + hedefOfset + 'px,0,0)';
-                j.aktifEl.style.opacity = hedefOpak;
-                if(j.yeniEl) {
-                    animasyonAyarla_(j.yeniEl, SURE_MS);
-                    j.yeniEl.style.transform = gecis
-                        ? 'translate3d(0,0,0)'
-                        : 'translate3d(' + (j.yon === 1 ? j.W : -j.W) + 'px,0,0)';
-                }
-                var bitti = false;
-                setTimeout(function() {
-                    if(bitti) return; bitti = true;
-                    if(gecis) {
-                        bitir_(j.hedef, j.yon === 1 ? -1 : 1, true);
-                    } else {
-                        bitir_(j.hedef || j.aktifAd, 0, false);
-                        // geri dönüşte aktif sekme yeniden görünür kalmalı
-                        var a = panel_(j.aktifAd);
-                        if(a) { a.hidden = false; a.classList.add('active'); }
-                        document.querySelectorAll('.tab-panel').forEach(function(p) {
-                            if(p.getAttribute('data-panel') !== j.aktifAd) { p.classList.remove('active'); p.hidden = true; }
-                        });
-                        mesgul = false;
-                    }
-                }, SURE_MS + 40);
-            }, {passive:true});
-        })();
+        // v3.9.19: Sekmeler sayfa içi bölümlere kaydırır; yatay sürükleme panel geçişi kaldırıldı.
 
         document.addEventListener('click', function() {
             document.querySelectorAll('.info-popover.show').forEach(function(info) {
@@ -1111,28 +916,20 @@
             var row2 = document.getElementById('summary-row-2');
             row2.innerHTML = '';
 
-            if(data.devirRaw > 0) {
-                row1.appendChild(createSummaryBox(oncekiYil + "'TEN DEVREDEN BORÇ", devirTemiz, 'yellow',
-                    oncekiYil + " yılından kalan ve henüz ödenmemiş aidat borcunuzdur."));
-            } else {
-                row1.appendChild(createSummaryBox(oncekiYil + "'TEN DEVREDEN BORÇ", 'Borç yok', 'gray',
-                    oncekiYil + " yılından kalan ve henüz ödenmemiş aidat borcunuzdur."));
-            }
+            row1.appendChild(createSummaryBox(oncekiYil + ' YILI BORCU', data.devirRaw > 0 ? devirTemiz : 'Borç yok',
+                data.devirRaw > 0 ? 'yellow' : 'gray',
+                oncekiYil + ' yılında ödenmeyen aidatlardan kalan borcunuzdur.'));
 
             row1.appendChild(createSummaryBox(cariYil + ' YILI BORCU', data.borcYilRaw > 0 ? borcTemiz : '0 TL',
                 data.borcYilRaw > 0 ? 'red' : 'green',
-                cariYil + ' yılı içinde bugüne kadar ödenmesi gereken aidatlardan ödemeleriniz düşüldükten sonra kalan tutardır. Gelecek ayların aidatı dahil değildir.'));
-
-            if(data.toplamBorcRaw <= 0) {
-                row2.appendChild(createSummaryBox('TOPLAM BORÇ', 'Borç yok', 'green',
-                    oncekiYil + " yılından devreden borç ile " + cariYil + ' yılı borcunuzun toplamıdır.'));
-            } else {
-                row2.appendChild(createSummaryBox('TOPLAM BORÇ', toplamTemiz, 'pink',
-                    oncekiYil + " yılından devreden borç ile " + cariYil + ' yılı borcunuzun toplamıdır.'));
-            }
+                cariYil + ' yılında vadesi gelen aidatlardan kalan borcunuzdur. Gelecek aylar dahil değildir.'));
 
             row2.appendChild(createSummaryBox(cariYil + ' YILINDA ÖDENEN', odenenTemiz, 'green',
-                cariYil + ' yılı içinde sistemimize kaydedilen toplam aidat ödemenizdir.'));
+                cariYil + ' yılında sisteme kaydedilen toplam ödemenizdir.'));
+
+            row2.appendChild(createSummaryBox('TOPLAM BORÇ', data.toplamBorcRaw > 0 ? toplamTemiz : 'Borç yok',
+                data.toplamBorcRaw > 0 ? 'pink' : 'green',
+                oncekiYil + ' ve ' + cariYil + ' yıllarına ait borçlarınızın toplamıdır.'));
 
             // Yıllık toplam hedef, yalnızca API bu alanı sağladığında gösterilir.
             // Değer, test Apps Script tarafında AYARLAR'daki 12 aylık aidatların toplamıdır.
@@ -1312,13 +1109,7 @@
             var odenen = Math.max(0, guvenliSayi(data.odenenYilRaw));
             var yillik = data.yillikTahakkukVar ? Math.max(0, guvenliSayi(data.yillikTahakkukRaw)) : 0;
             var annualRow = document.getElementById('accrual-annual-row');
-            var subtitle = document.getElementById('accrual-subtitle');
             annualRow.hidden = !data.yillikTahakkukVar;
-            var ayAdlari = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
-            var icindeBulunulanAy = ayAdlari[new Date().getMonth()];
-            subtitle.textContent = data.yillikTahakkukVar
-                ? 'Yıllık toplam 12 ayı; tahakkuk ise içinde bulunulan ay dahil (' + icindeBulunulanAy + ' dahil) tutarı gösterir.'
-                : 'Tahakkuk, içinde bulunulan ay dahil (' + icindeBulunulanAy + ' dahil) aidat tutarıdır.';
 
             var maxDeger = Math.max(tahakkuk, odenen, yillik, 1);
             function tl(v) { return Math.round(v).toLocaleString('tr-TR') + ' TL'; }
@@ -1552,6 +1343,67 @@
         function toast(m){var t=document.getElementById("toast");if(!t)return;t.textContent=m||"Kopyalandı";t.classList.add("show");if(window.toastTimer)clearTimeout(window.toastTimer);window.toastTimer=setTimeout(function(){t.classList.remove("show");},2200);}
     </script>
     
+<script>
+(function () {
+    var nav = document.querySelector('.tab-nav');
+    if (!nav) return;
+    var buttons = Array.prototype.slice.call(nav.querySelectorAll('.tab-btn'));
+    var sections = buttons.map(function (button) {
+        return document.querySelector('.tab-panel[data-panel="' + button.getAttribute('data-tab') + '"]');
+    }).filter(Boolean);
+    var rafPending = false;
+
+    function setActive(id) {
+        buttons.forEach(function (button) {
+            var active = button.getAttribute('data-tab') === id;
+            button.setAttribute('aria-selected', active ? 'true' : 'false');
+            button.tabIndex = active ? 0 : -1;
+        });
+    }
+
+    function scrollToSection(id) {
+        var target = document.querySelector('.tab-panel[data-panel="' + id + '"]');
+        if (!target) return;
+        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var navHeight = nav.getBoundingClientRect().height;
+        var y = window.pageYOffset + target.getBoundingClientRect().top - navHeight - 8;
+        window.scrollTo({ top: Math.max(0, y), behavior: reduceMotion ? 'auto' : 'smooth' });
+        setActive(id);
+    }
+
+    // The original tab listener calls this global function; redefine it as a scroll action.
+    window.iphoneGecis_ = scrollToSection;
+
+    buttons.forEach(function (button, index) {
+        button.addEventListener('keydown', function (event) {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            var next = (index + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+            buttons[next].focus();
+            scrollToSection(buttons[next].getAttribute('data-tab'));
+        });
+    });
+
+    function updateActiveFromScroll() {
+        rafPending = false;
+        var navBottom = nav.getBoundingClientRect().bottom;
+        var active = sections[0];
+        sections.forEach(function (section) {
+            if (section.getBoundingClientRect().top <= navBottom + 42) active = section;
+        });
+        if (active) setActive(active.getAttribute('data-panel'));
+    }
+
+    window.addEventListener('scroll', function () {
+        if (rafPending) return;
+        rafPending = true;
+        window.requestAnimationFrame(updateActiveFromScroll);
+    }, { passive: true });
+    window.addEventListener('resize', updateActiveFromScroll, { passive: true });
+    updateActiveFromScroll();
+})();
+</script>
+
 <script>
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
