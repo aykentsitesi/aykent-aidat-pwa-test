@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.23 TEST | v3.9.22 tabanı; API başlangıcı ve mevcut iş akışı korunmuştur -->
+<!-- AYKENT AIDAT PANELİ — v3.9.24 TEST | v3.9.23 tabanı; mobil erişilebilirlik ve scrollspy düzeltmeleri -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -121,9 +121,9 @@
         .wrap{display:block;min-height:100vh;padding-top:0;}
         .card{width:100%;max-width:none;min-height:100vh;background:white;padding-bottom:20px;box-shadow:none;border-radius:0;display:none;}
         .tab-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:9px 10px;background:#fff;border-bottom:1px solid #e8ebf0;position:sticky;top:0;z-index:500;box-shadow:0 3px 12px rgba(15,23,42,.06);}
-        .tab-btn{appearance:none;border:1px solid #e5e7eb;background:#f8fafc;color:#475467;border-radius:11px;min-width:0;min-height:44px;padding:6px 2px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .2s,border-color .2s,color .2s;}
+        .tab-btn{appearance:none;text-decoration:none;border:1px solid #e5e7eb;background:#f8fafc;color:#475467;border-radius:11px;min-width:0;min-height:44px;padding:6px 2px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .2s,border-color .2s,color .2s;}
         .tab-btn .tab-icon{font-size:16px;line-height:1;}
-        .tab-btn[aria-selected="true"]{background:var(--navy);border-color:var(--gold);color:#f4d47c;box-shadow:0 3px 9px rgba(26,43,72,.18);}
+        .tab-btn[aria-current="location"]{background:var(--navy);border-color:var(--gold);color:#f4d47c;box-shadow:0 3px 9px rgba(26,43,72,.18);}
         .tab-panel{display:block;min-height:120px;padding-bottom:8px;scroll-margin-top:82px;}
         .tab-panel.active{display:block;}
         .announcement-card{margin:14px 14px 8px;border:1px solid rgba(214,178,94,.5);border-radius:18px;overflow:hidden;background:#fffdf7;box-shadow:0 5px 16px rgba(15,23,42,.08);}
@@ -390,8 +390,9 @@
         .tab-panel{scroll-margin-top:78px;}
         #panel-ozet .box .small{font-size:15px;line-height:1.3;}
         #panel-ozet .box .big{max-width:100%;font-size:clamp(19px,5.5vw,26px);line-height:1.18;overflow-wrap:anywhere;word-break:normal;}
-        #panel-ozet .info-btn{width:44px;height:44px;min-width:44px;min-height:44px;flex:0 0 44px;font-size:19px;right:-7px;}
-        #panel-ozet .summary-label-row{min-height:46px;padding-right:39px;padding-left:6px;}
+        #panel-ozet .info-btn{position:absolute;right:0;top:50%;transform:translateY(-50%);width:44px;height:44px;min-width:44px;min-height:44px;flex:0 0 44px;font-size:19px;}
+        #panel-ozet .summary-label-row{min-height:48px;padding-right:48px;padding-left:4px;}
+        #panel-ozet .box .small{padding-right:0;}
         #panel-ozet .info-popover{font-size:15px;line-height:1.5;padding:14px 15px;max-height:min(55vh,360px);overflow-y:auto;}
         #panel-ozet .status-item-head{font-size:15px;gap:8px;align-items:flex-start;}
         #panel-ozet .status-item-head span{min-width:0;line-height:1.35;}
@@ -410,14 +411,21 @@
             #panel-ozet .box{min-width:0;padding:13px 7px 12px;}
             #panel-ozet .box .small{font-size:14px;}
             #panel-ozet .box .big{font-size:clamp(18px,5vw,23px);}
-            #panel-ozet .info-btn{right:-8px;}
-            #panel-ozet .summary-label-row{padding-right:34px;padding-left:2px;}
+            #panel-ozet .info-btn{right:0;width:44px;height:44px;min-width:44px;min-height:44px;}
+            #panel-ozet .summary-label-row{padding-right:48px;padding-left:2px;}
             #panel-ozet .annual-aidat-section{padding-left:12px;padding-right:12px;}
             #panel-ozet .status-item-head strong{font-size:16px;}
         }
         @media(prefers-reduced-motion:reduce){.tab-panel{scroll-behavior:auto!important}}
         /* ─── /v3.9.23 TEST ─── */
-</style>
+
+        /* v3.9.24 final overrides: keep touch targets inside cards at every width. */
+        #panel-ozet .info-btn{right:0;width:44px;height:44px;min-width:44px;min-height:44px;flex-basis:44px;}
+        #panel-ozet .summary-label-row{padding-right:48px;}
+        .tab-btn[aria-current="location"]{background:var(--navy);border-color:var(--gold);color:#f4d47c;box-shadow:0 3px 9px rgba(26,43,72,.18);}
+        .tab-btn:focus-visible{outline:3px solid #d6b25e;outline-offset:2px;}
+        @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.tab-panel.active{animation:none!important}}
+    </style>
     
 <script>
 (function () {
@@ -483,27 +491,27 @@
                 <div id="panel-isim" class="isim">-</div>
             </div>
 
-            <div class="tab-nav" role="tablist" aria-label="Aidat paneli bölümleri">
+            <nav class="tab-nav" aria-label="Aidat paneli bölümleri">
                 
                 
                 
                 
             
-<button type="button" class="tab-btn" id="tab-ozet" role="tab" aria-controls="panel-ozet" aria-selected="true" data-tab="ozet">
+<a class="tab-btn" id="tab-ozet" href="#panel-ozet" aria-current="location" data-tab="ozet">
                     <span class="tab-icon" aria-hidden="true">⌂</span><span>Özet</span>
-                </button>
-<button type="button" class="tab-btn" id="tab-odemeler" role="tab" aria-controls="panel-odemeler" aria-selected="false" data-tab="odemeler">
+                </a>
+<a class="tab-btn" id="tab-odemeler" href="#panel-odemeler" data-tab="odemeler">
                     <span class="tab-icon" aria-hidden="true">₺</span><span>Ödemeler</span>
-                </button>
-<button type="button" class="tab-btn" id="tab-iletisim" role="tab" aria-controls="panel-iletisim" aria-selected="false" data-tab="iletisim">
+                </a>
+<a class="tab-btn" id="tab-iletisim" href="#panel-iletisim" data-tab="iletisim">
                     <span class="tab-icon" aria-hidden="true">▣</span><span>Banka</span>
-                </button>
-<button type="button" class="tab-btn" id="tab-duyurular" role="tab" aria-controls="panel-duyurular" aria-selected="false" data-tab="duyurular">
-                    <span class="tab-icon" aria-hidden="true">▤</span><span>İletişim ve Duyurular</span>
-                </button>
-</div>
+                </a>
+<a class="tab-btn" id="tab-duyurular" href="#panel-duyurular" data-tab="duyurular">
+                    <span class="tab-icon" aria-hidden="true">▤</span><span>Duyurular</span>
+                </a>
+</nav>
 
-            <section class="tab-panel active" id="panel-ozet" role="tabpanel" aria-labelledby="tab-ozet" data-panel="ozet">
+            <section class="tab-panel active" id="panel-ozet" aria-label="Özet" data-panel="ozet">
                 <div class="summary-sticky">
                     <div class="summary" id="summary-row-1"></div>
                     <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
@@ -525,13 +533,13 @@
                             <div class="status-item-head"><span>Ödenen</span><strong id="accrual-paid-value">-</strong></div>
                             <div class="status-track"><div id="accrual-paid-bar" class="status-fill paid"></div></div>
                         </div>
-                        <div class="status-note">Bu bölüm, içinde bulunulan yılın aidat ve ödeme toplamlarını gösterir.</div>
+                        <div class="status-note">Bu bölüm, içinde bulunulan yılın aidat ve ödeme toplamlarını gösterir. Gelecek ayların aidatları dahil değildir.</div>
                     </div>
                 </div>
                 <div id="panel-not" class="note"></div>
             </section>
 
-            <section class="tab-panel" id="panel-odemeler" role="tabpanel" aria-labelledby="tab-odemeler" data-panel="odemeler">
+            <section class="tab-panel" id="panel-odemeler" aria-label="Ödemeler" data-panel="odemeler">
                 <h2 class="panel-section-title">AYLIK ÖDEME DURUMU</h2>
                 <div class="table-wrap">
                     <table>
@@ -541,14 +549,14 @@
                 </div>
             </section>
 
-            <section class="tab-panel" id="panel-iletisim" role="tabpanel" aria-labelledby="tab-iletisim" data-panel="iletisim">
+            <section class="tab-panel" id="panel-iletisim" aria-label="Banka bilgileri" data-panel="iletisim">
                 <div class="payment">
                     <div class="payment-head">BANKA BİLGİLERİ</div>
                     <div id="odeme-govde"></div>
                 </div>
             </section>
 
-            <section class="tab-panel" id="panel-duyurular" role="tabpanel" aria-labelledby="tab-duyurular" data-panel="duyurular">
+            <section class="tab-panel" id="panel-duyurular" aria-label="Duyurular ve yönetimle iletişim" data-panel="duyurular">
                 <h2 class="panel-section-title">İLETİŞİM VE DUYURULAR</h2>
                 <div class="announcement-card">
                     <div class="announcement-head">SİTE DUYURUSU</div>
@@ -681,29 +689,40 @@
             }
         }
 
+        function cacheFooterDurumuGuncelle_() {
+            var footer = document.getElementById('panel-guncelleme');
+            if(!footer) return;
+            var metin = footer.textContent.replace(/\s*·\s*(güncel kontrol ediliyor|son kayıt gösteriliyor)/gi, '');
+            footer.textContent = metin + ' · son kayıt gösteriliyor';
+        }
+
         function beklemeYazisiGuncelle_(metin) {
             var el = document.querySelector('.loader-text');
             if(el) el.textContent = metin || 'Bilgileriniz getiriliyor...';
         }
 
-        // Kaydırmalı sekmeler: tüm bölümler tek sayfada; sekme satırı üstte sabit.
+        // Tek sayfalı gezinme: üst bağlantılar ilgili bölüme kaydırır; aktif bölüm scrollspy ile izlenir.
         var ilkSekmeGosterildi = false;
         var sekmeSirasi = ['ozet', 'odemeler', 'iletisim', 'duyurular'];
         var sekmeScrollRaf = false;
 
+        function aktifSekmeIsaretle_(sekmeAdi) {
+            document.querySelectorAll('.tab-btn').forEach(function(link) {
+                if(link.getAttribute('data-tab') === sekmeAdi) link.setAttribute('aria-current', 'location');
+                else link.removeAttribute('aria-current');
+            });
+        }
+
         function sekmeAc(sekmeAdi) {
             if(sekmeSirasi.indexOf(sekmeAdi) === -1) sekmeAdi = 'ozet';
-            document.querySelectorAll('.tab-btn').forEach(function(btn) {
-                var aktif = btn.getAttribute('data-tab') === sekmeAdi;
-                btn.setAttribute('aria-selected', aktif ? 'true' : 'false');
-                btn.tabIndex = aktif ? 0 : -1;
-            });
             var panel = document.querySelector('.tab-panel[data-panel="' + sekmeAdi + '"]');
             if(!panel) return;
+            aktifSekmeIsaretle_(sekmeAdi);
             var nav = document.querySelector('.tab-nav');
             var pay = (nav ? nav.offsetHeight : 0) + 10;
             var hedef = panel.getBoundingClientRect().top + window.pageYOffset - pay;
-            window.scrollTo({top:Math.max(0, hedef), behavior:'smooth'});
+            var hareketAzalt = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({top:Math.max(0, hedef), behavior:hareketAzalt ? 'auto' : 'smooth'});
         }
 
         function kaydirmaSekmesiniGuncelle_() {
@@ -718,26 +737,14 @@
                 var top = panel.getBoundingClientRect().top;
                 if(top <= esik && top > enYakin) { enYakin = top; secili = ad; }
             });
-            if(window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 4) secili = sekmeSirasi[sekmeSirasi.length - 1];
-            document.querySelectorAll('.tab-btn').forEach(function(btn) {
-                var aktif = btn.getAttribute('data-tab') === secili;
-                btn.setAttribute('aria-selected', aktif ? 'true' : 'false');
-                btn.tabIndex = aktif ? 0 : -1;
-            });
+            // Sayfa sonuna gelindi diye otomatik son sekmeyi seçme; yalnızca gerçekten eşik çizgisini geçen bölüm seçilir.
+            aktifSekmeIsaretle_(secili);
         }
 
-        document.querySelectorAll('.tab-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                sekmeAc(btn.getAttribute('data-tab'));
-            });
-            btn.addEventListener('keydown', function(event) {
-                if(event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        document.querySelectorAll('.tab-btn').forEach(function(link) {
+            link.addEventListener('click', function(event) {
                 event.preventDefault();
-                var buttons = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
-                var index = buttons.indexOf(btn);
-                var next = buttons[(index + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length];
-                next.focus();
-                sekmeAc(next.getAttribute('data-tab'));
+                sekmeAc(link.getAttribute('data-tab'));
             });
         });
 
@@ -762,6 +769,11 @@
         document.addEventListener('click', function(event) {
             if(event.target && event.target.closest && event.target.closest('.box.info-open')) return;
             summaryInfoKapat_();
+        });
+        window.addEventListener('scroll', summaryInfoKapat_, {passive:true});
+        window.addEventListener('resize', summaryInfoKapat_);
+        document.addEventListener('keydown', function(event) {
+            if(event.key === 'Escape') summaryInfoKapat_();
         });
         document.addEventListener('keydown', function(event) {
             if(event.key === 'Escape') summaryInfoKapat_();
@@ -790,6 +802,7 @@
                 if(apiCevapGeldi) return;
                 if(panelCacheGosterildi) {
                     // Cache ekrandayken kullanıcıyı kırmızı hata kartına düşürme.
+                    cacheFooterDurumuGuncelle_();
                     toast("Güncel kontrol uzun sürdü; son kayıt gösteriliyor");
                     return;
                 }
@@ -803,6 +816,7 @@
                 if(apiCevapGeldi) return;
                 apiZamanlayicilariTemizle_();
                 if(panelCacheGosterildi) {
+                    cacheFooterDurumuGuncelle_();
                     toast("Güncel bağlantı alınamadı; son kayıt gösteriliyor");
                     return;
                 }
@@ -838,9 +852,8 @@
                 var mesaj = data ? guvenliMetin(data.hata, "Sistem hatası.") : "Sistem hatası.";
                 if(panelCacheGosterildi && !cacheRender && hataCacheIleBastirilabilir_(mesaj)) {
                     // Geçici sunucu/bağlantı hatasında çalışan eski paneli bozma.
+                    cacheFooterDurumuGuncelle_();
                     toast("Güncel veri alınamadı; son kayıt gösteriliyor");
-                    var gf = document.getElementById('panel-guncelleme');
-                    if(gf && gf.textContent.indexOf('son kayıt') === -1) gf.textContent += " · son kayıt gösteriliyor";
                     return;
                 }
                 if(!cacheRender) lokalPanelCacheSil_(panelKod);
@@ -904,10 +917,10 @@
                 cariYil + ' yılında yapılan aidat ödemelerinin toplamı.'));
             if(data.borcYilRaw > 0) {
                 row1.appendChild(createSummaryBox(data.etiketBorc, borcTemiz, 'red',
-                    cariYil + ' yılında henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında bugüne kadar oluşan, henüz ödenmemiş aidat.'));
             } else {
                 row1.appendChild(createSummaryBox(data.etiketBorc, '0 TL', 'green',
-                    cariYil + ' yılında henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılında bugüne kadar oluşan, henüz ödenmemiş aidat.'));
             }
 
             // 🔒 XSS Korumalı 2. Özet Satırı Yapılandırması
@@ -923,11 +936,11 @@
             }
 
             if(data.toplamBorcRaw <= 0) {
-                row2.appendChild(createSummaryBox('TOPLAM DURUM', 'BORÇ YOK 👍', 'green',
-                    cariYil + ' yılında henüz ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
+                row2.appendChild(createSummaryBox('TOPLAM BORÇ', 'Borç yok ✓', 'green',
+                    cariYil + ' yılının ödenmemiş aidatı ile ' + oncekiYil + ' yılından devreden borcun toplamı.'));
             } else {
                 row2.appendChild(createSummaryBox('TOPLAM BORÇ', toplamTemiz, 'pink',
-                    cariYil + ' yılında henüz ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
+                    cariYil + ' yılının ödenmemiş aidatı ile ' + oncekiYil + ' yılından devreden borcun toplamı.'));
             }
 
             if(data.notlar && data.notlar !== '0') {
@@ -946,9 +959,8 @@
                 var strongAy = document.createElement('strong');
                 strongAy.textContent = satir.ay;
                 tdAy.appendChild(strongAy);
-                var aylar = ['ocak','şubat','mart','nisan','mayıs','haziran','temmuz','ağustos','eylül','ekim','kasım','aralık'];
-                var ayAdi = String(satir.ay || '').toLocaleLowerCase('tr-TR').trim();
-                if(ayAdi === aylar[Number(new Intl.DateTimeFormat('en-US', {timeZone:'Europe/Istanbul', month:'numeric'}).format(new Date())) - 1]) {
+                var satirAyNo = ayMetniniNormalizeEt_(satir.ay);
+                if(satirAyNo === panelAyiniAl_(data)) {
                     tr.className = 'current-month-row';
                     tr.setAttribute('aria-label', satir.ay + ' - içinde bulunulan ay');
                     tdAy.classList.add('current-month-cell');
@@ -1030,13 +1042,38 @@
         }
 
         function guvenliSayi(deger) {
-            var n = Number(deger);
+            if(typeof deger === 'number') return isFinite(deger) ? deger : 0;
+            if(deger === null || deger === undefined || deger === '') return 0;
+            var metin = String(deger).trim().replace(/\s|TL/gi, '');
+            if(!metin) return 0;
+            // Türkçe biçim: 1.234,56 -> 1234.56; 2.350 -> 2350.
+            if(metin.indexOf(',') !== -1) metin = metin.replace(/\./g, '').replace(',', '.');
+            else if(/^-?\d{1,3}(\.\d{3})+$/.test(metin)) metin = metin.replace(/\./g, '');
+            var n = Number(metin);
             return isFinite(n) ? n : 0;
         }
 
         function guvenliClass(deger) {
             var v = guvenliMetin(deger, '').trim();
             return (v === 'paid' || v === 'muted') ? v : '';
+        }
+
+        function panelAyiniAl_(data) {
+            var apiAy = Number(data && data.aktifAy);
+            if(Number.isInteger(apiAy) && apiAy >= 1 && apiAy <= 12) return apiAy;
+            return Number(new Intl.DateTimeFormat('en-US', {timeZone:'Europe/Istanbul', month:'numeric'}).format(new Date()));
+        }
+
+        function ayMetniniNormalizeEt_(deger) {
+            var metin = String(deger || '').toLocaleLowerCase('tr-TR').trim();
+            var ascii = metin.replace(/ı/g,'i').replace(/İ/g,'i').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ç/g,'c');
+            var aylar = ['ocak','subat','mart','nisan','mayis','haziran','temmuz','agustos','eylul','ekim','kasim','aralik'];
+            var sayi = parseInt(ascii, 10);
+            if(sayi >= 1 && sayi <= 12 && String(sayi) === ascii) return sayi;
+            for(var i=0;i<aylar.length;i++) {
+                if(ascii.indexOf(aylar[i].slice(0,3)) === 0) return i + 1;
+            }
+            return 0;
         }
 
         // Öncelik Apps Script yanıtındaki aidat yılıdır. Alan yoksa Türkiye saatine göre yıl kullanılır.
@@ -1103,9 +1140,7 @@
             annualRow.hidden = !data.yillikTahakkukVar;
 
             var yil = panelYiliniAl_(data);
-            var istanbulAy = Number(new Intl.DateTimeFormat('en-US', {timeZone:'Europe/Istanbul', month:'numeric'}).format(new Date()));
-            var apiAktifAy = Number(data.aktifAy);
-            var ayNo = Number.isInteger(apiAktifAy) && apiAktifAy >= 1 && apiAktifAy <= 12 ? apiAktifAy : istanbulAy;
+            var ayNo = panelAyiniAl_(data);
             var ayAdlari = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
             var ay = ayAdlari[ayNo - 1];
             var statusHead = document.getElementById('accrual-status-head');
@@ -1125,8 +1160,9 @@
             if(monthlyRow) monthlyRow.hidden = !monthlyExists;
             if(monthlyExists) document.getElementById('accrual-monthly-value').textContent = tl(monthlyValue);
 
-            // İki tutar aynı ölçeği kullanır; fark/eksik/fazla yorumu üretilmez.
-            var maxDeger = Math.max(tahakkuk, odenen, 1);
+            // Her iki çubuk aynı referans ölçeğini kullanır. Yıllık toplam yoksa
+            // mevcut iki değerin en büyüğü referans alınır; eksik veri uydurulmaz.
+            var maxDeger = yillik > 0 ? yillik : Math.max(tahakkuk, odenen, 1);
             function oran(v) { return Math.max(0, Math.min(100, v / maxDeger * 100)); }
             document.getElementById('accrual-due-bar').style.width = oran(tahakkuk) + '%';
             document.getElementById('accrual-paid-bar').style.width = oran(odenen) + '%';
