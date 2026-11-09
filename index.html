@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.15 Özet sekmesi görsel ve grafik düzeltmeleri | API ve mevcut panel akışı korunmuştur -->
+<!-- AYKENT AIDAT PANELİ — v3.9.18 TEST | Tek sayfa sade görünüm, bilgi açıklamaları ve banka tutar satırı kaldırıldı -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -375,6 +375,22 @@
         @media(prefers-reduced-motion:reduce){ .tab-panel{transition:none!important;} }
         /* ─── /v3.9.15 ─── */
 
+
+        /* v3.9.18 TEST: Sekmesiz tek sayfa görünüm; mevcut renkler ve yazı karakterleri korunur. */
+        .tab-nav{display:none!important;}
+        .tab-panel,.tab-panel[hidden]{display:block!important;min-height:0;padding:10px 0 8px;}
+        .tab-panel.active{animation:none!important;}
+        #ozet-sorular,#accrual-card{display:none!important;}
+        #ozet-sorular ~ .summary-sticky{display:block!important;}
+        .annual-total-row{position:relative;display:flex;align-items:center;gap:8px;margin:4px 12px 10px;padding:11px 12px;border-top:1px solid #e6e9ef;border-bottom:1px solid #e6e9ef;background:#fff;color:var(--navy);}
+        .annual-total-row[hidden]{display:none!important;}
+        .annual-total-label{font-size:13px;font-weight:850;flex:1;}
+        .annual-total-value{font-size:16px;font-weight:950;white-space:nowrap;color:var(--navy);}
+        .annual-total-info{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;flex:0 0 19px;border:1px solid #8a6a22;border-radius:50%;background:#fff;color:#8a6a22;font-size:12px;font-weight:950;cursor:pointer;padding:0;}
+        .annual-total-popover{display:none;position:absolute;z-index:150;right:10px;top:calc(100% + 6px);width:min(290px,calc(100vw - 44px));padding:11px 12px;border:1px solid rgba(214,178,94,.75);border-radius:10px;background:#fff;color:#273449;font-size:12px;line-height:1.45;font-weight:700;box-shadow:0 8px 22px rgba(15,23,42,.18);}
+        .annual-total-popover.show{display:block;}
+        .single-page-heading{margin:10px 14px 0;padding:10px 0 7px;border-bottom:1px solid #e6e9ef;color:var(--navy);font-size:14px;font-weight:950;letter-spacing:.2px;}
+        .bank-guidance{margin:10px 14px 14px;padding:10px 12px;border-radius:10px;background:#fffaf0;color:#6f5a2a;font-size:12px;line-height:1.45;font-weight:750;}
 </style>
     
 <script>
@@ -441,26 +457,17 @@
                 <div id="panel-isim" class="isim">-</div>
             </div>
 
-            <div class="tab-nav" role="tablist" aria-label="Aidat paneli bölümleri">
-                <button type="button" class="tab-btn" id="tab-ozet" role="tab" aria-controls="panel-ozet" aria-selected="true" data-tab="ozet">
-                    <span class="tab-icon" aria-hidden="true">⌂</span><span>Özet</span>
-                </button>
-                <button type="button" class="tab-btn" id="tab-odemeler" role="tab" aria-controls="panel-odemeler" aria-selected="false" data-tab="odemeler">
-                    <span class="tab-icon" aria-hidden="true">₺</span><span>Ödemeler</span>
-                </button>
-                <button type="button" class="tab-btn" id="tab-duyurular" role="tab" aria-controls="panel-duyurular" aria-selected="false" data-tab="duyurular">
-                    <span class="tab-icon" aria-hidden="true">▤</span><span>Duyurular</span>
-                </button>
-                <button type="button" class="tab-btn" id="tab-iletisim" role="tab" aria-controls="panel-iletisim" aria-selected="false" data-tab="iletisim">
-                    <span class="tab-icon" aria-hidden="true">▣</span><span>Banka</span>
-                </button>
-            </div>
-
             <section class="tab-panel active" id="panel-ozet" role="tabpanel" aria-labelledby="tab-ozet" data-panel="ozet">
                 <div id="ozet-sorular" aria-live="polite"></div>
                 <div class="summary-sticky">
                     <div class="summary" id="summary-row-1"></div>
                     <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
+                </div>
+                <div class="annual-total-row" id="annual-total-row" hidden>
+                    <span class="annual-total-label" id="annual-total-label">2026 Yılı Toplam Aidat</span>
+                    <strong class="annual-total-value" id="annual-total-value">-</strong>
+                    <button type="button" class="annual-total-info" id="annual-total-info-btn" aria-label="Yıllık toplam aidat hakkında bilgi" aria-expanded="false">i</button>
+                    <div class="annual-total-popover" id="annual-total-popover" role="tooltip">Bu tutar, Ana Ayarlar bölümündeki Ocak–Aralık aylık aidatlarının toplamıdır.</div>
                 </div>
                 <div class="accrual-card" id="accrual-card" aria-label="Yıllık toplam, tahakkuk ve ödeme karşılaştırması" hidden>
                     <div class="accrual-head" id="accrual-head">AİDAT KARŞILAŞTIRMASI</div>
@@ -495,7 +502,8 @@
                 </div>
             </section>
 
-            <section class="tab-panel" id="panel-odemeler" role="tabpanel" aria-labelledby="tab-odemeler" data-panel="odemeler" hidden>
+            <section class="tab-panel" id="panel-odemeler" data-panel="odemeler">
+                <div class="single-page-heading">AYLIK ÖDEME DURUMU</div>
                 <div class="table-wrap">
                     <table>
                         <thead><tr><th>AY</th><th>AİDAT</th><th>EK</th></tr></thead>
@@ -504,14 +512,14 @@
                 </div>
             </section>
 
-            <section class="tab-panel" id="panel-duyurular" role="tabpanel" aria-labelledby="tab-duyurular" data-panel="duyurular" hidden>
+            <section class="tab-panel" id="panel-duyurular" data-panel="duyurular">
                 <div class="announcement-card">
                     <div class="announcement-head">SİTE DUYURUSU</div>
                     <div id="duyuru-metni" class="announcement-body announcement-empty">Şu anda yayınlanmış bir duyuru bulunmuyor.</div>
                 </div>
             </section>
 
-            <section class="tab-panel" id="panel-iletisim" role="tabpanel" aria-labelledby="tab-iletisim" data-panel="iletisim" hidden>
+            <section class="tab-panel" id="panel-iletisim" data-panel="iletisim">
                 <div class="payment">
                     <div class="payment-head">BANKA BİLGİLERİ</div>
                     <div id="odeme-govde"></div>
@@ -531,6 +539,8 @@
         // ⚙️ SADECE GEREKİRSE BU SATIRI DEĞİŞTİR:
         // Apps Script Web App dağıtımındaki /exec URL adresi. GitHub WEB_APP_URL ile karıştırma.
         const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbyYZv0MqrPYX2wCXQhiv83nZA8TfzhjN7QEP98LKQFGjUgnBjng96ngUxT_cLbH_W-L/exec";
+        // TEST BUILD: mevcut API yalnızca veri okumak için kullanılır; ziyaret logu gönderilmez.
+        const TEST_MODE = true;
 
         // Dengeli hız modu: varsa son panel verisini hemen gösterir, güncel veriyi arkadan yeniler.
         // Local cache en fazla 5 dakika kullanılır; gerçek güncel veri arkadan kontrol edilir.
@@ -1095,38 +1105,45 @@
             var cariYil = new Date().getFullYear();
             var oncekiYil = cariYil - 1;
 
-            // 🔒 XSS Korumalı 1. Özet Satırı Yapılandırması
+            // Dört temel bilgi kutusu: sıralama ve açıklamalar sadeleştirildi.
             var row1 = document.getElementById('summary-row-1');
             row1.innerHTML = '';
-            
-            row1.appendChild(createSummaryBox(data.etiketOdenen, odenenTemiz, 'green',
-                cariYil + ' yılında yapılan aidat ödemelerinin toplamı.'));
-            if(data.borcYilRaw > 0) {
-                row1.appendChild(createSummaryBox(data.etiketBorc, borcTemiz, 'red',
-                    cariYil + ' yılında tahakkuk etmiş, henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
-            } else {
-                row1.appendChild(createSummaryBox(data.etiketBorc, '0 TL', 'green',
-                    cariYil + ' yılında tahakkuk etmiş, henüz ödenmemiş aidat. Gelecek aylar dahil değildir.'));
-            }
-
-            // 🔒 XSS Korumalı 2. Özet Satırı Yapılandırması
             var row2 = document.getElementById('summary-row-2');
             row2.innerHTML = '';
 
             if(data.devirRaw > 0) {
-                row2.appendChild(createSummaryBox(data.etiketDevir, devirTemiz, 'yellow',
-                    oncekiYil + ' yılından devreden, henüz ödenmemiş borç.'));
+                row1.appendChild(createSummaryBox(oncekiYil + "'TEN DEVREDEN BORÇ", devirTemiz, 'yellow',
+                    oncekiYil + " yılından kalan ve henüz ödenmemiş aidat borcunuzdur."));
             } else {
-                row2.appendChild(createSummaryBox(data.etiketDevir, 'Borç yok', 'gray',
-                    oncekiYil + ' yılından devreden, henüz ödenmemiş borç.'));
+                row1.appendChild(createSummaryBox(oncekiYil + "'TEN DEVREDEN BORÇ", 'Borç yok', 'gray',
+                    oncekiYil + " yılından kalan ve henüz ödenmemiş aidat borcunuzdur."));
             }
 
+            row1.appendChild(createSummaryBox(cariYil + ' YILI BORCU', data.borcYilRaw > 0 ? borcTemiz : '0 TL',
+                data.borcYilRaw > 0 ? 'red' : 'green',
+                cariYil + ' yılı içinde bugüne kadar ödenmesi gereken aidatlardan ödemeleriniz düşüldükten sonra kalan tutardır. Gelecek ayların aidatı dahil değildir.'));
+
             if(data.toplamBorcRaw <= 0) {
-                row2.appendChild(createSummaryBox('TOPLAM DURUM', 'BORÇ YOK 👍', 'green',
-                    cariYil + ' yılında tahakkuk etmiş ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
+                row2.appendChild(createSummaryBox('TOPLAM BORÇ', 'Borç yok', 'green',
+                    oncekiYil + " yılından devreden borç ile " + cariYil + ' yılı borcunuzun toplamıdır.'));
             } else {
                 row2.appendChild(createSummaryBox('TOPLAM BORÇ', toplamTemiz, 'pink',
-                    cariYil + ' yılında tahakkuk etmiş ödenmemiş aidat + ' + oncekiYil + ' yılından devreden borç. Gelecek aylar dahil değildir.'));
+                    oncekiYil + " yılından devreden borç ile " + cariYil + ' yılı borcunuzun toplamıdır.'));
+            }
+
+            row2.appendChild(createSummaryBox(cariYil + ' YILINDA ÖDENEN', odenenTemiz, 'green',
+                cariYil + ' yılı içinde sistemimize kaydedilen toplam aidat ödemenizdir.'));
+
+            // Yıllık toplam hedef, yalnızca API bu alanı sağladığında gösterilir.
+            // Değer, test Apps Script tarafında AYARLAR'daki 12 aylık aidatların toplamıdır.
+            var annualTarget = Math.max(0, guvenliSayi(data.yillikTahakkukRaw));
+            var annualRow = document.getElementById('annual-total-row');
+            var annualValue = document.getElementById('annual-total-value');
+            var annualLabel = document.getElementById('annual-total-label');
+            if(annualRow && annualValue && annualLabel) {
+                annualRow.hidden = !(annualTarget > 0);
+                annualLabel.textContent = cariYil + ' YILI TOPLAM AİDAT';
+                if(annualTarget > 0) annualValue.textContent = ozetTL_(annualTarget);
             }
 
             if(data.notlar && data.notlar !== '0') {
@@ -1174,10 +1191,11 @@
             oGovde.appendChild(paymentRowNode('Alıcı', data.odemeAlici, data.odemeAlici));
             oGovde.appendChild(paymentRowNode('IBAN', data.odemeIban, ibanTemizleKopya(data.odemeIban)));
             
-            if(data.toplamBorcRaw > 0) {
-                oGovde.appendChild(paymentRowNode('Tutar', toplamTemiz, sadeceRakam(data.toplamBorc)));
-            }
             oGovde.appendChild(paymentRowNode('Açıklama', data.odemeAciklama, data.odemeAciklama));
+            var bankaNotu = document.createElement('div');
+            bankaNotu.className = 'bank-guidance';
+            bankaNotu.textContent = 'Ödeme tutarınızı ana ekrandaki toplam borç bilgisinden kontrol edebilirsiniz.';
+            oGovde.appendChild(bankaNotu);
 
             // 💬 Google Sheets'ten Dinamik WhatsApp Numarası ve Akıllı Hazır Mesaj Entegrasyonu
             var waDigits = data.whatsappNo.replace(/[^0-9]/g, '');
@@ -1201,7 +1219,7 @@
             document.getElementById('card').style.display = 'block';
 
             // Panel kullanıcıya gösterildikten sonra ziyaret logunu yalnızca güncel sunucu cevabında arka planda yaz.
-            if(!cacheRender) setTimeout(logZiyaretiArkaPlandaGonder, 80);
+            if(!cacheRender && !TEST_MODE) setTimeout(logZiyaretiArkaPlandaGonder, 80);
         }
 
         function logZiyaretiArkaPlandaGonder() {
@@ -1447,9 +1465,28 @@
             return box;
         }
 
+        (function annualTargetInfoInit_() {
+            var btn = document.getElementById('annual-total-info-btn');
+            var pop = document.getElementById('annual-total-popover');
+            if(!btn || !pop) return;
+            btn.addEventListener('click', function(event) {
+                event.stopPropagation();
+                var open = pop.classList.contains('show');
+                pop.classList.toggle('show', !open);
+                btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+            });
+            document.addEventListener('click', function(event) {
+                if(!event.target.closest('.annual-total-row')) {
+                    pop.classList.remove('show');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        })();
+
         function paymentRowNode(label, val, copyVal) {
             var row = document.createElement('div');
             row.className = 'payment-row';
+            row.setAttribute('data-payment-label', label);
             
             var lblNode = document.createElement('div');
             lblNode.className = 'payment-label';
