@@ -512,13 +512,14 @@
 </nav>
 
             <section class="tab-panel active" id="panel-ozet" aria-label="Özet" data-panel="ozet">
+                <div class="announcement-head panel-main-head">AİDAT ÖZETİ</div>
                 <div class="summary-sticky">
                     <div class="summary" id="summary-row-1"></div>
                     <div class="summary" id="summary-row-2" style="margin-top:6px;"></div>
                 </div>
                 <div class="accrual-card" id="accrual-card" aria-label="Yıllık aidat ve bugüne kadarki durum" hidden>
                     <section class="annual-aidat-section" id="accrual-annual-row" hidden aria-label="Yıllık aidat bilgisi">
-                        <div class="section-kicker" id="accrual-head">2026 YILLIK AİDATINIZ</div>
+                        <div class="section-kicker" id="accrual-head">2026 YILLIK AİDAT</div>
                         <div class="annual-total" id="accrual-annual-value">-</div>
                         <div class="annual-caption">12 aylık toplam</div>
                         <div class="monthly-aidat-line" id="accrual-monthly-row" hidden><span>Aylık aidat</span><strong id="accrual-monthly-value">-</strong></div>
@@ -533,14 +534,13 @@
                             <div class="status-item-head"><span>Ödenen</span><strong id="accrual-paid-value">-</strong></div>
                             <div class="status-track"><div id="accrual-paid-bar" class="status-fill paid"></div></div>
                         </div>
-                        <div class="status-note">Bu bölüm, içinde bulunulan yılın aidat ve ödeme toplamlarını gösterir. Gelecek ayların aidatları dahil değildir.</div>
                     </div>
                 </div>
-                <div id="panel-not" class="note"></div>
             </section>
 
             <section class="tab-panel" id="panel-odemeler" aria-label="Ödemeler" data-panel="odemeler">
-                <h2 class="panel-section-title">AYLIK ÖDEME DURUMU</h2>
+                <div class="announcement-head panel-section-band">AYLIK ÖDEME DURUMU</div>
+                <div id="panel-not" class="note"></div>
                 <div class="table-wrap">
                     <table>
                         <thead><tr><th>AY</th><th>AİDAT</th><th>EK</th></tr></thead>
@@ -576,7 +576,7 @@
 
             <div id="panel-footer" class="footer">
                 <div id="panel-guncelleme"></div>
-                <div class="footer-sign">© 2026 Aykent Site Yönetimi · <span>Tasarım: Fatih Oruç</span></div>
+
             </div>
         </div>
     </div>
@@ -1144,9 +1144,9 @@
             var ayAdlari = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
             var ay = ayAdlari[ayNo - 1];
             var statusHead = document.getElementById('accrual-status-head');
-            if(statusHead) statusHead.textContent = 'BUGÜNE KADAR DURUM (' + ay.toLocaleUpperCase('tr-TR') + ' DAHİL)';
+            if(statusHead) statusHead.textContent = 'YIL İÇİNDEKİ AİDAT DURUMU';
             var head = document.getElementById('accrual-head');
-            if(head) head.textContent = yil + ' YILLIK AİDATINIZ';
+            if(head) head.textContent = yil + ' YILLIK AİDAT';
 
             function tl(v) { return Math.round(v).toLocaleString('tr-TR') + ' TL'; }
             if(data.yillikTahakkukVar) {
@@ -1261,6 +1261,17 @@
             var textNode = document.createElement('div');
             textNode.className = 'payment-text';
             textNode.textContent = val;
+            textNode.setAttribute('role', 'button');
+            textNode.setAttribute('tabindex', '0');
+            textNode.setAttribute('aria-label', label + ' bilgisini kopyala');
+            textNode.title = 'Kopyalamak için dokunun';
+            textNode.addEventListener('click', function() { kopya(copyVal); });
+            textNode.addEventListener('keydown', function(event) {
+                if(event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    kopya(copyVal);
+                }
+            });
             
             var btn = document.createElement('button');
             btn.className = 'copy-btn';
@@ -1354,6 +1365,19 @@ if ('serviceWorker' in navigator) {
     background: #1A2B48;
     color: white;
 }
+
+        /* ─── v3.9.25 TEST: ortak başlık dili ve banka alanında dokunarak kopyalama ─── */
+        .panel-main-head{margin:10px 12px 0;border:1px solid rgba(214,178,94,.5);border-radius:14px;}
+        .panel-section-band{margin:12px 12px 0;border:1px solid rgba(214,178,94,.5);border-radius:14px;}
+        #panel-ozet .status-fill.paid{background:#43a047;}
+        #panel-odemeler .note{margin:10px 12px 12px;}
+        .payment-text{cursor:pointer;border-radius:5px;}
+        .payment-text:focus-visible{outline:2px solid #2563eb;outline-offset:3px;}
+        @media(max-width:580px){
+            .panel-main-head,.panel-section-band{margin-left:8px;margin-right:8px;font-size:16px;padding:14px 10px;}
+            #panel-odemeler .note{margin:9px 8px 11px;font-size:15px;}
+        }
+        /* ─── /v3.9.25 TEST ─── */
 </style>
 
 <div id="aykent-pwa-install" hidden>
