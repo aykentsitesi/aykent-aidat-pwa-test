@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.9.24 TEST | v3.9.23 tabanı; mobil erişilebilirlik ve scrollspy düzeltmeleri -->
+<!-- AYKENT AIDAT PANELİ — v3.9.27 TEST | v3.9.26 tabanı; sabit şerit, ekran boyunda bölümler, koyu yeşil, IBAN gruplu -->
 <html lang="tr">
 <head>
     <meta name="theme-color" content="#1A2B48">
@@ -486,6 +486,7 @@
 
     <div id="wrap" class="wrap">
         <div id="card" class="card">
+            <div class="top-sticky">
             <div class="hero">
                 <div id="panel-baslik" class="blok">-</div>
                 <div id="panel-isim" class="isim">-</div>
@@ -510,6 +511,7 @@
                     <span class="tab-icon" aria-hidden="true">▤</span><span>Duyurular</span>
                 </a>
 </nav>
+            </div>
 
             <section class="tab-panel active" id="panel-ozet" aria-label="Özet" data-panel="ozet">
                 <div class="announcement-head panel-main-head">AİDAT ÖZETİ</div>
@@ -623,6 +625,22 @@
             return deger;
         }
 
+        function ibanGrupla_(deger) {
+            var t = ibanTemizleKopya(String(deger || ''));
+            if(!/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/i.test(t)) return String(deger || '');
+            return t.replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        function ustYukseklik_() {
+            var t = document.querySelector('.top-sticky');
+            return t ? Math.round(t.getBoundingClientRect().height) : 0;
+        }
+
+        function ustYukseklikGuncelle_() {
+            var h = ustYukseklik_();
+            if(h > 0) document.documentElement.style.setProperty('--top-h', h + 'px');
+        }
+
         function getParam(name) {
             return new URLSearchParams(window.location.search).get(name);
         }
@@ -705,6 +723,9 @@
         var ilkSekmeGosterildi = false;
         var sekmeSirasi = ['ozet', 'odemeler', 'iletisim', 'duyurular'];
         var sekmeScrollRaf = false;
+        // v3.9.26: dokunulan sekme, kaydırma bitene kadar scroll olaylarınca ezilmez.
+        var sekmeKilidiAd = '';
+        var sekmeKilidiBitis = 0;
 
         function aktifSekmeIsaretle_(sekmeAdi) {
             document.querySelectorAll('.tab-btn').forEach(function(link) {
@@ -717,9 +738,12 @@
             if(sekmeSirasi.indexOf(sekmeAdi) === -1) sekmeAdi = 'ozet';
             var panel = document.querySelector('.tab-panel[data-panel="' + sekmeAdi + '"]');
             if(!panel) return;
+            // Dokunulan sekme, kaydırma bitene kadar (en çok 1 sn) scroll olaylarınca ezilmez.
+            sekmeKilidiAd = sekmeAdi;
+            sekmeKilidiBitis = Date.now() + 1000;
             aktifSekmeIsaretle_(sekmeAdi);
             var nav = document.querySelector('.tab-nav');
-            var pay = (nav ? nav.offsetHeight : 0) + 10;
+            var pay = ustYukseklik_();
             var hedef = panel.getBoundingClientRect().top + window.pageYOffset - pay;
             var hareketAzalt = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             window.scrollTo({top:Math.max(0, hedef), behavior:hareketAzalt ? 'auto' : 'smooth'});
@@ -727,8 +751,13 @@
 
         function kaydirmaSekmesiniGuncelle_() {
             sekmeScrollRaf = false;
+            if(sekmeKilidiAd && Date.now() < sekmeKilidiBitis) {
+                aktifSekmeIsaretle_(sekmeKilidiAd);
+                return;
+            }
+            sekmeKilidiAd = '';
             var nav = document.querySelector('.tab-nav');
-            var esik = (nav ? nav.getBoundingClientRect().height : 0) + 42;
+            var esik = ustYukseklik_() + 42;
             var secili = 'ozet';
             var enYakin = -Infinity;
             sekmeSirasi.forEach(function(ad) {
@@ -737,7 +766,11 @@
                 var top = panel.getBoundingClientRect().top;
                 if(top <= esik && top > enYakin) { enYakin = top; secili = ad; }
             });
-            // Sayfa sonuna gelindi diye otomatik son sekmeyi seçme; yalnızca gerçekten eşik çizgisini geçen bölüm seçilir.
+            // Sayfa gerçekten kaydırılabilir ve en alta gelindiyse son bölüm aktif olur.
+            var doc = document.documentElement;
+            var kaydirilabilir = doc.scrollHeight > window.innerHeight + 8;
+            var altaGelindi = (window.innerHeight + window.pageYOffset) >= (doc.scrollHeight - 4);
+            if(kaydirilabilir && window.pageYOffset > 0 && altaGelindi) secili = sekmeSirasi[sekmeSirasi.length - 1];
             aktifSekmeIsaretle_(secili);
         }
 
@@ -753,7 +786,7 @@
             sekmeScrollRaf = true;
             window.requestAnimationFrame(kaydirmaSekmesiniGuncelle_);
         }, {passive:true});
-        window.addEventListener('resize', kaydirmaSekmesiniGuncelle_);
+        window.addEventListener('resize', function() { ustYukseklikGuncelle_(); kaydirmaSekmesiniGuncelle_(); });
 
         function summaryInfoKapat_() {
             document.querySelectorAll('.info-popover.show').forEach(function(info) {
@@ -772,9 +805,6 @@
         });
         window.addEventListener('scroll', summaryInfoKapat_, {passive:true});
         window.addEventListener('resize', summaryInfoKapat_);
-        document.addEventListener('keydown', function(event) {
-            if(event.key === 'Escape') summaryInfoKapat_();
-        });
         document.addEventListener('keydown', function(event) {
             if(event.key === 'Escape') summaryInfoKapat_();
         });
@@ -985,7 +1015,7 @@
             oGovde.innerHTML = "";
             
             oGovde.appendChild(paymentRowNode('Alıcı', data.odemeAlici, data.odemeAlici));
-            oGovde.appendChild(paymentRowNode('IBAN', data.odemeIban, ibanTemizleKopya(data.odemeIban)));
+            oGovde.appendChild(paymentRowNode('IBAN', ibanGrupla_(data.odemeIban), ibanTemizleKopya(data.odemeIban)));
             
             oGovde.appendChild(paymentRowNode('Açıklama', data.odemeAciklama, data.odemeAciklama));
 
@@ -1003,11 +1033,12 @@
             }
 
             document.getElementById('panel-guncelleme').textContent = "Son güncelleme: " + data.guncellemeTarihi + (cacheRender ? " · güncel kontrol ediliyor" : "");
+            document.getElementById('card').style.display = 'block';
+            ustYukseklikGuncelle_();
             if(!ilkSekmeGosterildi) {
                 sekmeAc('ozet');
                 ilkSekmeGosterildi = true;
             }
-            document.getElementById('card').style.display = 'block';
 
             // Panel kullanıcıya gösterildikten sonra ziyaret logunu yalnızca güncel sunucu cevabında arka planda yaz.
             if(!cacheRender) setTimeout(logZiyaretiArkaPlandaGonder, 80);
@@ -1378,6 +1409,27 @@ if ('serviceWorker' in navigator) {
             #panel-odemeler .note{margin:9px 8px 11px;font-size:15px;}
         }
         /* ─── /v3.9.25 TEST ─── */
+
+        /* ─── v3.9.27 TEST: sabit şerit + ekran boyunda bölümler + koyu yeşil ─── */
+        html{scroll-snap-type:y proximity;scroll-padding-top:var(--top-h,92px);}
+        .top-sticky{position:sticky;top:0;z-index:500;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.10);}
+        .top-sticky .hero{padding:9px 12px 8px;border-bottom:2px solid var(--gold);}
+        .top-sticky .hero .blok{font-size:17px;line-height:1.2;letter-spacing:.3px;}
+        .top-sticky .isim{display:none;}
+        .top-sticky .tab-nav{position:static;box-shadow:none;border-bottom:0;}
+        .tab-panel,.tab-panel.active{display:flex;flex-direction:column;justify-content:space-evenly;
+            min-height:calc(100vh - var(--top-h,92px));min-height:calc(100svh - var(--top-h,92px));
+            scroll-margin-top:var(--top-h,92px);scroll-snap-align:start;}
+        #panel-odemeler{justify-content:flex-start;}
+        #panel-odemeler td{padding:clamp(5px,1.4svh,11px) 4px;}
+        #panel-odemeler th{position:static;padding:clamp(7px,1.5svh,12px) 4px;}
+        .payment-row{min-height:clamp(58px,9svh,84px);}
+        .paid{color:#166534;}
+        #panel-ozet .box.green{color:#14532d;}
+        #panel-ozet .box.green .big{color:#166534;}
+        #panel-ozet .status-fill.paid{background:#16803c!important;}
+        #panel-iletisim,#panel-duyurular{justify-content:center;gap:clamp(8px,2.5svh,24px);}
+        /* ─── /v3.9.27 TEST ─── */
 </style>
 
 <div id="aykent-pwa-install" hidden>
