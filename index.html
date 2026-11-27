@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.10.0 TEST | Tek akışlı sade sayfa (sekmesiz). Temel: v3.8.17 işlevleri + v3.9.x özet/grafik. -->
+<!-- AYKENT AIDAT PANELİ — v3.10.2 TEST | Tek akışlı sade sayfa (sekmesiz). Temel: v3.8.17 işlevleri + v3.9.x özet/grafik. -->
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -145,6 +145,8 @@
         .whatsapp-btn:focus-visible{outline:3px solid var(--navy);outline-offset:2px;}
 
         .footer{text-align:center;color:#667085;font-size:13px;padding:16px 10px 14px;font-weight:800;line-height:1.5;}
+        .dondu-not{margin:6px auto 0;max-width:440px;font-size:13px;line-height:1.4;color:#475569;font-weight:800;}
+        .dondu-not[hidden]{display:none;}
         .footer-sign{font-size:12px;color:#98a2b3;font-weight:750;}
         .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1A2B48;color:#f4d47c;padding:12px 24px;border-radius:999px;font-size:16px;opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:10001;font-weight:950;box-shadow:0 4px 16px rgba(0,0,0,.25);max-width:92vw;text-align:center;}
         .toast.show{opacity:1;}
@@ -164,6 +166,22 @@
         @media(prefers-reduced-motion:reduce){
             *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}
         }
+
+        /* Ödeme bildirimi */
+        .bildirim{margin:12px 10px 0;}
+        .bildirim[hidden],.bildirim-onay[hidden],.bildirim-durum:empty{display:none;}
+        .bildirim-btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;padding:10px 14px;background:#fff;color:var(--navy);border:2px solid var(--navy);border-radius:16px;font-size:17px;font-weight:950;cursor:pointer;font-family:inherit;}
+        .bildirim-btn:active{transform:translateY(1px);}
+        .bildirim-btn:disabled{opacity:.6;cursor:default;}
+        .bildirim-btn:focus-visible,.bildirim-onay button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+        .bildirim-onay{margin-top:10px;padding:12px 14px;background:#fffdf7;border:1px solid rgba(214,178,94,.55);border-radius:14px;font-size:15px;line-height:1.45;font-weight:750;color:#273449;}
+        .bildirim-onay p{margin-bottom:10px;}
+        .bildirim-onay button{min-height:48px;padding:8px 18px;border:0;border-radius:12px;font-size:16px;font-weight:950;cursor:pointer;margin-right:8px;font-family:inherit;}
+        .bildirim-onay .b-gonder{background:var(--navy);color:#f4d47c;}
+        .bildirim-onay .b-vazgec{background:#eef1f6;color:#101827;}
+        .bildirim-durum{margin-top:10px;padding:10px 12px;border-radius:12px;background:#f1f5f9;color:#334155;font-size:14px;line-height:1.45;font-weight:800;text-align:center;}
+        .bildirim-durum.ok{background:#e3f8eb;color:#14532d;}
+        .bildirim-durum.hata{background:#fff1f2;color:#9f1239;}
 
         /* ── Ana ekrana ekleme kutusu ── */
         #aykent-pwa-install{position:fixed;z-index:900;bottom:12px;left:12px;right:12px;max-width:500px;margin:auto;padding:14px;background:#fff;color:#101827;border:1px solid #d7deea;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.18);font:600 15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
@@ -287,10 +305,20 @@
                         Yöneticiye WhatsApp'tan Yaz
                     </a>
                 </div>
+                <div id="bildirim-alan" class="bildirim" hidden>
+                    <button type="button" id="bildirim-btn" class="bildirim-btn" aria-expanded="false" aria-controls="bildirim-onay">Ödeme yaptım, haber ver</button>
+                    <div id="bildirim-onay" class="bildirim-onay" role="group" aria-label="Ödeme bildirimi onayı" hidden>
+                        <p>Yönetime “ödeme yaptım” bildirimi gönderilsin mi? Bu bir ödeme kaydı değildir; yönetim banka hesabını kontrol ettikten sonra kaydı işler.</p>
+                        <button type="button" id="bildirim-gonder" class="b-gonder">Gönder</button>
+                        <button type="button" id="bildirim-vazgec" class="b-vazgec">Vazgeç</button>
+                    </div>
+                    <div id="bildirim-durum" class="bildirim-durum" role="status" aria-live="polite"></div>
+                </div>
             </main>
 
             <footer id="panel-footer" class="footer">
                 <div id="panel-guncelleme"></div>
+                <div id="panel-donduruldu" class="dondu-not" hidden></div>
                 <div class="footer-sign">© 2026 Aykent Site Yönetimi</div>
             </footer>
         </div>
@@ -314,6 +342,7 @@
         var panelCacheGosterildi = false;
         var aktifApiScript = null;
         var toastTimer = null;
+        var AY_ADLARI = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
 
         function temizleKurus(deger) {
             return typeof deger === 'string' ? deger.replace(/,00/g, '') : deger;
@@ -489,8 +518,18 @@
             odemeBilgileriniOlustur_(data);
             notuVeTabloyuOlustur_(data);
             whatsappGuncelle_(data);
+            bildirimAlaniniGuncelle_(data);
 
             document.getElementById('panel-guncelleme').textContent = "Son güncelleme: " + data.guncellemeTarihi + (cacheRender ? " · güncel kontrol ediliyor" : "");
+            // Sistem dondurulmuşsa (sunucuda HESAP_TARIHI doluysa) bilgilendirme satırı gösterilir.
+            var donduNot = document.getElementById('panel-donduruldu');
+            if(data.hesapDondu && data.hesapTarihi) {
+                donduNot.textContent = 'Bilgiler ' + data.hesapTarihi + ' itibarıyla gösterilmektedir. Yeni yıl aidatı belirlenince güncellenecektir.';
+                donduNot.hidden = false;
+            } else {
+                donduNot.textContent = '';
+                donduNot.hidden = true;
+            }
             document.getElementById('card').style.display = 'block';
 
             // Ziyaret logu yalnızca güncel sunucu cevabında, arka planda yazılır.
@@ -505,7 +544,10 @@
 
             row1.appendChild(createSummaryBox(data.etiketOdenen, temizleKurus(data.odenenYil), 'green',
                 cariYil + ' yılında yapılan aidat ödemelerinin toplamı.'));
-            var borcBilgi = cariYil + ' yılında bugüne kadar oluşan, henüz ödenmemiş aidat.';
+            // İçinde bulunulan ay (sunucudan gelen aktifAy, yoksa Türkiye saati) açıklamaya yazılır.
+            var ayAdi = AY_ADLARI[panelAyiniAl_(data) - 1] || '';
+            var dahil = ayAdi ? ' (' + ayAdi + ' dahil)' : '';
+            var borcBilgi = cariYil + ' yılında bugüne kadar' + dahil + ' oluşan, henüz ödenmemiş aidat.';
             if(data.borcYilRaw > 0) row1.appendChild(createSummaryBox(data.etiketBorc, temizleKurus(data.borcYil), 'red', borcBilgi));
             else row1.appendChild(createSummaryBox(data.etiketBorc, '0 TL', 'green', borcBilgi));
 
@@ -513,7 +555,7 @@
             if(data.devirRaw > 0) row2.appendChild(createSummaryBox(data.etiketDevir, temizleKurus(data.devir), 'yellow', devirBilgi));
             else row2.appendChild(createSummaryBox(data.etiketDevir, 'Borç yok', 'gray', devirBilgi));
 
-            var toplamBilgi = cariYil + ' yılının ödenmemiş aidatı ile ' + oncekiYil + ' yılından devreden borcun toplamı.';
+            var toplamBilgi = cariYil + ' yılının bugüne kadar' + dahil + ' oluşan, ödenmemiş aidatı ile ' + oncekiYil + ' yılından devreden borcun toplamı.';
             if(data.toplamBorcRaw <= 0) row2.appendChild(createSummaryBox('TOPLAM BORÇ', 'Borç yok ✓', 'green', toplamBilgi));
             else row2.appendChild(createSummaryBox('TOPLAM BORÇ', temizleKurus(data.toplamBorc), 'pink', toplamBilgi));
         }
@@ -601,6 +643,106 @@
                 waAlan.style.display = 'block';
             }
         }
+
+        // ── Ödeme bildirimi: hesabı DEĞİŞTİRMEZ; yalnızca yönetime "ödeme yaptım" haberi gider ──
+        var bildirimBekliyor = false;
+        var bildirimZamanlayici = null;
+        var bildirimScript = null;
+
+        function bildirimAnahtari_() { return 'aykent_bildirim_son_' + String(panelKod || ''); }
+
+        function bildirimDurumYaz_(metin, sinif) {
+            var el = document.getElementById('bildirim-durum');
+            if(!el) return;
+            el.textContent = metin || '';
+            el.className = 'bildirim-durum' + (sinif ? ' ' + sinif : '');
+        }
+
+        function bildirimOnayGoster_(goster) {
+            var onay = document.getElementById('bildirim-onay');
+            var btn = document.getElementById('bildirim-btn');
+            if(onay) onay.hidden = !goster;
+            if(btn) btn.setAttribute('aria-expanded', goster ? 'true' : 'false');
+        }
+
+        // Sunucu bildirimi desteklemiyorsa (bildirimAktif gelmezse) düğme hiç görünmez.
+        function bildirimAlaniniGuncelle_(data) {
+            var alan = document.getElementById('bildirim-alan');
+            if(!alan) return;
+            alan.hidden = !data.bildirimAktif;
+            if(!data.bildirimAktif) return;
+            var son = '';
+            try { son = localStorage.getItem(bildirimAnahtari_()) || ''; } catch(e) {}
+            if(son && !bildirimBekliyor) bildirimDurumYaz_('Son bildiriminiz: ' + son + ' · Yönetim kontrol edecek.', 'ok');
+        }
+
+        function bildirimBitir_(basarili, metin, kaydet) {
+            bildirimBekliyor = false;
+            if(bildirimZamanlayici) { clearTimeout(bildirimZamanlayici); bildirimZamanlayici = null; }
+            if(bildirimScript) { try { bildirimScript.remove(); } catch(e) {} bildirimScript = null; }
+            var gonder = document.getElementById('bildirim-gonder');
+            var btn = document.getElementById('bildirim-btn');
+            if(gonder) gonder.disabled = false;
+            if(btn) btn.disabled = false;
+            bildirimOnayGoster_(false);
+            bildirimDurumYaz_(metin, basarili ? 'ok' : 'hata');
+            if(basarili && kaydet) { try { localStorage.setItem(bildirimAnahtari_(), kaydet); } catch(e) {} }
+        }
+
+        function bildirimGonder_() {
+            if(bildirimBekliyor || !panelKod) return;
+            bildirimBekliyor = true;
+            var gonder = document.getElementById('bildirim-gonder');
+            var btn = document.getElementById('bildirim-btn');
+            if(gonder) gonder.disabled = true;
+            if(btn) btn.disabled = true;
+            bildirimDurumYaz_('Gönderiliyor...', '');
+            bildirimScript = document.createElement('script');
+            bildirimScript.async = true;
+            bildirimScript.src = GOOGLE_API_URL + '?mode=bildir&k=' + encodeURIComponent(panelKod) + '&callback=bildirimSonucu&_t=' + Date.now();
+            bildirimScript.onerror = function() {
+                bildirimBitir_(false, 'Bildirim gönderilemedi. Lütfen yöneticiye WhatsApp ile yazın.');
+            };
+            document.body.appendChild(bildirimScript);
+            bildirimZamanlayici = setTimeout(function() {
+                if(bildirimBekliyor) bildirimBitir_(false, 'Yanıt gelmedi. Bildirim gönderilmemiş olabilir; lütfen yöneticiye WhatsApp ile yazın.');
+            }, 12000);
+        }
+
+        // JSONP geri çağırımı: sunucu cevabı buraya gelir (global kalmalı).
+        function bildirimSonucu(r) {
+            if(!bildirimBekliyor) return;
+            r = r || {};
+            if(r.ok && r.log === 'yazildi') {
+                var zaman = guvenliMetin(r.zaman, '');
+                bildirimBitir_(true, 'Bildiriminiz yönetime iletildi' + (zaman ? ' (' + zaman + ')' : '') + '. Yönetim kontrol ettikten sonra kaydı işleyecek. Bu bir ödeme kaydı değildir.', zaman);
+            } else if(r.ok && r.log === 'limit') {
+                bildirimBitir_(true, 'Bugün zaten bildirim gönderdiniz. Yönetim kontrol edecektir.');
+            } else if(r.ok && r.log === 'kapali') {
+                bildirimBitir_(false, 'Ödeme bildirimi şu anda kapalı. Lütfen yöneticiye WhatsApp ile yazın.');
+                var alan = document.getElementById('bildirim-alan');
+                if(alan) alan.hidden = true;
+            } else {
+                bildirimBitir_(false, 'Bildirim gönderilemedi. Lütfen birkaç dakika sonra deneyin veya yöneticiye WhatsApp ile yazın.');
+            }
+        }
+
+        (function bildirimDugmeleriniBagla_() {
+            function bagla() {
+                var btn = document.getElementById('bildirim-btn');
+                var gonder = document.getElementById('bildirim-gonder');
+                var vazgec = document.getElementById('bildirim-vazgec');
+                if(!btn || !gonder || !vazgec) return;
+                btn.addEventListener('click', function() {
+                    var onay = document.getElementById('bildirim-onay');
+                    bildirimOnayGoster_(onay ? onay.hidden : true);
+                });
+                vazgec.addEventListener('click', function() { bildirimOnayGoster_(false); btn.focus(); });
+                gonder.addEventListener('click', bildirimGonder_);
+            }
+            if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bagla);
+            else bagla();
+        })();
 
         function logZiyaretiArkaPlandaGonder() {
             if(ziyaretLogGonderildi || !panelKod) return;
@@ -697,6 +839,9 @@
             data.odemeAciklama = guvenliMetin(data.odemeAciklama, '-');
             data.guncellemeTarihi = guvenliMetin(data.guncellemeTarihi, '-');
             data.whatsappNo = guvenliMetin(data.whatsappNo, '');
+            data.hesapDondu = data.hesapDondu === true;
+            data.bildirimAktif = data.bildirimAktif === true;
+            data.hesapTarihi = guvenliMetin(data.hesapTarihi, '');
 
             if(!Array.isArray(data.tablo)) data.tablo = [];
             data.tablo = data.tablo.map(function(satir) {
