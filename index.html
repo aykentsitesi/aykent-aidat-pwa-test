@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- AYKENT AIDAT PANELİ — v3.10.2 TEST | Tek akışlı sade sayfa (sekmesiz). Temel: v3.8.17 işlevleri + v3.9.x özet/grafik. -->
+<!-- AYKENT AIDAT PANELİ — v3.10.3 TEST | Tek akışlı sade sayfa (sekmesiz). Temel: v3.8.17 işlevleri + v3.9.x özet/grafik. -->
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="theme-color" content="#1A2B48">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -147,7 +147,6 @@
         .footer{text-align:center;color:#667085;font-size:13px;padding:16px 10px 14px;font-weight:800;line-height:1.5;}
         .dondu-not{margin:6px auto 0;max-width:440px;font-size:13px;line-height:1.4;color:#475569;font-weight:800;}
         .dondu-not[hidden]{display:none;}
-        .footer-sign{font-size:12px;color:#98a2b3;font-weight:750;}
         .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1A2B48;color:#f4d47c;padding:12px 24px;border-radius:999px;font-size:16px;opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:10001;font-weight:950;box-shadow:0 4px 16px rgba(0,0,0,.25);max-width:92vw;text-align:center;}
         .toast.show{opacity:1;}
 
@@ -183,6 +182,51 @@
         .bildirim-durum.ok{background:#e3f8eb;color:#14532d;}
         .bildirim-durum.hata{background:#fff1f2;color:#9f1239;}
 
+        /* ─── v3.10.3: hiyerarşi (hafif gövde, kalın yalnızca ana rakamlar), renk, boyut, iPhone güvenli alanı ─── */
+        body{font-weight:500;}
+        .blok{font-weight:800;}
+        .isim{font-weight:600;}
+        .band{font-weight:600;letter-spacing:.2px;font-size:18px;}
+        .box .small{font-weight:600;}
+        .box .big{font-weight:800;}
+        .info-btn span{font-weight:600;}
+        .info-text{font-size:14px;font-weight:500;}
+        .kicker{font-weight:600;letter-spacing:.1px;}
+        .annual-total{font-weight:800;}
+        .annual-caption{font-weight:500;}
+        .monthly strong{font-weight:700;}
+        .st-head{font-weight:500;}
+        .st-head strong{font-weight:700;}
+        .duyuru-body{font-weight:500;}
+        .duyuru-empty{font-weight:500;}
+        .payment-label{font-weight:600;}
+        .payment-value{font-weight:600;font-size:16px;}
+        .copy-btn{background:#1A2B48;color:#f4d47c;box-shadow:none;font-weight:700;}
+        .note{font-weight:500;}
+        .note-title{font-weight:700;font-size:14px;}
+        th{font-weight:600;}
+        td{font-weight:600;}
+        td:first-child{font-weight:600;}
+        tr.gelecek-ay td:first-child{color:#64748b;font-weight:500;}
+        .bu-ay{font-size:13px;font-weight:600;}
+        .whatsapp-btn{font-weight:700;}
+        .bildirim-btn{font-weight:700;}
+        .bildirim-onay{font-weight:500;}
+        .bildirim-onay button{font-weight:700;}
+        .bildirim-durum{font-weight:600;}
+        .dondu-not{font-size:14px;font-weight:600;}
+        .footer{font-weight:500;font-size:14px;color:#667085;}
+        .footer-sign{font-size:13px;color:#667085;font-weight:500;}
+        .toast{font-weight:700;bottom:calc(22px + env(safe-area-inset-bottom,0px));}
+        .wrap{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);}
+        .hero{padding-top:calc(22px + env(safe-area-inset-top,0px));}
+        .footer{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));}
+        @media(max-width:420px){
+            .box .small{font-size:14px;}
+            .hero{padding-top:calc(20px + env(safe-area-inset-top,0px));}
+        }
+        /* ─── /v3.10.3 ─── */
+
         /* ── Ana ekrana ekleme kutusu ── */
         #aykent-pwa-install{position:fixed;z-index:900;bottom:12px;left:12px;right:12px;max-width:500px;margin:auto;padding:14px;background:#fff;color:#101827;border:1px solid #d7deea;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.18);font:600 15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
         #aykent-pwa-install[hidden]{display:none;}
@@ -190,6 +234,7 @@
         #aykent-pwa-install ol{margin:0 0 10px 20px;font-weight:600;}
         #aykent-pwa-install button{min-height:44px;padding:10px 14px;border:0;border-radius:10px;cursor:pointer;font-size:15px;font-weight:800;background:#eef1f6;color:#101827;margin-right:6px;}
         #aykent-pwa-install .primary{background:#1A2B48;color:#fff;}
+        #aykent-pwa-install{bottom:calc(12px + env(safe-area-inset-bottom,0px));}
     </style>
 
 <script>
@@ -251,19 +296,19 @@
 
             <main>
                 <section class="sec" id="bolum-ozet" aria-labelledby="b-ozet">
-                    <h2 class="band" id="b-ozet">AİDAT ÖZETİ</h2>
+                    <h2 class="band" id="b-ozet">Aidat özeti</h2>
                     <div class="sec-body">
                         <div class="summary" id="summary-row-1"></div>
                         <div class="summary" id="summary-row-2"></div>
                         <div class="accrual" id="accrual-card" hidden>
                             <div class="annual" id="accrual-annual-row" hidden>
-                                <div class="kicker" id="accrual-head">YILLIK AİDAT</div>
+                                <div class="kicker" id="accrual-head">Yıllık aidat</div>
                                 <div class="annual-total" id="accrual-annual-value">-</div>
                                 <div class="annual-caption">12 aylık toplam</div>
                                 <div class="monthly" id="accrual-monthly-row" hidden><span>Aylık aidat</span><strong id="accrual-monthly-value">-</strong></div>
                             </div>
                             <div class="status" id="accrual-status">
-                                <div class="kicker">YIL İÇİNDEKİ AİDAT DURUMU</div>
+                                <div class="kicker">Yıl içindeki aidat durumu</div>
                                 <div class="st-item">
                                     <div class="st-head"><span>Bugüne kadar oluşan aidat</span><strong id="accrual-due-value">-</strong></div>
                                     <div class="bar"><i id="accrual-due-bar" class="f-due"></i></div>
@@ -279,21 +324,31 @@
                 </section>
 
                 <section class="sec" id="bolum-duyurular" aria-labelledby="b-duyuru">
-                    <h2 class="band" id="b-duyuru">DUYURULAR</h2>
+                    <h2 class="band" id="b-duyuru">Duyurular</h2>
                     <div id="duyuru-metni" class="duyuru-body"><div class="duyuru-empty">Şu anda yayınlanmış bir duyuru bulunmuyor.</div></div>
                 </section>
 
                 <section class="sec" id="bolum-banka" aria-labelledby="b-banka">
-                    <h2 class="band" id="b-banka">BANKA BİLGİLERİ</h2>
+                    <h2 class="band" id="b-banka">Banka bilgileri</h2>
                     <div id="odeme-govde"></div>
                 </section>
 
+                <div id="bildirim-alan" class="bildirim" hidden>
+                    <button type="button" id="bildirim-btn" class="bildirim-btn" aria-expanded="false" aria-controls="bildirim-onay">Ödeme yaptım, haber ver</button>
+                    <div id="bildirim-onay" class="bildirim-onay" role="group" aria-label="Ödeme bildirimi onayı" hidden>
+                        <p>Yönetime “ödeme yaptım” bildirimi gönderilsin mi? Bu bir ödeme kaydı değildir; yönetim banka hesabını kontrol ettikten sonra kaydı işler.</p>
+                        <button type="button" id="bildirim-gonder" class="b-gonder">Gönder</button>
+                        <button type="button" id="bildirim-vazgec" class="b-vazgec">Vazgeç</button>
+                    </div>
+                    <div id="bildirim-durum" class="bildirim-durum" role="status" aria-live="polite"></div>
+                </div>
+
                 <section class="sec" id="bolum-odemeler" aria-labelledby="b-odeme">
-                    <h2 class="band" id="b-odeme">AYLIK ÖDEME DURUMU</h2>
+                    <h2 class="band" id="b-odeme">Aylık ödeme durumu</h2>
                     <div id="panel-not" class="note"></div>
                     <div class="table-wrap">
                         <table>
-                            <thead><tr><th scope="col">AY</th><th scope="col">AİDAT</th><th scope="col">EK</th></tr></thead>
+                            <thead><tr><th scope="col">Ay</th><th scope="col">Aidat</th><th scope="col">Ek</th></tr></thead>
                             <tbody id="tablo-govde"></tbody>
                         </table>
                     </div>
@@ -304,15 +359,6 @@
                         <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.411 0 11.989 0c3.183.001 6.177 1.243 8.432 3.498 2.256 2.255 3.497 5.25 3.496 8.435-.003 6.634-5.354 11.982-11.933 11.982-1.996-.001-3.957-.5-5.698-1.447L0 24zm6.59-4.859c1.72.101 2.382.204 4.417.205 5.516 0 10.029-4.505 10.032-10.016.001-2.64-1.024-5.122-2.887-6.986-1.862-1.864-4.343-2.89-6.984-2.891-5.522 0-10.033 4.508-10.035 10.021-.001 2.007.518 2.975 1.512 4.704l-.956 3.493 3.585-.94c1.643.914 2.32 1.314 4.316 1.314zM16.518 14c-.258-.127-1.526-.749-1.762-.834-.236-.086-.407-.127-.578.128-.171.256-.664.834-.813.1-.148-.127-.297-.181-.554-.308-2.172-.962-3.56-3.137-3.667-3.281-.107-.144-.016-.223.056-.305.105-.119.255-.308.337-.419.082-.11.11-.186.165-.313.055-.128.027-.236-.014-.321-.04-.086-.407-1.012-.557-1.383-.146-.358-.295-.308-.407-.314-.105-.005-.226-.006-.347-.006-.12 0-.317.045-.483.226-.166.181-.634.616-.634 1.501 0 .885.643 1.74 1.731 1.884 2.253 3.22 3.738 3.535 5.234 3.639 1.15.08 2.137-.019 2.946-.139.902-.134 1.873-.762 2.138-1.463.264-.7 0-1.298-.079-1.422-.079-.124-.29-.199-.549-.326z"/></svg>
                         Yöneticiye WhatsApp'tan Yaz
                     </a>
-                </div>
-                <div id="bildirim-alan" class="bildirim" hidden>
-                    <button type="button" id="bildirim-btn" class="bildirim-btn" aria-expanded="false" aria-controls="bildirim-onay">Ödeme yaptım, haber ver</button>
-                    <div id="bildirim-onay" class="bildirim-onay" role="group" aria-label="Ödeme bildirimi onayı" hidden>
-                        <p>Yönetime “ödeme yaptım” bildirimi gönderilsin mi? Bu bir ödeme kaydı değildir; yönetim banka hesabını kontrol ettikten sonra kaydı işler.</p>
-                        <button type="button" id="bildirim-gonder" class="b-gonder">Gönder</button>
-                        <button type="button" id="bildirim-vazgec" class="b-vazgec">Vazgeç</button>
-                    </div>
-                    <div id="bildirim-durum" class="bildirim-durum" role="status" aria-live="polite"></div>
                 </div>
             </main>
 
@@ -357,6 +403,25 @@
             var t = ibanTemizleKopya(String(deger || ''));
             if(!/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/i.test(t)) return String(deger || '');
             return t.replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        // Büyük harfle gelen metni (sheet'ten) okunaklı yazıma çevirir: "B BLOK" → "B Blok", "OCAK" → "Ocak".
+        function basHarfBuyuk_(metin) {
+            return String(metin || '').split(' ').map(function(w) {
+                if(w.length < 2) return w;
+                return w.charAt(0).toLocaleUpperCase('tr-TR') + w.slice(1).toLocaleLowerCase('tr-TR');
+            }).join(' ');
+        }
+
+        // Yalnızca tamamı büyük harf olan etiketleri cümle yazımına çevirir: "2026 ÖDENEN" → "2026 ödenen".
+        function etiketDuzelt_(etiket) {
+            var m = String(etiket || '');
+            if(m !== m.toLocaleUpperCase('tr-TR') || m === m.toLocaleLowerCase('tr-TR')) return m;
+            var k = m.toLocaleLowerCase('tr-TR');
+            var ilk = k.charAt(0);
+            // Yalnızca ilk karakter harfse büyütülür; "2026 ödenen" gibi rakamla başlayanlar küçük kalır.
+            if(ilk !== ilk.toLocaleUpperCase('tr-TR')) return ilk.toLocaleUpperCase('tr-TR') + k.slice(1);
+            return k;
         }
 
         function getParam(name) {
@@ -509,7 +574,7 @@
             var cariYil = panelYiliniAl_(data);
             var oncekiYil = cariYil - 1;
 
-            document.getElementById('panel-baslik').textContent = data.blok + " · DAİRE " + data.daire;
+            document.getElementById('panel-baslik').textContent = basHarfBuyuk_(data.blok) + " · Daire " + data.daire;
             document.getElementById('panel-isim').textContent = data.isim;
 
             ozetKutulariniOlustur_(data, cariYil, oncekiYil);
@@ -597,7 +662,7 @@
             if(data.notlar && data.notlar.trim() && data.notlar.trim() !== '0') {
                 var baslik = document.createElement('span');
                 baslik.className = 'note-title';
-                baslik.textContent = 'SİZE ÖZEL NOT';
+                baslik.textContent = 'Size özel not';
                 not.appendChild(baslik);
                 not.appendChild(document.createTextNode(data.notlar));
                 not.style.display = 'block';
@@ -610,11 +675,14 @@
                 var tr = document.createElement('tr');
                 var tdAy = document.createElement('td');
                 var strongAy = document.createElement('strong');
-                strongAy.textContent = satir.ay;
+                var ayGoster = basHarfBuyuk_(satir.ay);
+                var satirAyNo = ayMetniniNormalizeEt_(satir.ay);
+                strongAy.textContent = ayGoster;
                 tdAy.appendChild(strongAy);
-                if(ayMetniniNormalizeEt_(satir.ay) === aktifAy) {
+                if(satirAyNo > aktifAy) tr.className = 'gelecek-ay';
+                if(satirAyNo === aktifAy) {
                     tr.className = 'current-month-row';
-                    tr.setAttribute('aria-label', satir.ay + ' - içinde bulunulan ay');
+                    tr.setAttribute('aria-label', ayGoster + ' - içinde bulunulan ay');
                     var buAy = document.createElement('span');
                     buAy.className = 'bu-ay';
                     buAy.textContent = '· bu ay';
@@ -887,7 +955,7 @@
 
             annualRow.hidden = !(yillik > 0);
             if(yillik > 0) {
-                document.getElementById('accrual-head').textContent = panelYiliniAl_(data) + ' YILLIK AİDAT';
+                document.getElementById('accrual-head').textContent = panelYiliniAl_(data) + ' yıllık aidat';
                 document.getElementById('accrual-annual-value').textContent = tl(yillik);
             }
             // Aylık tutar yalnızca API verirse gösterilir; yıllık tutar 12'ye bölünerek üretilmez.
@@ -914,12 +982,12 @@
 
             var sm = document.createElement('span');
             sm.className = 'small';
-            sm.textContent = label;
+            sm.textContent = etiketDuzelt_(label);
 
             var btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'info-btn';
-            btn.setAttribute('aria-label', label + ' hakkında bilgi');
+            btn.setAttribute('aria-label', etiketDuzelt_(label) + ' hakkında bilgi');
             btn.setAttribute('aria-expanded', 'false');
             var simge = document.createElement('span');
             simge.setAttribute('aria-hidden', 'true');
