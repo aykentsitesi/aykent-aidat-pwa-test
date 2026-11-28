@@ -2,10 +2,11 @@
   "name": "Aykent Aidat Paneli",
   "short_name": "Aykent Aidat",
   "description": "Aykent Sitesi aidat ve ödeme takip paneli",
+  "lang": "tr",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#1A2B48",
+  "theme_color": "#1A2B48",
   "icons": [
     {
       "src": "icon-192.png",
